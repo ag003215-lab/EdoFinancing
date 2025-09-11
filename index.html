@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Estados Financieros</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --sidebar-bg: #1e293b;
+            --card-bg: white;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tabs {
+            list-style: none;
+        }
+
+        .nav-tabs li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-tabs button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            text-align: left;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .nav-tabs button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-tabs button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-tabs button.active {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .mobile-menu-button {
+            display: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .form-group h3 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-left: 3px solid var(--primary);
+            background: #f8fafc;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .form-section-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .form-section h5 {
+            font-size: 1rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-item {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        input[type="file"] {
+            padding: 0.5rem;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        input[type="file"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            background-color: white;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 10px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #d92626;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 10px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--gray);
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            background: #f8fafc;
+            border-color: var(--gray);
+            color: var(--dark);
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* Report Styles */
+        .report-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .ai-analysis-container {
+            background: linear-gradient(135deg, #f0f9ff, #eef2ff);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .ai-analysis-container h4 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .ai-analysis-container p,
+        .ai-analysis-container ul {
+            font-size: 0.95rem;
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .company-logo-preview {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            background: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--gray);
+            overflow: hidden;
+            border: 3px solid var(--border-color);
+        }
+
+        .company-logo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .report-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .report-subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .financial-statement {
+            margin-bottom: 2rem;
+        }
+
+        .statement-title {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .statement-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        .statement-table th,
+        .statement-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .statement-table th {
+            background: #f8fafc;
+            font-weight: 600;
+        }
+
+        .statement-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background: #eff6ff;
+        }
+
+        .total-row td:last-child {
+            border-top: 2px solid #93c5fd;
+        }
+
+        .subtotal-row {
+            font-weight: 600;
+            background: #f1f5f9;
+        }
+
+        .sub-subtotal-row {
+            font-weight: 500;
+            background: #f8fafc;
+        }
+
+        .grand-total-row {
+            font-weight: bold;
+            background: var(--primary);
+            color: white;
+        }
+
+        .chart-container {
+            margin: 2rem 0;
+            height: 400px;
+        }
+
+        /* Comparison Styles */
+        .comparison-section {
+            margin: 2rem 0;
+        }
+
+        .period-selector {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .period-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .period-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.5s;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: #059669;
+            border-left: 4px solid var(--success);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1000;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-button {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 1001;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                cursor: pointer;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .section-title {
+                padding-top: 50px;
+                /* Space for mobile menu button */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* PDF Styles */
+        .pdf-cover {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .pdf-cover.solid {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .pdf-cover.pattern {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .pdf-cover.pattern::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 20%);
+        }
+
+        .pdf-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 8rem;
+            opacity: 0.1;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .pdf-logo {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 2rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .pdf-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pdf-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .pdf-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .pdf-period {
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .report-container {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="mobile-menu-button no-print" id="mobile-menu-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar no-print" id="sidebar">
+            <div class="sidebar-header">
+                <h1>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>Finanzas Pro</span>
+                </h1>
+            </div>
+            <ul class="nav-tabs">
+                <li><button class="tab-button active" data-tab="balance"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                        </svg>Balance General</button></li>
+                <li><button class="tab-button" data-tab="resultados"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>Estado de Resultados</button></li>
+                <li><button class="tab-button" data-tab="ratios"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m12 14 4-4"></path>
+                            <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
+                        </svg>Ratios Financieros</button></li>
+                <li><button class="tab-button" data-tab="analisis-ia">✨ Análisis con IA</button></li>
+                <li><button class="tab-button" data-tab="comparativo"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 3v3a2 2 0 0 1-2 2H3"></path>
+                            <path d="M21 8v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3l3 -3 3 3h3a2 2 0 0 1 2 2z">
+                            </path>
+                            <path d="M12 18v-7.5"></path>
+                            <path d="M12 7.5l-2.5 2.5"></path>
+                            <path d="M12 7.5l2.5 2.5"></path>
+                        </svg>Comparativo</button></li>
+                <li><button class="tab-button" data-tab="vista-previa"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>Vista Previa</button></li>
+                <li><button class="tab-button" data-tab="exportar"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>Exportar</button></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Balance General Tab -->
+            <div id="balance" class="tab-content active">
+                <h2 class="section-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                    </svg>Balance General Detallado</h2>
+                <div id="balance-message"></div>
+
+                <!-- ACTIVO -->
+                <div class="form-group">
+                    <h3>ACTIVO</h3>
+
+                    <!-- Activo Corriente -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Activo Corriente</h4>
+
+                        <!-- Disponibilidades -->
+                        <div class="form-section">
+                            <h5>Disponibilidades</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Caja</label>
+                                    <input type="number" id="cash" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Bancos</label>
+                                    <input type="number" id="banks" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Inversiones Temporales</label>
+                                    <input type="number" id="short-term-investments" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cuentas por Cobrar Comerciales -->
+                        <div class="form-section">
+                            <h5>Cuentas por Cobrar Comerciales</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Clientes Nacionales</label>
+                                    <input type="number" id="domestic-clients" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Clientes Extranjeros</label>
+                                    <input type="number" id="foreign-clients" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Documentos por Cobrar</label>
+                                    <input type="number" id="notes-receivable" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Provisión para Incobrables (-)</label>
+                                    <input type="number" id="bad-debt-provision" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inventarios -->
+                        <div class="form-section">
+                            <h5>Inventarios</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Materias Primas</label>
+                                    <input type="number" id="raw-materials" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Productos en Proceso</label>
+                                    <input type="number" id="work-in-progress" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Productos Terminados</label>
+                                    <input type="number" id="finished-goods" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Mercancías en Tránsito</label>
+                                    <input type="number" id="goods-in-transit" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Otros Activos Corrientes -->
+                        <div class="form-section">
+                            <h5>Otros Activos Corrientes</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Impuestos por Recuperar</label>
+                                    <input type="number" id="tax-refunds" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Intereses por Cobrar</label>
+                                    <input type="number" id="interest-receivable" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Anticipos a Proveedores</label>
+                                    <input type="number" id="supplier-advances" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Otros</label>
+                                    <input type="number" id="other-current-assets" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activo No Corriente -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Activo No Corriente</h4>
+
+                        <!-- Propiedad, Planta y Equipo -->
+                        <div class="form-section">
+                            <h5>Propiedad, Planta y Equipo</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Terrenos</label>
+                                    <input type="number" id="land" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Edificios</label>
+                                    <input type="number" id="buildings" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Maquinaria y Equipo</label>
+                                    <input type="number" id="machinery" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Muebles y Enseres</label>
+                                    <input type="number" id="furniture" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Depreciación Acumulada (-)</label>
+                                    <input type="number" id="accumulated-depreciation" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Equipo de Transporte</label>
+                                    <input type="number" id="transportation-equipment" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Intangibles -->
+                        <div class="form-section">
+                            <h5>Intangibles</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Marcas y Patentes</label>
+                                    <input type="number" id="trademarks-patents" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Licencias</label>
+                                    <input type="number" id="licenses" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Amortización Acumulada (-)</label>
+                                    <input type="number" id="accumulated-amortization" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Software</label>
+                                    <input type="number" id="software" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inversiones Permanentes -->
+                        <div class="form-section">
+                            <h5>Inversiones Permanentes</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Acciones de Inversión</label>
+                                    <input type="number" id="investment-shares" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Bonos</label>
+                                    <input type="number" id="bonds" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Otras Inversiones</label>
+                                    <input type="number" id="other-investments" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASIVO Y PATRIMONIO -->
+                <div class="form-group">
+                    <h3>PASIVO Y PATRIMONIO</h3>
+
+                    <!-- Pasivo Corriente -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Pasivo Corriente</h4>
+
+                        <!-- Proveedores -->
+                        <div class="form-section">
+                            <h5>Proveedores</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Proveedores Nacionales</label>
+                                    <input type="number" id="domestic-suppliers" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Proveedores Extranjeros</label>
+                                    <input type="number" id="foreign-suppliers" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Documentos por Pagar</label>
+                                    <input type="number" id="notes-payable" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Obligaciones Financieras -->
+                        <div class="form-section">
+                            <h5>Obligaciones Financieras</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Préstamos Bancarios a Corto Plazo</label>
+                                    <input type="number" id="short-term-bank-loans" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Sobregiros Bancarios</label>
+                                    <input type="number" id="bank-overdrafts" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Obligaciones Fiscales -->
+                        <div class="form-section">
+                            <h5>Obligaciones Fiscales</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>IVA por Pagar</label>
+                                    <input type="number" id="vat-payable" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>ISR por Pagar</label>
+                                    <input type="number" id="income-tax-payable" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Otros Impuestos</label>
+                                    <input type="number" id="other-taxes" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Otros Pasivos Corrientes -->
+                        <div class="form-section">
+                            <h5>Otros Pasivos Corrientes</h5>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Anticipos de Clientes</label>
+                                    <input type="number" id="customer-advances" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Provisiones</label>
+                                    <input type="number" id="provisions" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-item">
+                                    <label>Dividendos por Pagar</label>
+                                    <input type="number" id="dividends-payable" placeholder="0.00" step="0.01">
+                                </div>
+                                <div class="form-item">
+                                    <label>Otros</label>
+                                    <input type="number" id="other-current-liabilities" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pasivo No Corriente -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Pasivo No Corriente</h4>
+
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Préstamos Bancarios a Largo Plazo</label>
+                                <input type="number" id="long-term-bank-loans" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Obligaciones por Arrendamiento Financiero</label>
+                                <input type="number" id="finance-lease-obligations" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Otros Pasivos a Largo Plazo</label>
+                                <input type="number" id="other-long-term-liabilities" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patrimonio -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Patrimonio</h4>
+
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Capital Social</label>
+                                <input type="number" id="capital-stock" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Prima en Venta de Acciones</label>
+                                <input type="number" id="share-premium" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Reservas Legales</label>
+                                <input type="number" id="legal-reserves" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Reservas Facultativas</label>
+                                <input type="number" id="voluntary-reserves" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Resultados Acumulados</label>
+                                <input type="number" id="accumulated-results" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Resultado del Ejercicio</label>
+                                <input type="number" id="current-period-result" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="calculateBalance()"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20V10"></path>
+                            <path d="M18 20V4"></path>
+                            <path d="M6 20V16"></path>
+                        </svg>Calcular Balance</button>
+                    <button class="btn btn-outline" onclick="loadSampleBalanceData()"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>Datos de Ejemplo</button>
+                    <button class="btn btn-danger" onclick="clearForm('balance')"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                            </path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>Limpiar</button>
+                </div>
+            </div>
+
+            <!-- Estado de Resultados Tab -->
+            <div id="resultados" class="tab-content">
+                <h2 class="section-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>Estado de Resultados Detallado</h2>
+                <div id="resultados-message"></div>
+
+                <div class="form-group">
+                    <h3>INGRESOS</h3>
+
+                    <!-- Ventas Netas -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Ventas Netas</h4>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Ventas Brutas</label>
+                                <input type="number" id="gross-sales" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Devoluciones sobre Ventas (-)</label>
+                                <input type="number" id="sales-returns" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Descuentos sobre Ventas (-)</label>
+                                <input type="number" id="sales-discounts" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Bonificaciones (-)</label>
+                                <input type="number" id="bonuses" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Otros Ingresos -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Otros Ingresos</h4>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Ingresos por Arrendamiento</label>
+                                <input type="number" id="rental-income" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Ingresos Financieros</label>
+                                <input type="number" id="financial-income" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Ganancia en Venta de Activos</label>
+                                <input type="number" id="asset-sale-gain" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Otros Ingresos</label>
+                                <input type="number" id="other-income" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>COSTO DE VENTAS</h3>
+
+                    <div class="form-section">
+                        <h4 class="form-section-title">Costo de Ventas</h4>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Inventario Inicial</label>
+                                <input type="number" id="beginning-inventory" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Compras Netas</label>
+                                <input type="number" id="net-purchases" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Inventario Final (-)</label>
+                                <input type="number" id="ending-inventory" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Costo de Productos Terminados</label>
+                                <input type="number" id="finished-goods-cost" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>GASTOS DE OPERACIÓN</h3>
+
+                    <!-- Gastos de Venta -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Gastos de Venta</h4>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Sueldos y Salarios de Ventas</label>
+                                <input type="number" id="sales-salaries" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Comisiones de Ventas</label>
+                                <input type="number" id="sales-commissions" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Publicidad y Promoción</label>
+                                <input type="number" id="advertising" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Transporte de Mercancías</label>
+                                <input type="number" id="freight-out" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Otros Gastos de Venta</label>
+                                <input type="number" id="other-sales-expenses" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gastos de Administración -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Gastos de Administración</h4>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Sueldos y Salarios de Administración</label>
+                                <input type="number" id="admin-salaries" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Honorarios Profesionales</label>
+                                <input type="number" id="professional-fees" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Servicios Generales</label>
+                                <input type="number" id="general-services" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Mantenimiento de Oficinas</label>
+                                <input type="number" id="office-maintenance" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Depreciación de Activos Fijos</label>
+                                <input type="number" id="depreciation-expense" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Amortización de Intangibles</label>
+                                <input type="number" id="amortization-expense" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Otros Gastos de Administración</label>
+                                <input type="number" id="other-admin-expenses" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>GASTOS FINANCIEROS</h3>
+
+                    <div class="form-section">
+                        <h4 class="form-section-title">Gastos Financieros</h4>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Intereses Pagados</label>
+                                <input type="number" id="interest-expense" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Comisiones Bancarias</label>
+                                <input type="number" id="bank-commissions" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Pérdida en Cambio</label>
+                                <input type="number" id="exchange-loss" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Otros Gastos Financieros</label>
+                                <input type="number" id="other-financial-expenses" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>IMPUESTOS</h3>
+
+                    <div class="form-section">
+                        <h4 class="form-section-title">Impuestos</h4>
+                        <div class="form-row">
+                            <div class="form-item">
+                                <label>Impuesto Sobre la Renta (ISR)</label>
+                                <input type="number" id="income-tax" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-item">
+                                <label>Otros Impuestos</label>
+                                <input type="number" id="other-taxes-expense" placeholder="0.00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="calculateResults()"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20V10"></path>
+                            <path d="M18 20V4"></path>
+                            <path d="M6 20V16"></path>
+                        </svg>Calcular Resultados</button>
+                    <button class="btn btn-outline" onclick="loadSampleResultsData()"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>Datos de Ejemplo</button>
+                    <button class="btn btn-danger" onclick="clearForm('resultados')"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                            </path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>Limpiar</button>
+                </div>
+            </div>
+
+            <!-- Ratios Financieros Tab -->
+            <div id="ratios" class="tab-content">
+                <h2 class="section-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="m12 14 4-4"></path>
+                        <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
+                    </svg>Ratios Financieros</h2>
+                <div id="ratios-message"></div>
+
+                <div class="form-group">
+                    <h3>Modo de Visualización</h3>
+                    <div class="form-row">
+                        <div class="form-item">
+                            <label for="ratio-mode">Seleccionar Modo</label>
+                            <select id="ratio-mode" onchange="switchRatioMode()">
+                                <option value="bank">🏦 Modo Banco (Liquidez/Solvencia)</option>
+                                <option value="investor">💼 Modo Inversionista (Rentabilidad)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Ratios Calculados</h3>
+                    <div id="ratios-display">
+                        <p>Ingrese datos en las secciones anteriores y calcule para ver los ratios.</p>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="calculateRatios()"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20V10"></path>
+                            <path d="M18 20V4"></path>
+                            <path d="M6 20V16"></path>
+                        </svg>Calcular Ratios</button>
+                </div>
+            </div>
+
+            <!-- AI Analysis Tab -->
+            <div id="analisis-ia" class="tab-content">
+                <h2 class="section-title">✨ Análisis con IA</h2>
+                <div id="ai-message"></div>
+
+                <div class="form-group">
+                    <h3>Generar Análisis</h3>
+                    <p style="margin-bottom: 1.5rem; color: var(--gray);">Utilice la IA para generar resúmenes,
+                        identificar fortalezas/debilidades y obtener recomendaciones estratégicas basadas en sus datos
+                        financieros. Asegúrese de haber calculado el balance y los resultados primero.</p>
+                    <div class="actions">
+                        <button id="ai-summary-btn" class="btn btn-primary" onclick="generateAIAnalysis('summary')">📝
+                            Generar Resumen Ejecutivo</button>
+                        <button id="ai-swot-btn" class="btn btn-primary" onclick="generateAIAnalysis('swot')">💪 Generar
+                            Fortalezas y Debilidades</button>
+                        <button id="ai-recom-btn" class="btn btn-primary"
+                            onclick="generateAIAnalysis('recommendations')">💡 Generar Recomendaciones</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Resumen Ejecutivo</h3>
+                    <textarea id="ai-summary-result" readonly
+                        placeholder="El resumen ejecutivo generado por la IA aparecerá aquí..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <h3>Fortalezas y Debilidades</h3>
+                    <textarea id="ai-swot-result" readonly
+                        placeholder="El análisis de fortalezas y debilidades generado por la IA aparecerá aquí..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <h3>Recomendaciones Estratégicas</h3>
+                    <textarea id="ai-recommendations-result" readonly
+                        placeholder="Las recomendaciones estratégicas generadas por la IA aparecerán aquí..."></textarea>
+                </div>
+            </div>
+
+            <!-- Comparativo Tab -->
+            <div id="comparativo" class="tab-content">
+                <h2 class="section-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M8 3v3a2 2 0 0 1-2 2H3"></path>
+                        <path d="M21 8v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3l3 -3 3 3h3a2 2 0 0 1 2 2z">
+                        </path>
+                        <path d="M12 18v-7.5"></path>
+                        <path d="M12 7.5l-2.5 2.5"></path>
+                        <path d="M12 7.5l2.5 2.5"></path>
+                    </svg>Comparativo de Periodos</h2>
+                <div id="comparativo-message"></div>
+
+                <div class="period-selector">
+                    <div class="period-card">
+                        <h3 class="period-title">Periodo 1</h3>
+                        <div class="form-item">
+                            <label for="period1-name">Nombre del Periodo</label>
+                            <input type="text" id="period1-name" placeholder="Ej: 2025-06">
+                        </div>
+                        <div class="form-item">
+                            <label for="period1-net-income">Utilidad Neta</label>
+                            <input type="number" id="period1-net-income" placeholder="0.00" step="0.01">
+                        </div>
+                        <div class="form-item">
+                            <label for="period1-sales">Ventas Netas</label>
+                            <input type="number" id="period1-sales" placeholder="0.00" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="period-card">
+                        <h3 class="period-title">Periodo 2</h3>
+                        <div class="form-item">
+                            <label for="period2-name">Nombre del Periodo</label>
+                            <input type="text" id="period2-name" placeholder="Ej: 2025-07">
+                        </div>
+                        <div class="form-item">
+                            <label for="period2-net-income">Utilidad Neta</label>
+                            <input type="number" id="period2-net-income" placeholder="0.00" step="0.01">
+                        </div>
+                        <div class="form-item">
+                            <label for="period2-sales">Ventas Netas</label>
+                            <input type="number" id="period2-sales" placeholder="0.00" step="0.01">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Gráfico Comparativo</h3>
+                    <div class="chart-container">
+                        <canvas id="comparison-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="generateComparison()"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20V10"></path>
+                            <path d="M18 20V4"></path>
+                            <path d="M6 20V16"></path>
+                        </svg>Generar Comparativo</button>
+                    <button class="btn btn-outline" onclick="loadSampleComparisonData()"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>Datos de Ejemplo</button>
+                </div>
+            </div>
+
+            <!-- Vista Previa Tab -->
+            <div id="vista-previa" class="tab-content">
+                <h2 class="section-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>Vista Previa del Reporte</h2>
+                <div id="preview-message"></div>
+
+                <div class="report-container" id="report-preview">
+                    <div class="report-header">
+                        <div class="company-logo-preview" id="preview-logo">
+                            <span>LOGO</span>
+                        </div>
+                        <h2 class="report-title" id="preview-company-name">Nombre de la Empresa</h2>
+                        <p class="report-subtitle" id="preview-period">Periodo: YYYY-MM</p>
+                    </div>
+
+                    <div id="preview-ai-summary" class="financial-statement"></div>
+
+                    <div class="financial-statement">
+                        <h3 class="statement-title">Balance General</h3>
+                        <table class="statement-table" id="preview-balance-table">
+                            <thead>
+                                <tr>
+                                    <th>Concepto</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">Sin datos disponibles. Calcule el balance primero.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="financial-statement">
+                        <h3 class="statement-title">Estado de Resultados</h3>
+                        <table class="statement-table" id="preview-results-table">
+                            <thead>
+                                <tr>
+                                    <th>Concepto</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">Sin datos disponibles. Calcule los resultados primero.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="financial-statement">
+                        <h3 class="statement-title">Ratios Financieros Clave</h3>
+                        <div id="preview-ratios">
+                            <p>Sin ratios calculados.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="updatePreview()"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>Actualizar Vista Previa</button>
+                </div>
+            </div>
+
+            <!-- Exportar Tab -->
+            <div id="exportar" class="tab-content">
+                <h2 class="section-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>Exportar Reporte</h2>
+                <div id="export-message"></div>
+
+                <div class="form-group">
+                    <h3>Personalización del Reporte</h3>
+                    <div class="form-row">
+                        <div class="form-item">
+                            <label for="company-logo">Subir Logo de la Empresa</label>
+                            <input type="file" id="company-logo" accept="image/png, image/jpeg">
+                        </div>
+                        <div class="form-item">
+                            <label for="company-name">Nombre de la Empresa</label>
+                            <input type="text" id="company-name" placeholder="Mi Empresa S.A. de C.V.">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-item">
+                            <label for="report-period">Periodo</label>
+                            <input type="text" id="report-period" placeholder="Ej: Junio 2025">
+                        </div>
+                        <div class="form-item">
+                            <label for="cover-background">Fondo de Portada (PDF)</label>
+                            <select id="cover-background">
+                                <option value="solid">Sólido (Gradiente)</option>
+                                <option value="pattern">Patrón Suave</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-item">
+                            <label for="watermark-text">Marca de Agua (PDF, opcional)</label>
+                            <input type="text" id="watermark-text" placeholder="CONFIDENCIAL">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Opciones de Exportación</h3>
+                    <div class="form-row">
+                        <div class="form-item">
+                            <label for="export-section">Seleccionar Sección</label>
+                            <select id="export-section">
+                                <option value="full">Reporte Completo</option>
+                                <option value="balance">Solo Balance General</option>
+                                <option value="results">Solo Estado de Resultados</option>
+                                <option value="ratios">Solo Ratios Financieros</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="export-pdf-btn" class="btn btn-primary" onclick="exportReport()"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <path d="M10 15.5c.5 1.5 2.5 1.5 3 0"></path>
+                            <path d="M12 18v-2"></path>
+                            <path d="M10 12v-1h4v1"></path>
+                            <path d="M10 9h4"></path>
+                            <path d="M15 12h-1"></path>
+                        </svg>Exportar PDF</button>
+                    <button id="export-csv-btn" class="btn btn-primary" style="background-color: var(--success);"
+                        onclick="exportCSV()"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>Exportar CSV</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Global Variables & State ---
+        let comparisonChart = null;
+        let financialData = { balance: {}, results: {}, ratios: {}, analysis: {} };
+        let logoObjectURL = null;
+        const spinnerSVG = `<svg class="spinner" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>`;
+        const apiKey = ""; // API key will be automatically provided in the environment.
+
+        function setupTabNavigation() {
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const tabId = this.dataset.tab;
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+                    if (window.innerWidth <= 992) {
+                        document.getElementById('sidebar').classList.remove('open');
+                    }
+                });
+            });
+        }
+
+        function setupMobileMenu() {
+            const toggleButton = document.getElementById('mobile-menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            toggleButton.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+            });
+        }
+
+        function setupLogoUploader() {
+            document.getElementById('company-logo').addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    if (logoObjectURL) {
+                        URL.revokeObjectURL(logoObjectURL); // Revoke old URL to prevent memory leaks
+                    }
+                    logoObjectURL = URL.createObjectURL(file);
+                    updatePreview(); // Update preview immediately after selecting a new logo
+                }
+            });
+        }
+
+        // --- UI & Utility Functions ---
+        function showMessage(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const messageClass = type === 'error' ? 'message error' : 'message success';
+            container.innerHTML = `<div class="${messageClass}">${message}</div>`;
+            setTimeout(() => { container.innerHTML = ''; }, 5000);
+        }
+
+        function getValue(id) {
+            const element = document.getElementById(id);
+            return element ? parseFloat(element.value) || 0 : 0;
+        }
+
+        function getTextValue(id) {
+            const element = document.getElementById(id);
+            return element ? element.value.trim() : '';
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(amount);
+        }
+
+        function clearForm(tabId) {
+            const formContainer = document.getElementById(tabId);
+            if (formContainer) {
+                formContainer.querySelectorAll('input[type="number"], input[type="text"]').forEach(input => {
+                    input.value = '';
+                });
+                showMessage(`${tabId}-message`, '✅ Campos limpiados.', 'success');
+            }
+        }
+
+        // --- Core Calculation Functions ---
+        function getBalanceTotals() {
+            const cashTotal = getValue('cash') + getValue('banks') + getValue('short-term-investments');
+            const accountsReceivableTotal = getValue('domestic-clients') + getValue('foreign-clients') + getValue('notes-receivable') - getValue('bad-debt-provision');
+            const inventoryTotal = getValue('raw-materials') + getValue('work-in-progress') + getValue('finished-goods') + getValue('goods-in-transit');
+            const otherCurrentAssetsTotal = getValue('tax-refunds') + getValue('interest-receivable') + getValue('supplier-advances') + getValue('other-current-assets');
+            const currentAssetsTotal = cashTotal + accountsReceivableTotal + inventoryTotal + otherCurrentAssetsTotal;
+            const ppeGrossTotal = getValue('land') + getValue('buildings') + getValue('machinery') + getValue('furniture') + getValue('transportation-equipment');
+            const ppeNetTotal = ppeGrossTotal - getValue('accumulated-depreciation');
+            const intangiblesTotal = (getValue('trademarks-patents') + getValue('licenses') + getValue('software')) - getValue('accumulated-amortization');
+            const investmentsTotal = getValue('investment-shares') + getValue('bonds') + getValue('other-investments');
+            const nonCurrentAssetsTotal = ppeNetTotal + intangiblesTotal + investmentsTotal;
+            const totalAssets = currentAssetsTotal + nonCurrentAssetsTotal;
+            const suppliersTotal = getValue('domestic-suppliers') + getValue('foreign-suppliers') + getValue('notes-payable');
+            const shortTermLoansTotal = getValue('short-term-bank-loans') + getValue('bank-overdrafts');
+            const taxesTotal = getValue('vat-payable') + getValue('income-tax-payable') + getValue('other-taxes');
+            const otherCurrentLiabilitiesTotal = getValue('customer-advances') + getValue('provisions') + getValue('dividends-payable') + getValue('other-current-liabilities');
+            const currentLiabilitiesTotal = suppliersTotal + shortTermLoansTotal + taxesTotal + otherCurrentLiabilitiesTotal;
+            const longTermLiabilitiesTotal = getValue('long-term-bank-loans') + getValue('finance-lease-obligations') + getValue('other-long-term-liabilities');
+            const totalLiabilities = currentLiabilitiesTotal + longTermLiabilitiesTotal;
+            const totalEquity = getValue('capital-stock') + getValue('share-premium') + getValue('legal-reserves') + getValue('voluntary-reserves') + getValue('accumulated-results') + getValue('current-period-result');
+            const totalLiabilitiesEquity = totalLiabilities + totalEquity;
+
+            return { totalAssets, totalLiabilitiesEquity, currentAssetsTotal, nonCurrentAssetsTotal, totalLiabilities, totalEquity, cashTotal, accountsReceivableTotal, inventoryTotal, otherCurrentAssetsTotal, ppeGrossTotal, ppeNetTotal, intangiblesTotal, investmentsTotal, suppliersTotal, shortTermLoansTotal, taxesTotal, otherCurrentLiabilitiesTotal, currentLiabilitiesTotal, longTermLiabilitiesTotal };
+        }
+
+        function validateAccountingEquation() {
+            const { totalAssets, totalLiabilitiesEquity } = getBalanceTotals();
+            const difference = Math.abs(totalAssets - totalLiabilitiesEquity);
+            if (difference > 0.01) {
+                showMessage('balance-message', `¡Descuadre en la ecuación contable! Activo (${formatCurrency(totalAssets)}) ≠ Pasivo + Patrimonio (${formatCurrency(totalLiabilitiesEquity)})`, 'error');
+                return false;
+            }
+            return true;
+        }
+
+        function calculateBalance() {
+            if (!validateAccountingEquation()) return;
+
+            financialData.balance = {
+                cash: { cash: getValue('cash'), banks: getValue('banks'), shortTermInvestments: getValue('short-term-investments') },
+                accountsReceivable: { domesticClients: getValue('domestic-clients'), foreignClients: getValue('foreign-clients'), notesReceivable: getValue('notes-receivable'), badDebtProvision: getValue('bad-debt-provision') },
+                inventory: { rawMaterials: getValue('raw-materials'), workInProgress: getValue('work-in-progress'), finishedGoods: getValue('finished-goods'), goodsInTransit: getValue('goods-in-transit') },
+                otherCurrentAssets: { taxRefunds: getValue('tax-refunds'), interestReceivable: getValue('interest-receivable'), supplierAdvances: getValue('supplier-advances'), other: getValue('other-current-assets') },
+                ppe: { land: getValue('land'), buildings: getValue('buildings'), machinery: getValue('machinery'), furniture: getValue('furniture'), transportationEquipment: getValue('transportation-equipment'), accumulatedDepreciation: getValue('accumulated-depreciation') },
+                intangibles: { trademarksPatents: getValue('trademarks-patents'), licenses: getValue('licenses'), software: getValue('software'), accumulatedAmortization: getValue('accumulated-amortization') },
+                investments: { investmentShares: getValue('investment-shares'), bonds: getValue('bonds'), other: getValue('other-investments') },
+                suppliers: { domesticSuppliers: getValue('domestic-suppliers'), foreignSuppliers: getValue('foreign-suppliers'), notesPayable: getValue('notes-payable') },
+                shortTermLoans: { bankLoans: getValue('short-term-bank-loans'), overdrafts: getValue('bank-overdrafts') },
+                taxes: { vatPayable: getValue('vat-payable'), incomeTaxPayable: getValue('income-tax-payable'), otherTaxes: getValue('other-taxes') },
+                otherCurrentLiabilities: { customerAdvances: getValue('customer-advances'), provisions: getValue('provisions'), dividendsPayable: getValue('dividends-payable'), other: getValue('other-current-liabilities') },
+                longTermLiabilities: { bankLoans: getValue('long-term-bank-loans'), financeLease: getValue('finance-lease-obligations'), other: getValue('other-long-term-liabilities') },
+                equity: { capitalStock: getValue('capital-stock'), sharePremium: getValue('share-premium'), legalReserves: getValue('legal-reserves'), voluntaryReserves: getValue('voluntary-reserves'), accumulatedResults: getValue('accumulated-results'), currentPeriodResult: getValue('current-period-result') },
+                totals: getBalanceTotals()
+            };
+            showMessage('balance-message', '✅ Balance General calculado correctamente.', 'success');
+        }
+
+        function getResultsTotals() {
+            const grossSales = getValue('gross-sales');
+            const salesReturns = getValue('sales-returns');
+            const salesDiscounts = getValue('sales-discounts');
+            const bonuses = getValue('bonuses');
+            const netSales = grossSales - salesReturns - salesDiscounts - bonuses;
+
+            const totalOtherIncome = getValue('rental-income') + getValue('financial-income') + getValue('asset-sale-gain') + getValue('other-income');
+            const totalRevenue = netSales + totalOtherIncome;
+
+            const costOfSales = (getValue('beginning-inventory') + getValue('net-purchases') - getValue('ending-inventory')) + getValue('finished-goods-cost');
+            const grossProfit = totalRevenue - costOfSales;
+
+            const totalSalesExpenses = getValue('sales-salaries') + getValue('sales-commissions') + getValue('advertising') + getValue('freight-out') + getValue('other-sales-expenses');
+            const totalAdminExpenses = getValue('admin-salaries') + getValue('professional-fees') + getValue('general-services') + getValue('office-maintenance') + getValue('depreciation-expense') + getValue('amortization-expense') + getValue('other-admin-expenses');
+            const totalOperatingExpenses = totalSalesExpenses + totalAdminExpenses;
+            const operatingProfit = grossProfit - totalOperatingExpenses;
+
+            const totalFinancialExpenses = getValue('interest-expense') + getValue('bank-commissions') + getValue('exchange-loss') + getValue('other-financial-expenses');
+            const profitBeforeTax = operatingProfit - totalFinancialExpenses;
+
+            const totalTaxes = getValue('income-tax') + getValue('other-taxes-expense');
+            const netIncome = profitBeforeTax - totalTaxes;
+
+            return { netSales, totalOtherIncome, totalRevenue, costOfSales, grossProfit, totalSalesExpenses, totalAdminExpenses, totalOperatingExpenses, operatingProfit, totalFinancialExpenses, profitBeforeTax, totalTaxes, netIncome };
+        }
+
+        function calculateResults() {
+            const totals = getResultsTotals();
+            financialData.results = {
+                revenue: {
+                    grossSales: getValue('gross-sales'), salesReturns: getValue('sales-returns'), salesDiscounts: getValue('sales-discounts'), bonuses: getValue('bonuses'), netSales: totals.netSales,
+                    rentalIncome: getValue('rental-income'), financialIncome: getValue('financial-income'), assetSaleGain: getValue('asset-sale-gain'), otherIncome: getValue('other-income'), totalOtherIncome: totals.totalOtherIncome,
+                    totalRevenue: totals.totalRevenue
+                },
+                costOfSales: {
+                    beginningInventory: getValue('beginning-inventory'), netPurchases: getValue('net-purchases'), endingInventory: getValue('ending-inventory'), finishedGoodsCost: getValue('finished-goods-cost'),
+                    costOfSales: totals.costOfSales
+                },
+                operatingExpenses: {
+                    sales: { salaries: getValue('sales-salaries'), commissions: getValue('sales-commissions'), advertising: getValue('advertising'), freightOut: getValue('freight-out'), other: getValue('other-sales-expenses'), total: totals.totalSalesExpenses },
+                    administration: { salaries: getValue('admin-salaries'), professionalFees: getValue('professional-fees'), generalServices: getValue('general-services'), officeMaintenance: getValue('office-maintenance'), depreciation: getValue('depreciation-expense'), amortization: getValue('amortization-expense'), other: getValue('other-admin-expenses'), total: totals.totalAdminExpenses },
+                    totalOperatingExpenses: totals.totalOperatingExpenses
+                },
+                financialExpenses: { interest: getValue('interest-expense'), bankCommissions: getValue('bank-commissions'), exchangeLoss: getValue('exchange-loss'), other: getValue('other-financial-expenses'), total: totals.totalFinancialExpenses },
+                taxes: { incomeTax: getValue('income-tax'), otherTaxes: getValue('other-taxes-expense'), total: totals.totalTaxes },
+                netIncome: totals.netIncome,
+                totals: totals
+            };
+            showMessage('resultados-message', `✅ Estado de Resultados calculado. Utilidad Neta: ${formatCurrency(totals.netIncome)}`, 'success');
+        }
+
+        function calculateRatios() {
+            if (!financialData.balance.totals || !financialData.results.totals) {
+                showMessage('ratios-message', '⚠️ Primero calcule el Balance General y el Estado de Resultados.', 'error');
+                return;
+            }
+
+            const { currentAssetsTotal, totalAssets, currentLiabilitiesTotal, totalLiabilities, totalEquity, inventoryTotal } = financialData.balance.totals;
+            const { netIncome, totalRevenue } = financialData.results.totals;
+
+            const ratios = {
+                currentRatio: currentLiabilitiesTotal > 0 ? currentAssetsTotal / currentLiabilitiesTotal : 0,
+                quickRatio: currentLiabilitiesTotal > 0 ? (currentAssetsTotal - inventoryTotal) / currentLiabilitiesTotal : 0,
+                debtRatio: totalAssets > 0 ? totalLiabilities / totalAssets : 0,
+                equityRatio: totalAssets > 0 ? totalEquity / totalAssets : 0,
+                roe: totalEquity > 0 ? netIncome / totalEquity : 0,
+                netMargin: totalRevenue > 0 ? netIncome / totalRevenue : 0
+            };
+
+            financialData.ratios = ratios;
+            displayRatios(ratios);
+            showMessage('ratios-message', '✅ Ratios Financieros calculados correctamente.', 'success');
+        }
+
+        // --- Display & UI Update Functions ---
+        function displayRatios(ratios) {
+            const mode = document.getElementById('ratio-mode').value;
+            const container = document.getElementById('ratios-display');
+            const { netIncome } = financialData.results.totals;
+
+            const bankModeHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;"><div style="background: #eff6ff; padding: 1rem; border-radius: 8px;"><h4 style="color:#1e40af">Razón Corriente</h4><p style="font-size: 1.5rem; font-weight: bold; color: #2563eb;">${ratios.currentRatio.toFixed(2)}</p><small>Activo Corriente / Pasivo Corriente</small></div><div style="background: #eff6ff; padding: 1rem; border-radius: 8px;"><h4 style="color:#1e40af">Prueba Ácida</h4><p style="font-size: 1.5rem; font-weight: bold; color: #2563eb;">${ratios.quickRatio.toFixed(2)}</p><small>(Act. Corr. - Inventarios) / Pas. Corr.</small></div><div style="background: #eff6ff; padding: 1rem; border-radius: 8px;"><h4 style="color:#1e40af">Ratio de Endeudamiento</h4><p style="font-size: 1.5rem; font-weight: bold; color: #2563eb;">${(ratios.debtRatio * 100).toFixed(1)}%</p><small>Pasivo Total / Activo Total</small></div></div>`;
+            const investorModeHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;"><div style="background: #dcfce7; padding: 1rem; border-radius: 8px;"><h4 style="color:#065f46">ROE</h4><p style="font-size: 1.5rem; font-weight: bold; color: #10b981;">${(ratios.roe * 100).toFixed(2)}%</p><small>Utilidad Neta / Patrimonio</small></div><div style="background: #dcfce7; padding: 1rem; border-radius: 8px;"><h4 style="color:#065f46">Margen Neto</h4><p style="font-size: 1.5rem; font-weight: bold; color: #10b981;">${(ratios.netMargin * 100).toFixed(2)}%</p><small>Utilidad Neta / Ventas</small></div><div style="background: #dcfce7; padding: 1rem; border-radius: 8px;"><h4 style="color:#065f46">Utilidad Neta</h4><p style="font-size: 1.5rem; font-weight: bold; color: #10b981;">${formatCurrency(netIncome)}</p><small>Ingresos - Gastos</small></div></div>`;
+            container.innerHTML = mode === 'bank' ? bankModeHTML : investorModeHTML;
+        }
+
+        function switchRatioMode() {
+            if (financialData.ratios && Object.keys(financialData.ratios).length > 0) {
+                displayRatios(financialData.ratios);
+            }
+        }
+
+        function generateComparison() {
+            const period1Name = getTextValue('period1-name') || 'Periodo 1';
+            const period2Name = getTextValue('period2-name') || 'Periodo 2';
+            const period1NetIncome = getValue('period1-net-income');
+            const period2NetIncome = getValue('period2-net-income');
+            const period1Sales = getValue('period1-sales');
+            const period2Sales = getValue('period2-sales');
+            const incomeVariation = period1NetIncome !== 0 ? ((period2NetIncome - period1NetIncome) / Math.abs(period1NetIncome)) * 100 : 0;
+            const ctx = document.getElementById('comparison-chart').getContext('2d');
+
+            if (comparisonChart) comparisonChart.destroy();
+
+            comparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [period1Name, period2Name],
+                    datasets: [
+                        { label: 'Utilidad Neta', data: [period1NetIncome, period2NetIncome], backgroundColor: ['#3b82f6', '#10b981'] },
+                        { label: 'Ventas Netas', data: [period1Sales, period2Sales], backgroundColor: ['#60a5fa', '#34d399'] }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, ticks: { callback: value => formatCurrency(value) } } },
+                    plugins: { legend: { position: 'top' }, title: { display: true, text: 'Comparativo de Periodos' } }
+                }
+            });
+
+            showMessage('comparativo-message', `✅ Comparativo generado. Variación en Utilidad: ${incomeVariation >= 0 ? '+' : ''}${incomeVariation.toFixed(1)}%`, 'success');
+        }
+
+        function updatePreviewTables() {
+            if (financialData.balance.totals) {
+                const b = financialData.balance;
+                const bt = b.totals;
+                document.getElementById('preview-balance-table').innerHTML = `
+                    <thead><tr><th>Concepto</th><th>Monto</th></tr></thead>
+                    <tbody>
+                        <tr><td colspan="2"><strong>ACTIVO</strong></td></tr>
+                        <tr><td><strong>Activo Corriente</strong></td><td></td></tr>
+                        <tr><td>&nbsp;&nbsp;Disponibilidades</td><td>${formatCurrency(bt.cashTotal)}</td></tr>
+                        <tr><td>&nbsp;&nbsp;Cuentas por Cobrar Comerciales</td><td>${formatCurrency(bt.accountsReceivableTotal)}</td></tr>
+                        <tr><td>&nbsp;&nbsp;Inventarios</td><td>${formatCurrency(bt.inventoryTotal)}</td></tr>
+                        <tr><td>&nbsp;&nbsp;Otros Activos Corrientes</td><td>${formatCurrency(bt.otherCurrentAssetsTotal)}</td></tr>
+                        <tr class="total-row"><td>Total Activo Corriente</td><td>${formatCurrency(bt.currentAssetsTotal)}</td></tr>
+                        <tr><td><strong>Activo No Corriente</strong></td><td></td></tr>
+                        <tr><td>&nbsp;&nbsp;Propiedad, Planta y Equipo (Neto)</td><td>${formatCurrency(bt.ppeNetTotal)}</td></tr>
+                        <tr><td>&nbsp;&nbsp;Intangibles (Neto)</td><td>${formatCurrency(bt.intangiblesTotal)}</td></tr>
+                        <tr><td>&nbsp;&nbsp;Inversiones Permanentes</td><td>${formatCurrency(bt.investmentsTotal)}</td></tr>
+                        <tr class="total-row"><td>Total Activo No Corriente</td><td>${formatCurrency(bt.nonCurrentAssetsTotal)}</td></tr>
+                        <tr class="grand-total-row"><td><strong>TOTAL ACTIVO</strong></td><td><strong>${formatCurrency(bt.totalAssets)}</strong></td></tr>
+                        <tr><td colspan="2"><strong>PASIVO Y PATRIMONIO</strong></td></tr>
+                        <tr><td><strong>Pasivo Corriente</strong></td><td></td></tr>
+                        <tr><td>&nbsp;&nbsp;Proveedores</td><td>${formatCurrency(bt.suppliersTotal)}</td></tr>
+                        <tr><td>&nbsp;&nbsp;Obligaciones Financieras</td><td>${formatCurrency(bt.shortTermLoansTotal)}</td></tr>
+                        <tr><td>&nbsp;&nbsp;Obligaciones Fiscales</td><td>${formatCurrency(bt.taxesTotal)}</td></tr>
+                        <tr><td>&nbsp;&nbsp;Otros Pasivos Corrientes</td><td>${formatCurrency(bt.otherCurrentLiabilitiesTotal)}</td></tr>
+                        <tr class="total-row"><td>Total Pasivo Corriente</td><td>${formatCurrency(bt.currentLiabilitiesTotal)}</td></tr>
+                        <tr><td><strong>Pasivo No Corriente</strong></td><td></td></tr>
+                        <tr class="total-row"><td>Total Pasivo No Corriente</td><td>${formatCurrency(bt.longTermLiabilitiesTotal)}</td></tr>
+                        <tr class="total-row"><td>Total Pasivo</td><td>${formatCurrency(bt.totalLiabilities)}</td></tr>
+                        <tr><td><strong>Patrimonio</strong></td><td></td></tr>
+                        <tr class="total-row"><td>Total Patrimonio</td><td>${formatCurrency(bt.totalEquity)}</td></tr>
+                        <tr class="grand-total-row"><td><strong>TOTAL PASIVO Y PATRIMONIO</strong></td><td><strong>${formatCurrency(bt.totalLiabilitiesEquity)}</strong></td></tr>
+                    </tbody>`;
+            }
+
+            if (financialData.results.totals) {
+                const rt = financialData.results.totals;
+                document.getElementById('preview-results-table').innerHTML = `
+                    <thead><tr><th>Concepto</th><th>Monto</th></tr></thead>
+                    <tbody>
+                        <tr><td>Ventas Netas</td><td>${formatCurrency(rt.netSales)}</td></tr>
+                        <tr><td>Otros Ingresos</td><td>${formatCurrency(rt.totalOtherIncome)}</td></tr>
+                        <tr class="subtotal-row"><td><strong>Total Ingresos</strong></td><td><strong>${formatCurrency(rt.totalRevenue)}</strong></td></tr>
+                        <tr><td>Costo de Ventas</td><td>(${formatCurrency(rt.costOfSales)})</td></tr>
+                        <tr class="total-row"><td><strong>Utilidad Bruta</strong></td><td><strong>${formatCurrency(rt.grossProfit)}</strong></td></tr>
+                        <tr><td>Gastos de Venta</td><td>(${formatCurrency(rt.totalSalesExpenses)})</td></tr>
+                        <tr><td>Gastos de Administración</td><td>(${formatCurrency(rt.totalAdminExpenses)})</td></tr>
+                        <tr class="subtotal-row"><td><strong>Total Gastos de Operación</strong></td><td><strong>(${formatCurrency(rt.totalOperatingExpenses)})</strong></td></tr>
+                        <tr class="total-row"><td><strong>Utilidad Operativa</strong></td><td><strong>${formatCurrency(rt.operatingProfit)}</strong></td></tr>
+                        <tr><td>Gastos Financieros</td><td>(${formatCurrency(rt.totalFinancialExpenses)})</td></tr>
+                        <tr class="total-row"><td><strong>Utilidad antes de Impuestos</strong></td><td><strong>${formatCurrency(rt.profitBeforeTax)}</strong></td></tr>
+                        <tr><td>Impuestos</td><td>(${formatCurrency(rt.totalTaxes)})</td></tr>
+                        <tr class="grand-total-row"><td><strong>UTILIDAD NETA</strong></td><td><strong>${formatCurrency(rt.netIncome)}</strong></td></tr>
+                    </tbody>`;
+            }
+
+            if (financialData.ratios && Object.keys(financialData.ratios).length > 0) {
+                const ratios = financialData.ratios;
+                document.getElementById('preview-ratios').innerHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;"><div style="background: #f8fafc; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--primary);"><h4 style="font-size:0.9rem">Razón Corriente</h4><p style="font-size: 1.2rem; font-weight: bold;">${ratios.currentRatio.toFixed(2)}</p></div><div style="background: #f8fafc; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--success);"><h4 style="font-size:0.9rem">ROE</h4><p style="font-size: 1.2rem; font-weight: bold;">${(ratios.roe * 100).toFixed(2)}%</p></div><div style="background: #f8fafc; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--warning);"><h4 style="font-size:0.9rem">Margen Neto</h4><p style="font-size: 1.2rem; font-weight: bold;">${(ratios.netMargin * 100).toFixed(2)}%</p></div></div>`;
+            }
+        }
+        function getPdfContent() {
+            const section = document.getElementById('export-section').value;
+            let contentToExport;
+            switch (section) {
+                case 'balance': contentToExport = document.getElementById('preview-balance-table').closest('.financial-statement'); break;
+                case 'results': contentToExport = document.getElementById('preview-results-table').closest('.financial-statement'); break;
+                case 'ratios': contentToExport = document.getElementById('preview-ratios').closest('.financial-statement'); break;
+                default: contentToExport = document.getElementById('report-preview');
+            }
+            return contentToExport.cloneNode(true);
+        }
+
+        function exportReport() {
+            const companyName = getTextValue('company-name') || 'Reporte Financiero';
+            const reportPeriod = getTextValue('report-period') || 'N/A';
+            const logoUrl = logoObjectURL; // Use the object URL from the uploaded file
+            const watermark = getTextValue('watermark-text');
+            const background = document.getElementById('cover-background').value;
+            const exportBtn = document.getElementById('export-pdf-btn');
+            const originalBtnHTML = exportBtn.innerHTML;
+
+            exportBtn.disabled = true;
+            exportBtn.innerHTML = `${spinnerSVG} Generando...`;
+
+            const cover = document.createElement('div');
+            cover.className = `pdf-cover ${background}`;
+            cover.innerHTML = `${watermark ? `<div class="pdf-watermark">${watermark}</div>` : ''}<div class="pdf-logo">${logoUrl ? `<img src="${logoUrl}" alt="Logo">` : '<span>LOGO</span>'}</div><h1 class="pdf-title">${companyName}</h1><p class="pdf-subtitle">Estados Financieros</p><div class="pdf-period">${reportPeriod}</div>`;
+
+            const content = getPdfContent();
+            const pdfContainer = document.createElement('div');
+            pdfContainer.appendChild(cover);
+            pdfContainer.appendChild(content);
+
+            const options = {
+                margin: 0,
+                filename: `Reporte_${companyName.replace(/ /g, "_")}_${reportPeriod.replace(/ /g, "_")}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(pdfContainer).set(options).save()
+                .then(() => showMessage('export-message', '✅ PDF generado y descargado.', 'success'))
+                .catch(err => {
+                    showMessage('export-message', '❌ Error al generar el PDF.', 'error');
+                    console.error(err);
+                })
+                .finally(() => {
+                    exportBtn.disabled = false;
+                    exportBtn.innerHTML = originalBtnHTML;
+                });
+        }
+
+        function exportCSV() {
+            const section = document.getElementById('export-section').value;
+            let csvContent = "data:text/csv;charset=utf-8,";
+            let filename = 'Reporte_Financiero.csv';
+
+            if (section === 'balance' || section === 'full') {
+                if (!financialData.balance.totals) { showMessage('export-message', 'Calcule el balance primero.', 'error'); return; }
+                Object.entries(financialData.balance).forEach(([key, value]) => {
+                    if (key !== 'totals') {
+                        Object.entries(value).forEach(([subKey, subValue]) => {
+                            csvContent += `Balance,${key},${subKey},${subValue}\n`;
+                        });
+                    }
+                });
+                filename = 'Balance_General.csv';
+            }
+            if (section === 'results' || section === 'full') {
+                if (!financialData.results.totals) { showMessage('export-message', 'Calcule los resultados primero.', 'error'); return; }
+                Object.entries(financialData.results).forEach(([key, value]) => {
+                    if (key !== 'totals' && key !== 'netIncome') {
+                        if (typeof value === 'object') {
+                            Object.entries(value).forEach(([subKey, subValue]) => {
+                                if (typeof subValue === 'object') {
+                                    Object.entries(subValue).forEach(([innerKey, innerValue]) => {
+                                        csvContent += `Resultados,${key},${subKey},${innerKey},${innerValue}\n`;
+                                    });
+                                } else {
+                                    csvContent += `Resultados,${key},${subKey},${subValue}\n`;
+                                }
+                            });
+                        } else {
+                            csvContent += `Resultados,${key},${value}\n`;
+                        }
+                    }
+                });
+                csvContent += `Resultados,Utilidad Neta,${financialData.results.netIncome}\n`;
+                filename = section === 'results' ? 'Estado_Resultados.csv' : 'Reporte_Completo.csv';
+            }
+            if (section === 'ratios' || section === 'full') {
+                if (!financialData.ratios) { showMessage('export-message', 'Calcule los ratios primero.', 'error'); return; }
+                Object.entries(financialData.ratios).forEach(([key, value]) => {
+                    csvContent += `Ratios,${key},${value.toFixed(4)}\n`;
+                });
+                filename = section === 'ratios' ? 'Ratios_Financieros.csv' : 'Reporte_Completo.csv';
+            }
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showMessage('export-message', `✅ ${filename} generado y descargado.`, 'success');
+        }
+
+        function loadSampleBalanceData() {
+            const data = { 'cash': 25000, 'banks': 35000, 'short-term-investments': 10000, 'domestic-clients': 20000, 'foreign-clients': 15000, 'notes-receivable': 8000, 'bad-debt-provision': 2000, 'raw-materials': 18000, 'work-in-progress': 12000, 'finished-goods': 22000, 'goods-in-transit': 3000, 'tax-refunds': 5000, 'interest-receivable': 2500, 'supplier-advances': 4000, 'other-current-assets': 3500, 'land': 80000, 'buildings': 120000, 'machinery': 90000, 'furniture': 15000, 'transportation-equipment': 25000, 'accumulated-depreciation': 45000, 'trademarks-patents': 12000, 'licenses': 8000, 'software': 10000, 'accumulated-amortization': 3000, 'investment-shares': 20000, 'bonds': 15000, 'other-investments': 10000, 'domestic-suppliers': 18000, 'foreign-suppliers': 12000, 'notes-payable': 5000, 'short-term-bank-loans': 25000, 'bank-overdrafts': 8000, 'vat-payable': 6000, 'income-tax-payable': 4000, 'other-taxes': 2000, 'customer-advances': 7000, 'provisions': 3000, 'dividends-payable': 5000, 'other-current-liabilities': 4000, 'long-term-bank-loans': 60000, 'finance-lease-obligations': 15000, 'other-long-term-liabilities': 10000, 'capital-stock': 151000, 'share-premium': 20000, 'legal-reserves': 15000, 'voluntary-reserves': 10000, 'accumulated-results': 25000, 'current-period-result': 48500 };
+            Object.keys(data).forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = data[id]; });
+            showMessage('balance-message', '✅ Datos de ejemplo cargados.', 'success');
+        }
+
+        function loadSampleResultsData() {
+            const data = { 'gross-sales': 250000, 'sales-returns': 8000, 'sales-discounts': 5000, 'bonuses': 3000, 'rental-income': 12000, 'financial-income': 8000, 'asset-sale-gain': 5000, 'other-income': 3000, 'beginning-inventory': 45000, 'net-purchases': 120000, 'ending-inventory': 50000, 'finished-goods-cost': 15000, 'sales-salaries': 25000, 'sales-commissions': 12000, 'advertising': 8000, 'freight-out': 6000, 'other-sales-expenses': 4000, 'admin-salaries': 30000, 'professional-fees': 8000, 'general-services': 6000, 'office-maintenance': 4000, 'depreciation-expense': 12000, 'amortization-expense': 3000, 'other-admin-expenses': 5000, 'interest-expense': 8000, 'bank-commissions': 3000, 'exchange-loss': 2000, 'other-financial-expenses': 1500, 'income-tax': 15000, 'other-taxes-expense': 2000 };
+            Object.keys(data).forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = data[id]; });
+            showMessage('resultados-message', '✅ Datos de ejemplo cargados.', 'success');
+        }
+
+        function loadSampleComparisonData() {
+            document.getElementById('period1-name').value = '2025-06';
+            document.getElementById('period1-net-income').value = 25000;
+            document.getElementById('period1-sales').value = 180000;
+            document.getElementById('period2-name').value = '2025-07';
+            document.getElementById('period2-net-income').value = 32000;
+            document.getElementById('period2-sales').value = 210000;
+            showMessage('comparativo-message', '✅ Datos de ejemplo cargados.', 'success');
+        }
+
+        // --- Gemini API Integration ---
+
+        function getPromptData() {
+            if (!financialData.balance.totals || !financialData.results.totals || !financialData.ratios) {
+                return null;
+            }
+            return `
+                Datos Financieros para ${getTextValue('company-name') || 'la empresa'} para el periodo ${getTextValue('report-period') || 'actual'}:
+
+                **Balance General (Resumen):**
+                - Activos Totales: ${formatCurrency(financialData.balance.totals.totalAssets)}
+                - Pasivos Totales: ${formatCurrency(financialData.balance.totals.totalLiabilities)}
+                - Patrimonio Neto: ${formatCurrency(financialData.balance.totals.totalEquity)}
+
+                **Estado de Resultados (Resumen):**
+                - Ingresos Totales: ${formatCurrency(financialData.results.totals.totalRevenue)}
+                - Utilidad Bruta: ${formatCurrency(financialData.results.totals.grossProfit)}
+                - Utilidad Operativa: ${formatCurrency(financialData.results.totals.operatingProfit)}
+                - Utilidad Neta: ${formatCurrency(financialData.results.totals.netIncome)}
+
+                **Ratios Clave:**
+                - Razón Corriente: ${financialData.ratios.currentRatio.toFixed(2)}
+                - Prueba Ácida: ${financialData.ratios.quickRatio.toFixed(2)}
+                - Ratio de Endeudamiento: ${(financialData.ratios.debtRatio * 100).toFixed(2)}%
+                - ROE (Retorno sobre el Patrimonio): ${(financialData.ratios.roe * 100).toFixed(2)}%
+                - Margen Neto: ${(financialData.ratios.netMargin * 100).toFixed(2)}%
+            `;
+        }
+
+        async function generateAIAnalysis(analysisType) {
+            const promptData = getPromptData();
+            if (!promptData) {
+                showMessage('ai-message', 'Por favor, calcule primero el Balance General y el Estado de Resultados.', 'error');
+                return;
+            }
+
+            const btnId = `ai-${analysisType.slice(0, 5)}-btn`;
+            const resultTextareaId = `ai-${analysisType}-result`;
+            const button = document.getElementById(btnId);
+            const resultTextarea = document.getElementById(resultTextareaId);
+
+            const originalBtnHTML = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = `${spinnerSVG} Generando...`;
+            resultTextarea.value = "Analizando datos...";
+
+            let systemPrompt = "Eres un analista financiero experto. Tu tarea es analizar los siguientes datos financieros y generar una respuesta concisa, profesional y fácil de entender en español. El tono debe ser objetivo y basado en datos.";
+            let userPrompt = "";
+
+            switch (analysisType) {
+                case 'summary':
+                    userPrompt = `Basado en los siguientes datos, genera un resumen ejecutivo. Céntrate en los puntos más importantes sobre la liquidez, rentabilidad y estructura de capital.\n\n${promptData}`;
+                    break;
+                case 'swot':
+                    userPrompt = `Basado en los siguientes datos, identifica 2-3 fortalezas clave y 2-3 debilidades clave. Explica brevemente por qué cada punto es una fortaleza o debilidad, utilizando los datos para respaldar tu análisis.\n\n${promptData}`;
+                    break;
+                case 'recommendations':
+                    userPrompt = `Basado en los siguientes datos, proporciona 2-3 recomendaciones estratégicas y accionables para mejorar la salud financiera de la empresa. Justifica cada recomendación.\n\n${promptData}`;
+                    break;
+            }
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error de la API: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    resultTextarea.value = text;
+                    financialData.analysis[analysisType] = text;
+                    if (analysisType === 'summary') {
+                        updatePreview();
+                    }
+                } else {
+                    throw new Error("La respuesta de la API no contiene texto.");
+                }
+
+            } catch (error) {
+                console.error("Error al llamar a la API de Gemini:", error);
+                resultTextarea.value = "Ocurrió un error al generar el análisis. Por favor, inténtelo de nuevo.";
+                showMessage('ai-message', 'Error al contactar al servicio de IA.', 'error');
+            } finally {
+                button.disabled = false;
+                button.innerHTML = originalBtnHTML;
+            }
+        }
+
+        // --- Update Preview to include AI Summary ---
+        function updatePreview() {
+            document.getElementById('preview-company-name').textContent = getTextValue('company-name') || 'Nombre de la Empresa';
+            document.getElementById('preview-period').textContent = `Periodo: ${getTextValue('report-period') || 'YYYY-MM'}`;
+
+            const logoPreview = document.getElementById('preview-logo');
+            if (logoObjectURL) {
+                logoPreview.innerHTML = `<img src="${logoObjectURL}" alt="Logo">`;
+            } else {
+                logoPreview.innerHTML = '<span>LOGO</span>';
+            }
+
+            const aiSummaryContainer = document.getElementById('preview-ai-summary');
+            if (financialData.analysis.summary) {
+                aiSummaryContainer.innerHTML = `<div class="ai-analysis-container"><h4>✨ Resumen Ejecutivo por IA</h4><p>${financialData.analysis.summary.replace(/\n/g, '<br>')}</p></div>`;
+            } else {
+                aiSummaryContainer.innerHTML = "";
+            }
+
+            updatePreviewTables();
+            showMessage('preview-message', '✅ Vista previa actualizada.', 'success');
+        }
+
+        // --- Event Listeners & Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            setupTabNavigation();
+            setupMobileMenu();
+            setupLogoUploader();
+            loadSampleBalanceData();
+            loadSampleResultsData();
+            calculateBalance();
+            calculateResults();
+            calculateRatios();
+            updatePreview();
+        });
+    </script>
+</body>
+
+</html>

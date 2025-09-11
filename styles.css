@@ -1,0 +1,290 @@
+:root {
+    --bg: #f7fafc;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --accent: #0f766e;
+    --good: #16a34a;
+    --warn: #f59e0b;
+    --bad: #dc2626;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: #0f172a
+}
+
+.app {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 16px
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: linear-gradient(90deg, #ecfeff, #f0fdf4);
+    border-radius: 8px
+}
+
+.topbar .brand h1 {
+    margin: 0;
+    font-size: 18px
+}
+
+.topbar .meta {
+    display: flex;
+    gap: 8px;
+    align-items: center
+}
+
+.topbar input {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #e6edf0
+}
+
+.topbar .small input {
+    width: 140px
+}
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0
+}
+
+.tab-btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #e6edf0;
+    cursor: pointer
+}
+
+.tab-btn.active {
+    background: var(--accent);
+    color: #fff
+}
+
+.tab {
+    display: none
+}
+
+.tab.active {
+    display: block
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px
+}
+
+.card {
+    background: var(--card);
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(2, 6, 23, 0.06)
+}
+
+.card.wide {
+    grid-column: 1 / -1
+}
+
+.controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap
+}
+
+.controls button {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #e6edf0;
+    background: #f8fafc;
+    cursor: pointer
+}
+
+.tableWrap {
+    margin-top: 8px;
+    border-top: 1px dashed #e6edf0;
+    padding-top: 8px
+}
+
+.accountTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px
+}
+
+.accountTable th,
+.accountTable td {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid #f1f5f9
+}
+
+.accountTable input[type="text"],
+.accountTable input[type="number"] {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #eef2f6;
+    border-radius: 6px
+}
+
+.actionsBar {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px
+}
+
+.actionsBar button {
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    cursor: pointer
+}
+
+.actionsBar button#clearBtn {
+    background: #ef4444
+}
+
+.reportHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 12px
+}
+
+.reportHeader .left h2 {
+    margin: 0
+}
+
+.status {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 600
+}
+
+.status.good {
+    background: rgba(22, 163, 74, 0.12);
+    color: var(--good)
+}
+
+.status.bad {
+    background: rgba(220, 38, 38, 0.08);
+    color: var(--bad)
+}
+
+.status.neutral {
+    background: rgba(99, 102, 241, 0.06);
+    color: var(--muted)
+}
+
+.reportBody h3 {
+    margin: 12px 0 6px 0
+}
+
+.ratios {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap
+}
+
+.ratios .ratioItem {
+    background: #fff;
+    padding: 8px;
+    border-radius: 6px;
+    min-width: 160px
+}
+
+.dashTop {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px
+}
+
+.cardsRow {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px
+}
+
+.statCard {
+    flex: 1;
+    min-width: 160px;
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px
+}
+
+.statLabel {
+    color: var(--muted);
+    font-size: 13px
+}
+
+.statValue {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 6px
+}
+
+.chartWrap {
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px
+}
+
+.footer {
+    text-align: center;
+    margin-top: 16px;
+    color: var(--muted)
+}
+
+.exportRow,
+.exportButtons,
+.qrRow {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 8px
+}
+
+#qrContainer canvas {
+    max-width: 120px;
+    max-height: 120px
+}
+
+/* Responsive */
+@media (max-width:900px) {
+    .grid {
+        grid-template-columns: 1fr
+    }
+
+    .topbar {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start
+    }
+
+    .tabs {
+        flex-wrap: wrap
+    }
+}
