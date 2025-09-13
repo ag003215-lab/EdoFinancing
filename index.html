@@ -272,12 +272,12 @@
 
 <body class="bg-light-bg text-light-text dark:bg-dark-bg dark:text-dark-text transition-colors duration-300">
     <!-- Pantalla de bienvenida -->
-    <div id="welcome-screen" class="welcome-screen bg-gradient-to-br from-primary-600 to-primary-800 text-white p-8">
-        <div class="text-center animate-fade-in-up">
+    <div id="welcome-screen" class="welcome-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text">
+        <div class="text-center animate-fade-in-up transition-all duration-500">
             <div class="flex items-center justify-center mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white animate-bounce-slow"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                    stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-20 w-20 text-primary-600 dark:text-primary-400 animate-bounce-slow" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                     <polyline points="14 2 14 8 20 8"></polyline>
                     <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -285,13 +285,12 @@
                     <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
             </div>
-            <h1 class="text-5xl font-extrabold mb-4">Agronare Financiero</h1>
-            <p class="text-lg mb-8 max-w-lg mx-auto font-light opacity-80">
-                Tu herramienta intuitiva para generar, analizar y comparar estados financieros.
-                Optimiza tu toma de decisiones con análisis detallados y reportes profesionales.
+            <h1 class="text-5xl font-extrabold mb-4 text-gray-800 dark:text-gray-100">Agronare Financiero</h1>
+            <p class="text-lg mb-8 max-w-lg mx-auto font-light text-gray-600 dark:text-gray-300">
+                Tu herramienta intuitiva para analizar estados financieros.
             </p>
             <button onclick="enterApp()"
-                class="px-8 py-4 bg-white text-primary-600 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                class="px-8 py-4 bg-primary-600 text-white rounded-full font-bold text-lg shadow-lg hover:bg-primary-700 transform hover:scale-105 transition-all duration-300">
                 Ingresar a la App
             </button>
         </div>
@@ -354,6 +353,13 @@
                                 <path d="m12 14 4-4"></path>
                                 <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
                             </svg>Ratios Financieros</button></li>
+                    <li><button
+                            class="tab-button w-full py-3 px-4 text-gray-300 text-left rounded-lg transition-all duration-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 flex items-center gap-3"
+                            data-tab="comprobacion">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                            </svg>Comprobación</button></li>
                     <li><button
                             class="tab-button w-full py-3 px-4 text-gray-300 text-left rounded-lg transition-all duration-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 flex items-center gap-3"
                             data-tab="analisis-ia">✨ Análisis con IA</button></li>
@@ -466,6 +472,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Disponibilidades</span>
+                                        <span id="total-cash"></span>
+                                    </div>
                                     <!-- Cuentas por Cobrar Comerciales -->
                                     <div
                                         class="p-4 rounded-md mb-4 bg-light-card dark:bg-dark-card shadow-inner transition-colors duration-300">
@@ -504,6 +515,11 @@
                                                     class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Cuentas por Cobrar</span>
+                                        <span id="total-accounts-receivable"></span>
                                     </div>
                                     <!-- Inventarios -->
                                     <div
@@ -544,6 +560,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Inventarios</span>
+                                        <span id="total-inventory"></span>
+                                    </div>
                                     <!-- Otros Activos Corrientes -->
                                     <div
                                         class="p-4 rounded-md mb-4 bg-light-card dark:bg-dark-card shadow-inner transition-colors duration-300">
@@ -581,6 +602,11 @@
                                                     class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Otros Activos Corrientes</span>
+                                        <span id="total-other-current-assets"></span>
                                     </div>
                                 </div>
                                 <!-- Activo No Corriente -->
@@ -642,6 +668,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Propiedad, Planta y Equipo</span>
+                                        <span id="total-ppe-net"></span>
+                                    </div>
                                     <!-- Intangibles -->
                                     <div
                                         class="p-4 rounded-md mb-4 bg-light-card dark:bg-dark-card shadow-inner transition-colors duration-300">
@@ -679,6 +710,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Intangibles</span>
+                                        <span id="total-intangibles"></span>
+                                    </div>
                                     <!-- Inversiones Permanentes -->
                                     <div
                                         class="p-4 rounded-md mb-4 bg-light-card dark:bg-dark-card shadow-inner transition-colors duration-300">
@@ -709,6 +745,11 @@
                                                     class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Inversiones Permanentes</span>
+                                        <span id="total-investments"></span>
                                     </div>
                                 </div>
                             </div>
@@ -760,6 +801,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Proveedores</span>
+                                        <span id="total-suppliers"></span>
+                                    </div>
                                     <!-- Obligaciones Financieras -->
                                     <div
                                         class="p-4 rounded-md mb-4 bg-light-card dark:bg-dark-card shadow-inner transition-colors duration-300">
@@ -782,6 +828,11 @@
                                                     class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Obligaciones Financieras</span>
+                                        <span id="total-short-term-loans"></span>
                                     </div>
                                     <!-- Obligaciones Fiscales -->
                                     <div
@@ -814,6 +865,11 @@
                                                     class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Obligaciones Fiscales</span>
+                                        <span id="total-taxes"></span>
                                     </div>
                                     <!-- Otros Pasivos Corrientes -->
                                     <div
@@ -852,6 +908,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Otros Pasivos Corrientes</span>
+                                        <span id="total-other-current-liabilities"></span>
+                                    </div>
                                 </div>
                                 <!-- Pasivo No Corriente -->
                                 <div
@@ -859,85 +920,101 @@
                                     <h4
                                         class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
                                         Pasivo No Corriente</h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                        <div>
-                                            <label
-                                                class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Préstamos
-                                                Bancarios a Largo Plazo</label>
-                                            <input type="text" id="long-term-bank-loans" placeholder="$0.00"
-                                                class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                    <div
+                                        class="p-4 rounded-md mb-4 bg-light-card dark:bg-dark-card shadow-inner transition-colors duration-300">
+                                        <h5
+                                            class="text-base font-semibold text-light-text dark:text-dark-text pb-2 mb-2 border-b border-border-light dark:border-border-dark transition-colors duration-300">
+                                            Deuda a Largo Plazo</h5>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                            <div>
+                                                <label
+                                                    class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Préstamos
+                                                    Bancarios a Largo Plazo</label>
+                                                <input type="text" id="long-term-bank-loans" placeholder="$0.00"
+                                                    class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Obligaciones
+                                                    por Arrendamiento Financiero</label>
+                                                <input type="text" id="finance-lease-obligations" placeholder="$0.00"
+                                                    class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label
-                                                class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Obligaciones
-                                                por Arrendamiento Financiero</label>
-                                            <input type="text" id="finance-lease-obligations" placeholder="$0.00"
-                                                class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                        </div>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                        <div>
-                                            <label
-                                                class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Otros
-                                                Pasivos a Largo Plazo</label>
-                                            <input type="text" id="other-long-term-liabilities" placeholder="$0.00"
-                                                class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Patrimonio -->
-                                <div
-                                    class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
-                                    <h4
-                                        class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
-                                        Patrimonio</h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                        <div>
-                                            <label
-                                                class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Capital
-                                                Social</label>
-                                            <input type="text" id="capital-stock" placeholder="$0.00"
-                                                class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                        </div>
-                                        <div>
-                                            <label
-                                                class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Prima
-                                                en Venta de Acciones</label>
-                                            <input type="text" id="share-premium" placeholder="$0.00"
-                                                class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                            <div>
+                                                <label
+                                                    class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Otros
+                                                    Pasivos a Largo Plazo</label>
+                                                <input type="text" id="other-long-term-liabilities" placeholder="$0.00"
+                                                    class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                        <div>
-                                            <label
-                                                class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Reservas
-                                                Legales</label>
-                                            <input type="text" id="legal-reserves" placeholder="$0.00"
-                                                class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Pasivo No Corriente</span>
+                                        <span id="total-long-term-liabilities"></span>
+                                    </div>
+                                    <!-- Patrimonio -->
+                                    <div
+                                        class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+                                        <h4
+                                            class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
+                                            Patrimonio</h4>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                            <div>
+                                                <label
+                                                    class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Capital
+                                                    Social</label>
+                                                <input type="text" id="capital-stock" placeholder="$0.00"
+                                                    class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Prima
+                                                    en Venta de Acciones</label>
+                                                <input type="text" id="share-premium" placeholder="$0.00"
+                                                    class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label
-                                                class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Reservas
-                                                Facultativas</label>
-                                            <input type="text" id="voluntary-reserves" placeholder="$0.00"
-                                                class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                            <div>
+                                                <label
+                                                    class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Reservas
+                                                    Legales</label>
+                                                <input type="text" id="legal-reserves" placeholder="$0.00"
+                                                    class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Reservas
+                                                    Facultativas</label>
+                                                <input type="text" id="voluntary-reserves" placeholder="$0.00"
+                                                    class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                            <div>
+                                                <label
+                                                    class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Resultados
+                                                    Acumulados</label>
+                                                <input type="text" id="accumulated-results" placeholder="$0.00"
+                                                    class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Resultado
+                                                    del Ejercicio</label>
+                                                <input type="text" id="current-period-result" placeholder="$0.00"
+                                                    class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                        <div>
-                                            <label
-                                                class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Resultados
-                                                Acumulados</label>
-                                            <input type="text" id="accumulated-results" placeholder="$0.00"
-                                                class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                        </div>
-                                        <div>
-                                            <label
-                                                class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Resultado
-                                                del Ejercicio</label>
-                                            <input type="text" id="current-period-result" placeholder="$0.00"
-                                                class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                        </div>
+                                    <div
+                                        class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                                        <span>Total Patrimonio</span>
+                                        <span id="total-equity"></span>
                                     </div>
                                 </div>
                             </div>
@@ -1039,7 +1116,11 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div
+                            class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                            <span>Total Ventas Netas</span>
+                            <span id="total-net-sales"></span>
+                        </div>
                         <!-- Otros Ingresos -->
                         <div
                             class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
@@ -1078,6 +1159,11 @@
                                         class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
                                 </div>
                             </div>
+                        </div>
+                        <div
+                            class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                            <span>Total Otros Ingresos</span>
+                            <span id="total-other-income"></span>
                         </div>
                     </div>
 
@@ -1123,6 +1209,11 @@
                                         class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
                                 </div>
                             </div>
+                        </div>
+                        <div
+                            class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                            <span>Total Costo de Ventas</span>
+                            <span id="total-cost-of-sales"></span>
                         </div>
                     </div>
 
@@ -1179,7 +1270,11 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div
+                            class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                            <span>Total Gastos de Venta</span>
+                            <span id="total-sales-expenses"></span>
+                        </div>
                         <!-- Gastos de Administración -->
                         <div
                             class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
@@ -1244,381 +1339,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div
-                        class="bg-light-card dark:bg-dark-card rounded-xl p-6 mb-6 shadow-md transition-colors duration-300">
-                        <h3
-                            class="text-xl font-semibold text-light-text dark:text-dark-text pb-3 mb-6 border-b border-border-light dark:border-border-dark transition-colors duration-300">
-                            GASTOS FINANCIEROS</h3>
                         <div
-                            class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
-                            <h4
-                                class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
-                                Gastos Financieros</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Intereses
-                                        Pagados</label>
-                                    <input type="text" id="interest-expense" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Comisiones
-                                        Bancarias</label>
-                                    <input type="text" id="bank-commissions" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Pérdida
-                                        en Cambio</label>
-                                    <input type="text" id="exchange-loss" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Otros
-                                        Gastos Financieros</label>
-                                    <input type="text" id="other-financial-expenses" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-light-card dark:bg-dark-card rounded-xl p-6 mb-6 shadow-md transition-colors duration-300">
-                        <h3
-                            class="text-xl font-semibold text-light-text dark:text-dark-text pb-3 mb-6 border-b border-border-light dark:border-border-dark transition-colors duration-300">
-                            IMPUESTOS</h3>
-                        <div
-                            class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
-                            <h4
-                                class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
-                                Impuestos</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Impuesto
-                                        Sobre la Renta (ISR)</label>
-                                    <input type="text" id="income-tax" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Otros
-                                        Impuestos</label>
-                                    <input type="text" id="other-taxes-expense" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-wrap gap-4 mt-8">
-                        <button
-                            class="btn btn-primary bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2"
-                            onclick="calculateBalance()">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 20V10"></path>
-                                <path d="M18 20V4"></path>
-                                <path d="M6 20V16"></path>
-                            </svg>Calcular Balance
-                        </button>
-                        <button
-                            class="btn btn-outline border-2 border-border-light dark:border-border-dark text-gray-500 dark:text-gray-400 font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2"
-                            onclick="loadSampleBalanceData()">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>Datos de Ejemplo
-                        </button>
-                        <button
-                            class="btn btn-danger bg-danger-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2"
-                            onclick="clearForm('balance')">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path
-                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                </path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>Limpiar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Pestaña de Estado de Resultados -->
-                <div id="resultados" class="tab-content animate-fadeIn hidden">
-                    <h2
-                        class="text-2xl font-bold text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400 pb-2 mb-6 flex items-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="20" x2="18" y2="10"></line>
-                            <line x1="12" y1="20" x2="12" y2="4"></line>
-                            <line x1="6" y1="20" x2="6" y2="14"></line>
-                        </svg>Estado de Resultados Detallado
-                    </h2>
-                    <div id="resultados-message"></div>
-
-                    <div
-                        class="bg-light-card dark:bg-dark-card rounded-xl p-6 mb-6 shadow-md transition-colors duration-300">
-                        <h3
-                            class="text-xl font-semibold text-light-text dark:text-dark-text pb-3 mb-6 border-b border-border-light dark:border-border-dark transition-colors duration-300">
-                            INGRESOS</h3>
-                        <div
-                            class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
-                            <h4
-                                class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
-                                Ventas Netas</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Ventas
-                                        Brutas</label>
-                                    <input type="text" id="gross-sales" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Devoluciones
-                                        sobre Ventas (-)</label>
-                                    <input type="text" id="sales-returns" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Descuentos
-                                        sobre Ventas (-)</label>
-                                    <input type="text" id="sales-discounts" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Bonificaciones
-                                        (-)</label>
-                                    <input type="text" id="bonuses" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Otros Ingresos -->
-                        <div
-                            class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
-                            <h4
-                                class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
-                                Otros Ingresos</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Ingresos
-                                        por Arrendamiento</label>
-                                    <input type="text" id="rental-income" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Ingresos
-                                        Financieros</label>
-                                    <input type="text" id="financial-income" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Ganancia
-                                        en Venta de Activos</label>
-                                    <input type="text" id="asset-sale-gain" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Otros
-                                        Ingresos</label>
-                                    <input type="text" id="other-income" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-light-card dark:bg-dark-card rounded-xl p-6 mb-6 shadow-md transition-colors duration-300">
-                        <h3
-                            class="text-xl font-semibold text-light-text dark:text-dark-text pb-3 mb-6 border-b border-border-light dark:border-border-dark transition-colors duration-300">
-                            COSTO DE VENTAS</h3>
-                        <div
-                            class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
-                            <h4
-                                class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
-                                Costo de Ventas</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Inventario
-                                        Inicial</label>
-                                    <input type="text" id="beginning-inventory" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Compras
-                                        Netas</label>
-                                    <input type="text" id="net-purchases" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Inventario
-                                        Final (-)</label>
-                                    <input type="text" id="ending-inventory" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Costo
-                                        de Productos Terminados</label>
-                                    <input type="text" id="finished-goods-cost" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="bg-light-card dark:bg-dark-card rounded-xl p-6 mb-6 shadow-md transition-colors duration-300">
-                        <h3
-                            class="text-xl font-semibold text-light-text dark:text-dark-text pb-3 mb-6 border-b border-border-light dark:border-border-dark transition-colors duration-300">
-                            GASTOS DE OPERACIÓN</h3>
-                        <!-- Gastos de Venta -->
-                        <div
-                            class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
-                            <h4
-                                class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
-                                Gastos de Venta</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Sueldos
-                                        y Salarios de Ventas</label>
-                                    <input type="text" id="sales-salaries" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Comisiones
-                                        de Ventas</label>
-                                    <input type="text" id="sales-commissions" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Publicidad
-                                        y Promoción</label>
-                                    <input type="text" id="advertising" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Transporte
-                                        de Mercancías</label>
-                                    <input type="text" id="freight-out" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Otros
-                                        Gastos de Venta</label>
-                                    <input type="text" id="other-sales-expenses" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Gastos de Administración -->
-                        <div
-                            class="p-4 rounded-xl mb-6 border-l-4 border-primary-600 dark:border-primary-500 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
-                            <h4
-                                class="text-lg font-bold text-primary-600 dark:text-primary-500 mb-4 transition-colors duration-300">
-                                Gastos de Administración</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Sueldos
-                                        y Salarios de Administración</label>
-                                    <input type="text" id="admin-salaries" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Honorarios
-                                        Profesionales</label>
-                                    <input type="text" id="professional-fees" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Servicios
-                                        Generales</label>
-                                    <input type="text" id="general-services" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Mantenimiento
-                                        de Oficinas</label>
-                                    <input type="text" id="office-maintenance" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Depreciación
-                                        de Activos Fijos</label>
-                                    <input type="text" id="depreciation-expense" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Amortización
-                                        de Intangibles</label>
-                                    <input type="text" id="amortization-expense" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                <div>
-                                    <label
-                                        class="block text-sm font-semibold text-light-text dark:text-dark-text mb-1">Otros
-                                        Gastos de Administración</label>
-                                    <input type="text" id="other-admin-expenses" placeholder="$0.00"
-                                        class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
-                                </div>
-                            </div>
+                            class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                            <span>Total Gastos de Administración</span>
+                            <span id="total-admin-expenses"></span>
                         </div>
                     </div>
 
@@ -1665,6 +1389,11 @@
                                 </div>
                             </div>
                         </div>
+                        <div
+                            class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                            <span>Total Gastos Financieros</span>
+                            <span id="total-financial-expenses"></span>
+                        </div>
                     </div>
 
                     <div
@@ -1693,6 +1422,11 @@
                                         class="w-full p-3 rounded-lg border border-border-light dark:border-border-dark focus:outline-none focus:ring-2 focus:ring-primary-600 bg-light-card dark:bg-gray-800 transition-colors duration-300">
                                 </div>
                             </div>
+                        </div>
+                        <div
+                            class="p-4 bg-primary-100 dark:bg-primary-900 rounded-lg text-primary-800 dark:text-primary-200 font-bold mb-4 flex justify-between items-center">
+                            <span>Total Impuestos</span>
+                            <span id="total-taxes-expense"></span>
                         </div>
                     </div>
 
@@ -1787,6 +1521,50 @@
                                 <path d="M18 20V4"></path>
                                 <path d="M6 20V16"></path>
                             </svg>Calcular Ratios
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pestaña de Comprobación de Estados -->
+                <div id="comprobacion" class="tab-content animate-fadeIn hidden">
+                    <h2
+                        class="text-2xl font-bold text-primary-600 dark:text-primary-400 border-b-2 border-primary-600 dark:border-primary-400 pb-2 mb-6 flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        </svg>Comprobación de Estados Financieros
+                    </h2>
+                    <div id="comprobacion-message"></div>
+
+                    <div
+                        class="bg-light-card dark:bg-dark-card rounded-xl p-6 mb-6 shadow-md transition-colors duration-300">
+                        <h3
+                            class="text-xl font-semibold text-light-text dark:text-dark-text pb-3 mb-6 border-b border-border-light dark:border-border-dark transition-colors duration-300">
+                            Verificación de Consistencia</h3>
+                        <p class="text-gray-500 dark:text-gray-400 mb-4">Esta herramienta verifica que tus estados
+                            financieros cuadren correctamente y que la información sea consistente.</p>
+
+                        <div id="comprobacion-results" class="space-y-4">
+                            <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg flex items-center gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <p class="text-sm text-blue-700 dark:text-blue-300">Haz clic en el botón de abajo para
+                                    ejecutar la comprobación.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 mt-8">
+                        <button
+                            class="btn btn-primary bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-all duration-300 flex items-center gap-2"
+                            onclick="checkFinancialStatements()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 6 9 17l-5-5" />
+                            </svg>Comprobar Estados
                         </button>
                     </div>
                 </div>
@@ -2144,6 +1922,7 @@
                                     <option value="balance">Solo Balance General</option>
                                     <option value="results">Solo Estado de Resultados</option>
                                     <option value="ratios">Solo Ratios Financieros</option>
+                                    <option value="comprobacion">Solo Comprobación</option>
                                 </select>
                             </div>
                         </div>
@@ -2185,7 +1964,12 @@
     <script>
         // --- Variables globales y estado de la aplicación ---
         let comparisonChart = null;
-        let financialData = { balance: {}, results: {}, ratios: {}, analysis: {} };
+        let financialData = {
+            balance: {},
+            results: {},
+            ratios: {},
+            analysis: {}
+        };
         let logoObjectURL = null;
         const spinnerSVG = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l1-1.647z"></path></svg>`;
         const apiKey = "";
@@ -2221,12 +2005,27 @@
 
             let message = '';
             switch (tabId) {
-                case 'resultados': message = "Introduce tus ingresos y gastos, y luego haz clic en 'Calcular Resultados'."; break;
-                case 'ratios': message = "Calcula el balance y los resultados primero para ver tus ratios financieros."; break;
-                case 'analisis-ia': message = "Después de calcular tus datos, usa la IA para obtener análisis detallados."; break;
-                case 'comparativo': message = "Ingresa los datos de dos periodos para compararlos visualmente."; break;
-                case 'vista-previa': message = "Aquí puedes ver una vista previa de tu reporte final antes de exportarlo."; break;
-                case 'exportar': message = "Personaliza y exporta tu reporte en formato PDF o CSV."; break;
+                case 'resultados':
+                    message = "Introduce tus ingresos y gastos, y luego haz clic en 'Calcular Resultados'.";
+                    break;
+                case 'ratios':
+                    message = "Calcula el balance y los resultados primero para ver tus ratios financieros.";
+                    break;
+                case 'comprobacion':
+                    message = "Calcula el balance y los resultados para verificar la consistencia de tus estados.";
+                    break;
+                case 'analisis-ia':
+                    message = "Después de calcular tus datos, usa la IA para obtener análisis detallados.";
+                    break;
+                case 'comparativo':
+                    message = "Ingresa los datos de dos periodos para compararlos visualmente.";
+                    break;
+                case 'vista-previa':
+                    message = "Aquí puedes ver una vista previa de tu reporte final antes de exportarlo.";
+                    break;
+                case 'exportar':
+                    message = "Personaliza y exporta tu reporte en formato PDF o CSV.";
+                    break;
             }
 
             if (message) {
@@ -2246,6 +2045,15 @@
             return formatter.format(value);
         }
 
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
         function parseCurrency(value) {
             if (typeof value !== 'string') return value || 0;
             return parseFloat(value.replace(/[^0-9.-]+/g, "")) || 0;
@@ -2253,7 +2061,14 @@
 
         function getValue(id) {
             const element = document.getElementById(id);
-            return element ? parseCurrency(element.value) : 0;
+            if (element) {
+                // Remove currency symbols and commas before parsing
+                const cleanValue = element.value.replace(/[^0-9.-]+/g, "");
+                const num = parseFloat(cleanValue) || 0;
+                element.value = num > 0 ? formatCurrency(num) : ''; // Format on blur/change
+                return num;
+            }
+            return 0;
         }
 
         function getTextValue(id) {
@@ -2261,15 +2076,14 @@
             return element ? element.value.trim() : '';
         }
 
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(amount);
-        }
-
         function clearForm(tabId) {
             const formContainer = document.getElementById(tabId);
             if (formContainer) {
-                formContainer.querySelectorAll('input[type="text"][placeholder="$0.00"]').forEach(input => {
+                formContainer.querySelectorAll('input[type="text"]').forEach(input => {
                     input.value = '';
+                });
+                formContainer.querySelectorAll('span[id^="total-"]').forEach(span => {
+                    span.textContent = '';
                 });
                 showNotification('Campos limpiados.', 'success');
             }
@@ -2298,11 +2112,35 @@
             const totalEquity = getValue('capital-stock') + getValue('share-premium') + getValue('legal-reserves') + getValue('voluntary-reserves') + getValue('accumulated-results') + getValue('current-period-result');
             const totalLiabilitiesEquity = totalLiabilities + totalEquity;
 
-            return { totalAssets, totalLiabilitiesEquity, currentAssetsTotal, nonCurrentAssetsTotal, totalLiabilities, totalEquity, cashTotal, accountsReceivableTotal, inventoryTotal, otherCurrentAssetsTotal, ppeGrossTotal, ppeNetTotal, intangiblesTotal, investmentsTotal, suppliersTotal, shortTermLoansTotal, taxesTotal, otherCurrentLiabilitiesTotal, currentLiabilitiesTotal, longTermLiabilitiesTotal };
+            return {
+                totalAssets,
+                totalLiabilitiesEquity,
+                currentAssetsTotal,
+                nonCurrentAssetsTotal,
+                totalLiabilities,
+                totalEquity,
+                cashTotal,
+                accountsReceivableTotal,
+                inventoryTotal,
+                otherCurrentAssetsTotal,
+                ppeGrossTotal,
+                ppeNetTotal,
+                intangiblesTotal,
+                investmentsTotal,
+                suppliersTotal,
+                shortTermLoansTotal,
+                taxesTotal,
+                otherCurrentLiabilitiesTotal,
+                currentLiabilitiesTotal,
+                longTermLiabilitiesTotal
+            };
         }
 
         function validateAccountingEquation() {
-            const { totalAssets, totalLiabilitiesEquity } = getBalanceTotals();
+            const {
+                totalAssets,
+                totalLiabilitiesEquity
+            } = getBalanceTotals();
             const difference = Math.abs(totalAssets - totalLiabilitiesEquity);
             if (difference > 0.01) {
                 showNotification(`¡Descuadre en la ecuación contable! Activo (${formatCurrency(totalAssets)}) ≠ Pasivo + Patrimonio (${formatCurrency(totalLiabilitiesEquity)})`, 'error');
@@ -2312,24 +2150,102 @@
         }
 
         function calculateBalance() {
-            if (!validateAccountingEquation()) return;
-
+            const totals = getBalanceTotals();
             financialData.balance = {
-                cash: { cash: getValue('cash'), banks: getValue('banks'), shortTermInvestments: getValue('short-term-investments') },
-                accountsReceivable: { domesticClients: getValue('domestic-clients'), foreignClients: getValue('foreign-clients'), notesReceivable: getValue('notes-receivable'), badDebtProvision: getValue('bad-debt-provision') },
-                inventory: { rawMaterials: getValue('raw-materials'), workInProgress: getValue('work-in-progress'), finishedGoods: getValue('finished-goods'), goodsInTransit: getValue('goods-in-transit') },
-                otherCurrentAssets: { taxRefunds: getValue('tax-refunds'), interestReceivable: getValue('interest-receivable'), supplierAdvances: getValue('supplier-advances'), other: getValue('other-current-assets') },
-                ppe: { land: getValue('land'), buildings: getValue('buildings'), machinery: getValue('machinery'), furniture: getValue('furniture'), transportationEquipment: getValue('transportation-equipment'), accumulatedDepreciation: getValue('accumulated-depreciation') },
-                intangibles: { trademarksPatents: getValue('trademarks-patents'), licenses: getValue('licenses'), software: getValue('software'), accumulatedAmortization: getValue('accumulated-amortization') },
-                investments: { investmentShares: getValue('investment-shares'), bonds: getValue('bonds'), other: getValue('other-investments') },
-                suppliers: { domesticSuppliers: getValue('domestic-suppliers'), foreignSuppliers: getValue('foreign-suppliers'), notesPayable: getValue('notes-payable') },
-                shortTermLoans: { bankLoans: getValue('short-term-bank-loans'), overdrafts: getValue('bank-overdrafts') },
-                taxes: { vatPayable: getValue('vat-payable'), incomeTaxPayable: getValue('income-tax-payable'), otherTaxes: getValue('other-taxes') },
-                otherCurrentLiabilities: { customerAdvances: getValue('customer-advances'), provisions: getValue('provisions'), dividendsPayable: getValue('dividends-payable'), other: getValue('other-current-liabilities') },
-                longTermLiabilities: { bankLoans: getValue('long-term-bank-loans'), financeLease: getValue('finance-lease-obligations'), other: getValue('other-long-term-liabilities') },
-                equity: { capitalStock: getValue('capital-stock'), sharePremium: getValue('share-premium'), legalReserves: getValue('legal-reserves'), voluntaryReserves: getValue('voluntary-reserves'), accumulatedResults: getValue('accumulated-results'), currentPeriodResult: getValue('current-period-result') },
-                totals: getBalanceTotals()
+                cash: {
+                    cash: getValue('cash'),
+                    banks: getValue('banks'),
+                    shortTermInvestments: getValue('short-term-investments')
+                },
+                accountsReceivable: {
+                    domesticClients: getValue('domestic-clients'),
+                    foreignClients: getValue('foreign-clients'),
+                    notesReceivable: getValue('notes-receivable'),
+                    badDebtProvision: getValue('bad-debt-provision')
+                },
+                inventory: {
+                    rawMaterials: getValue('raw-materials'),
+                    workInProgress: getValue('work-in-progress'),
+                    finishedGoods: getValue('finished-goods'),
+                    goodsInTransit: getValue('goods-in-transit')
+                },
+                otherCurrentAssets: {
+                    taxRefunds: getValue('tax-refunds'),
+                    interestReceivable: getValue('interest-receivable'),
+                    supplierAdvances: getValue('supplier-advances'),
+                    other: getValue('other-current-assets')
+                },
+                ppe: {
+                    land: getValue('land'),
+                    buildings: getValue('buildings'),
+                    machinery: getValue('machinery'),
+                    furniture: getValue('furniture'),
+                    transportationEquipment: getValue('transportation-equipment'),
+                    accumulatedDepreciation: getValue('accumulated-depreciation')
+                },
+                intangibles: {
+                    trademarksPatents: getValue('trademarks-patents'),
+                    licenses: getValue('licenses'),
+                    software: getValue('software'),
+                    accumulatedAmortization: getValue('accumulated-amortization')
+                },
+                investments: {
+                    investmentShares: getValue('investment-shares'),
+                    bonds: getValue('bonds'),
+                    other: getValue('other-investments')
+                },
+                suppliers: {
+                    domesticSuppliers: getValue('domestic-suppliers'),
+                    foreignSuppliers: getValue('foreign-suppliers'),
+                    notesPayable: getValue('notes-payable')
+                },
+                shortTermLoans: {
+                    bankLoans: getValue('short-term-bank-loans'),
+                    overdrafts: getValue('bank-overdrafts')
+                },
+                taxes: {
+                    vatPayable: getValue('vat-payable'),
+                    incomeTaxPayable: getValue('income-tax-payable'),
+                    otherTaxes: getValue('other-taxes')
+                },
+                otherCurrentLiabilities: {
+                    customerAdvances: getValue('customer-advances'),
+                    provisions: getValue('provisions'),
+                    dividendsPayable: getValue('dividends-payable'),
+                    other: getValue('other-current-liabilities')
+                },
+                longTermLiabilities: {
+                    bankLoans: getValue('long-term-bank-loans'),
+                    financeLease: getValue('finance-lease-obligations'),
+                    other: getValue('other-long-term-liabilities')
+                },
+                equity: {
+                    capitalStock: getValue('capital-stock'),
+                    sharePremium: getValue('share-premium'),
+                    legalReserves: getValue('legal-reserves'),
+                    voluntaryReserves: getValue('voluntary-reserves'),
+                    accumulatedResults: getValue('accumulated-results'),
+                    currentPeriodResult: getValue('current-period-result')
+                },
+                totals: totals
             };
+
+            // Actualizar totales en la UI
+            document.getElementById('total-cash').textContent = formatCurrency(totals.cashTotal);
+            document.getElementById('total-accounts-receivable').textContent = formatCurrency(totals.accountsReceivableTotal);
+            document.getElementById('total-inventory').textContent = formatCurrency(totals.inventoryTotal);
+            document.getElementById('total-other-current-assets').textContent = formatCurrency(totals.otherCurrentAssetsTotal);
+            document.getElementById('total-ppe-net').textContent = formatCurrency(totals.ppeNetTotal);
+            document.getElementById('total-intangibles').textContent = formatCurrency(totals.intangiblesTotal);
+            document.getElementById('total-investments').textContent = formatCurrency(totals.investmentsTotal);
+
+            document.getElementById('total-suppliers').textContent = formatCurrency(totals.suppliersTotal);
+            document.getElementById('total-short-term-loans').textContent = formatCurrency(totals.shortTermLoansTotal);
+            document.getElementById('total-taxes').textContent = formatCurrency(totals.taxesTotal);
+            document.getElementById('total-other-current-liabilities').textContent = formatCurrency(totals.otherCurrentLiabilitiesTotal);
+            document.getElementById('total-long-term-liabilities').textContent = formatCurrency(totals.longTermLiabilitiesTotal);
+            document.getElementById('total-equity').textContent = formatCurrency(totals.totalEquity);
+
             showNotification('Balance General calculado correctamente.', 'success');
         }
 
@@ -2357,31 +2273,92 @@
             const totalTaxes = getValue('income-tax') + getValue('other-taxes-expense');
             const netIncome = profitBeforeTax - totalTaxes;
 
-            return { netSales, totalOtherIncome, totalRevenue, costOfSales, grossProfit, totalSalesExpenses, totalAdminExpenses, totalOperatingExpenses, operatingProfit, totalFinancialExpenses, profitBeforeTax, totalTaxes, netIncome };
+            return {
+                netSales,
+                totalOtherIncome,
+                totalRevenue,
+                costOfSales,
+                grossProfit,
+                totalSalesExpenses,
+                totalAdminExpenses,
+                totalOperatingExpenses,
+                operatingProfit,
+                totalFinancialExpenses,
+                profitBeforeTax,
+                totalTaxes,
+                netIncome
+            };
         }
 
         function calculateResults() {
             const totals = getResultsTotals();
             financialData.results = {
                 revenue: {
-                    grossSales: getValue('gross-sales'), salesReturns: getValue('sales-returns'), salesDiscounts: getValue('sales-discounts'), bonuses: getValue('bonuses'), netSales: totals.netSales,
-                    rentalIncome: getValue('rental-income'), financialIncome: getValue('financial-income'), assetSaleGain: getValue('asset-sale-gain'), otherIncome: getValue('other-income'), totalOtherIncome: totals.totalOtherIncome,
+                    grossSales: getValue('gross-sales'),
+                    salesReturns: getValue('sales-returns'),
+                    salesDiscounts: getValue('sales-discounts'),
+                    bonuses: getValue('bonuses'),
+                    netSales: totals.netSales,
+                    rentalIncome: getValue('rental-income'),
+                    financialIncome: getValue('financial-income'),
+                    assetSaleGain: getValue('asset-sale-gain'),
+                    otherIncome: getValue('other-income'),
+                    totalOtherIncome: totals.totalOtherIncome,
                     totalRevenue: totals.totalRevenue
                 },
                 costOfSales: {
-                    beginningInventory: getValue('beginning-inventory'), netPurchases: getValue('net-purchases'), endingInventory: getValue('ending-inventory'), finishedGoodsCost: getValue('finished-goods-cost'),
+                    beginningInventory: getValue('beginning-inventory'),
+                    netPurchases: getValue('net-purchases'),
+                    endingInventory: getValue('ending-inventory'),
+                    finishedGoodsCost: getValue('finished-goods-cost'),
                     costOfSales: totals.costOfSales
                 },
                 operatingExpenses: {
-                    sales: { salaries: getValue('sales-salaries'), commissions: getValue('sales-commissions'), advertising: getValue('advertising'), freightOut: getValue('freight-out'), other: getValue('other-sales-expenses'), total: totals.totalSalesExpenses },
-                    administration: { salaries: getValue('admin-salaries'), professionalFees: getValue('professional-fees'), generalServices: getValue('general-services'), officeMaintenance: getValue('office-maintenance'), depreciation: getValue('depreciation-expense'), amortization: getValue('amortization-expense'), other: getValue('other-admin-expenses'), total: totals.totalAdminExpenses },
+                    sales: {
+                        salaries: getValue('sales-salaries'),
+                        commissions: getValue('sales-commissions'),
+                        advertising: getValue('advertising'),
+                        freightOut: getValue('freight-out'),
+                        other: getValue('other-sales-expenses'),
+                        total: totals.totalSalesExpenses
+                    },
+                    administration: {
+                        salaries: getValue('admin-salaries'),
+                        professionalFees: getValue('professional-fees'),
+                        generalServices: getValue('general-services'),
+                        officeMaintenance: getValue('office-maintenance'),
+                        depreciation: getValue('depreciation-expense'),
+                        amortization: getValue('amortization-expense'),
+                        other: getValue('other-admin-expenses'),
+                        total: totals.totalAdminExpenses
+                    },
                     totalOperatingExpenses: totals.totalOperatingExpenses
                 },
-                financialExpenses: { interest: getValue('interest-expense'), bankCommissions: getValue('bank-commissions'), exchangeLoss: getValue('exchange-loss'), other: getValue('other-financial-expenses'), total: totals.totalFinancialExpenses },
-                taxes: { incomeTax: getValue('income-tax'), otherTaxes: getValue('other-taxes-expense'), total: totals.totalTaxes },
+                financialExpenses: {
+                    interest: getValue('interest-expense'),
+                    bankCommissions: getValue('bank-commissions'),
+                    exchangeLoss: getValue('exchange-loss'),
+                    other: getValue('other-financial-expenses'),
+                    total: totals.totalFinancialExpenses
+                },
+                taxes: {
+                    incomeTax: getValue('income-tax'),
+                    otherTaxes: getValue('other-taxes-expense'),
+                    total: totals.totalTaxes
+                },
                 netIncome: totals.netIncome,
                 totals: totals
             };
+
+            // Actualizar totales en la UI
+            document.getElementById('total-net-sales').textContent = formatCurrency(totals.netSales);
+            document.getElementById('total-other-income').textContent = formatCurrency(totals.totalOtherIncome);
+            document.getElementById('total-cost-of-sales').textContent = formatCurrency(totals.costOfSales);
+            document.getElementById('total-sales-expenses').textContent = formatCurrency(totals.totalSalesExpenses);
+            document.getElementById('total-admin-expenses').textContent = formatCurrency(totals.totalAdminExpenses);
+            document.getElementById('total-financial-expenses').textContent = formatCurrency(totals.totalFinancialExpenses);
+            document.getElementById('total-taxes-expense').textContent = formatCurrency(totals.totalTaxes);
+
             showNotification(`Estado de Resultados calculado. Utilidad Neta: ${formatCurrency(totals.netIncome)}`, 'success');
         }
 
@@ -2391,8 +2368,19 @@
                 return;
             }
 
-            const { currentAssetsTotal, totalAssets, currentLiabilitiesTotal, totalLiabilities, totalEquity, inventoryTotal } = financialData.balance.totals;
-            const { netIncome, totalRevenue, grossProfit } = financialData.results.totals;
+            const {
+                currentAssetsTotal,
+                totalAssets,
+                currentLiabilitiesTotal,
+                totalLiabilities,
+                totalEquity,
+                inventoryTotal
+            } = financialData.balance.totals;
+            const {
+                netIncome,
+                totalRevenue,
+                grossProfit
+            } = financialData.results.totals;
 
             const ratios = {
                 currentRatio: currentLiabilitiesTotal > 0 ? currentAssetsTotal / currentLiabilitiesTotal : 0,
@@ -2409,10 +2397,69 @@
             showNotification('Ratios Financieros calculados correctamente.', 'success');
         }
 
+        function checkFinancialStatements() {
+            if (!financialData.balance.totals || !financialData.results.totals) {
+                showNotification('Primero calcule el Balance General y el Estado de Resultados.', 'error');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('comprobacion-results');
+            resultsDiv.innerHTML = '';
+
+            const { totalAssets, totalLiabilitiesEquity, totalEquity } = financialData.balance.totals;
+            const { netIncome } = financialData.results.totals;
+
+            let isBalanced = true;
+
+            // Comprobación de la Ecuación Contable
+            const accountingEquationCheck = Math.abs(totalAssets - totalLiabilitiesEquity) < 0.01;
+            const accountingMessage = document.createElement('div');
+            accountingMessage.className = `p-4 rounded-lg flex items-center gap-3 ${accountingEquationCheck ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'}`;
+            accountingMessage.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${accountingEquationCheck ? 'text-green-500' : 'text-red-500'}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="${accountingEquationCheck ? 'M5 13l4 4L19 7' : 'M6 18L18 6M6 6l12 12'}" />
+                </svg>
+                <div>
+                    <h4 class="font-bold">Ecuación Contable (Activo = Pasivo + Patrimonio)</h4>
+                    <p class="text-sm">Resultado: ${accountingEquationCheck ? '¡Los estados cuadran!' : '¡Los estados no cuadran!'}</p>
+                    <p class="text-sm">Activo: ${formatCurrency(totalAssets)}</p>
+                    <p class="text-sm">Pasivo + Patrimonio: ${formatCurrency(totalLiabilitiesEquity)}</p>
+                </div>
+            `;
+            resultsDiv.appendChild(accountingMessage);
+            if (!accountingEquationCheck) isBalanced = false;
+
+            // Comprobación de Utilidad Neta
+            const netIncomeCheck = Math.abs(netIncome - getValue('current-period-result')) < 0.01;
+            const netIncomeMessage = document.createElement('div');
+            netIncomeMessage.className = `p-4 rounded-lg flex items-center gap-3 ${netIncomeCheck ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'}`;
+            netIncomeMessage.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${netIncomeCheck ? 'text-green-500' : 'text-red-500'}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="${netIncomeCheck ? 'M5 13l4 4L19 7' : 'M6 18L18 6M6 6l12 12'}" />
+                </svg>
+                <div>
+                    <h4 class="font-bold">Conciliación del Resultado del Ejercicio</h4>
+                    <p class="text-sm">Resultado: ${netIncomeCheck ? '¡La utilidad neta coincide!' : '¡La utilidad neta no coincide!'}</p>
+                    <p class="text-sm">Utilidad Neta (Estado de Resultados): ${formatCurrency(netIncome)}</p>
+                    <p class="text-sm">Resultado del Ejercicio (Balance): ${formatCurrency(getValue('current-period-result'))}</p>
+                </div>
+            `;
+            resultsDiv.appendChild(netIncomeMessage);
+            if (!netIncomeCheck) isBalanced = false;
+
+            if (isBalanced) {
+                showNotification('¡La comprobación ha sido exitosa! Tus estados financieros son consistentes.', 'success', 8000);
+            } else {
+                showNotification('La comprobación ha fallado. Revisa los detalles en la sección de Comprobación de Estados.', 'error', 8000);
+            }
+        }
+
         function displayRatios(ratios) {
             const mode = document.getElementById('ratio-mode').value;
             const container = document.getElementById('ratios-display');
-            const { netIncome } = financialData.results.totals;
+            const {
+                netIncome
+            } = financialData.results.totals;
 
             const bankModeHTML = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
@@ -2475,14 +2522,38 @@
                 data: {
                     labels: [period1Name, period2Name],
                     datasets: [
-                        { label: 'Utilidad Neta', data: [period1NetIncome, period2NetIncome], backgroundColor: ['#4ADE80', '#16A34A'] },
-                        { label: 'Ventas Netas', data: [period1Sales, period2Sales], backgroundColor: ['#86EFAC', '#4ADE80'] }
+                        {
+                            label: 'Utilidad Neta',
+                            data: [period1NetIncome, period2NetIncome],
+                            backgroundColor: ['#4ADE80', '#16A34A']
+                        },
+                        {
+                            label: 'Ventas Netas',
+                            data: [period1Sales, period2Sales],
+                            backgroundColor: ['#86EFAC', '#4ADE80']
+                        }
                     ]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, ticks: { callback: value => formatCurrency(value) } } },
-                    plugins: { legend: { position: 'top' }, title: { display: true, text: 'Comparativo de Periodos' } }
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => formatCurrency(value)
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Comparativo de Periodos'
+                        }
+                    }
                 }
             });
 
@@ -2529,14 +2600,20 @@
                     <tr><td class="${tdClass}">&nbsp;&nbsp;Otros Pasivos Corrientes</td><td class="${tdClass}">${formatCurrency(bt.otherCurrentLiabilitiesTotal)}</td></tr>
                     <tr class="${highlightRowClass}"><td class="${tdClass}">Total Pasivo Corriente</td><td class="${tdClass}">${formatCurrency(bt.currentLiabilitiesTotal)}</td></tr>
                     <tr class="bg-gray-100 dark:bg-gray-600"><td class="${tdClass} font-semibold">Pasivo No Corriente</td><td></td></tr>
+                    <tr><td class="${tdClass}">&nbsp;&nbsp;Deuda a Largo Plazo</td><td class="${tdClass}">${formatCurrency(bt.longTermLiabilitiesTotal)}</td></tr>
                     <tr class="${highlightRowClass}"><td class="${tdClass}">Total Pasivo No Corriente</td><td class="${tdClass}">${formatCurrency(bt.longTermLiabilitiesTotal)}</td></tr>
                     <tr class="bg-tertiary-100 dark:bg-tertiary-900 text-tertiary-800 dark:text-tertiary-300 font-semibold"><td class="${tdClass}">Total Pasivo</td><td class="${tdClass}">${formatCurrency(bt.totalLiabilities)}</td></tr>
                     <tr class="bg-gray-100 dark:bg-gray-600"><td class="${tdClass} font-semibold">Patrimonio</td><td></td></tr>
+                    <tr><td class="${tdClass}">&nbsp;&nbsp;Capital Social y Reservas</td><td class="${tdClass}">${formatCurrency(bt.totalEquity - getValue('current-period-result'))}</td></tr>
+                    <tr><td class="${tdClass}">&nbsp;&nbsp;Resultado del Ejercicio</td><td class="${tdClass}">${formatCurrency(getValue('current-period-result'))}</td></tr>
                     <tr class="${highlightRowClass}"><td class="${tdClass}">Total Patrimonio</td><td class="${tdClass}">${formatCurrency(bt.totalEquity)}</td></tr>
                     <tr class="${totalRowClass}"><td class="${tdClass}">TOTAL PASIVO Y PATRIMONIO</td><td class="${tdClass}"><strong>${formatCurrency(bt.totalLiabilitiesEquity)}</strong></td></tr>
                 </tbody>
             </table>`;
-            return { activosHtml, pasivosHtml };
+            return {
+                activosHtml,
+                pasivosHtml
+            };
         }
 
         function generateResultsTableHtml(resultsData, isPDF = false) {
@@ -2556,19 +2633,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td class="${tdClass}">Ventas Netas</td><td class="${tdClass}">${formatCurrency(rt.netSales)}</td></tr>
-                    <tr><td class="${tdClass}">Otros Ingresos</td><td class="${tdClass}">${formatCurrency(rt.totalOtherIncome)}</td></tr>
-                    <tr class="${highlightRowClass}"><td class="${tdClass}">Total Ingresos</td><td class="${tdClass}"><strong>${formatCurrency(rt.totalRevenue)}</strong></td></tr>
-                    <tr><td class="${tdClass}">Costo de Ventas</td><td class="${tdClass}">(${formatCurrency(rt.costOfSales)})</td></tr>
-                    <tr class="${highlightRowClass}"><td class="${tdClass}">Utilidad Bruta</td><td class="${tdClass}"><strong>${formatCurrency(rt.grossProfit)}</strong></td></tr>
-                    <tr><td class="${tdClass}">Gastos de Venta</td><td class="${tdClass}">(${formatCurrency(rt.totalSalesExpenses)})</td></tr>
-                    <tr><td class="${tdClass}">Gastos de Administración</td><td class="${tdClass}">(${formatCurrency(rt.totalAdminExpenses)})</td></tr>
-                    <tr class="bg-tertiary-100 dark:bg-tertiary-900 text-tertiary-800 dark:text-tertiary-300 font-semibold"><td class="${tdClass}">Total Gastos de Operación</td><td class="${tdClass}"><strong>(${formatCurrency(rt.totalOperatingExpenses)})</strong></td></tr>
-                    <tr class="${highlightRowClass}"><td class="${tdClass}">Utilidad Operativa</td><td class="${tdClass}"><strong>${formatCurrency(rt.operatingProfit)}</strong></td></tr>
-                    <tr><td class="${tdClass}">Gastos Financieros</td><td class="${tdClass}">(${formatCurrency(rt.totalFinancialExpenses)})</td></tr>
-                    <tr class="${highlightRowClass}"><td class="${tdClass}">Utilidad antes de Impuestos</td><td class="${tdClass}"><strong>${formatCurrency(rt.profitBeforeTax)}</strong></td></tr>
-                    <tr><td class="${tdClass}">Impuestos</td><td class="${tdClass}">(${formatCurrency(rt.totalTaxes)})</td></tr>
-                    <tr class="${totalRowClass}"><td class="${tdClass}">UTILIDAD NETA</td><td class="${tdClass}"><strong>${formatCurrency(rt.netIncome)}</strong></td></tr>
+                    <tr class="${highlightRowClass}"><td class="${tdClass}">Total Ventas Netas</td><td class="${tdClass}"><strong>${formatCurrency(rt.netSales)}</strong></td></tr>
+                    <tr class="${highlightRowClass}"><td class="${tdClass}">Total Otros Ingresos</td><td class="${tdClass}"><strong>${formatCurrency(rt.totalOtherIncome)}</strong></td></tr>
+                    <tr class="${totalRowClass}"><td class="${tdClass}">TOTAL INGRESOS</td><td class="${tdClass}"><strong>${formatCurrency(rt.totalRevenue)}</strong></td></tr>
+                    <tr class="${highlightRowClass}"><td class="${tdClass}">Total Costo de Ventas</td><td class="${tdClass}"><strong>(${formatCurrency(rt.costOfSales)})</strong></td></tr>
+                    <tr class="${totalRowClass}"><td class="${tdClass}">UTILIDAD BRUTA</td><td class="${tdClass}"><strong>${formatCurrency(rt.grossProfit)}</strong></td></tr>
+                    <tr class="${highlightRowClass}"><td class="${tdClass}">Total Gastos de Venta</td><td class="${tdClass}">(${formatCurrency(rt.totalSalesExpenses)})</td></tr>
+                    <tr class="${highlightRowClass}"><td class="${tdClass}">Total Gastos de Administración</td><td class="${tdClass}">(${formatCurrency(rt.totalAdminExpenses)})</td></tr>
+                    <tr class="${totalRowClass}"><td class="${tdClass}">TOTAL GASTOS DE OPERACIÓN</td><td class="${tdClass}"><strong>(${formatCurrency(rt.totalOperatingExpenses)})</strong></td></tr>
+                    <tr class="${totalRowClass}"><td class="${tdClass}">UTILIDAD OPERATIVA</td><td class="${tdClass}"><strong>${formatCurrency(rt.operatingProfit)}</strong></td></tr>
+                    <tr class="${highlightRowClass}"><td class="${tdClass}">Total Gastos Financieros</td><td class="${tdClass}">(${formatCurrency(rt.totalFinancialExpenses)})</td></tr>
+                    <tr class="${totalRowClass}"><td class="${tdClass}">UTILIDAD ANTES DE IMPUESTOS</td><td class="${tdClass}"><strong>${formatCurrency(rt.profitBeforeTax)}</strong></td></tr>
+                    <tr class="${highlightRowClass}"><td class="${tdClass}">Total Impuestos</td><td class="${tdClass}">(${formatCurrency(rt.totalTaxes)})</td></tr>
+                    <tr class="${totalRowClass} bg-secondary-500"><td class="${tdClass} font-bold text-lg">UTILIDAD NETA</td><td class="${tdClass} font-bold text-lg"><strong>${formatCurrency(rt.netIncome)}</strong></td></tr>
                 </tbody>
             </table>`;
         }
@@ -2576,14 +2653,16 @@
         function updatePreviewTables() {
             const balanceContentDiv = document.getElementById('preview-balance-content');
             if (financialData.balance.totals) {
-                const { activosHtml, pasivosHtml } = generateBalanceTablesHtml(financialData.balance);
+                const {
+                    activosHtml,
+                    pasivosHtml
+                } = generateBalanceTablesHtml(financialData.balance);
                 balanceContentDiv.innerHTML = `<div class="flex-1">${activosHtml}</div><div class="flex-1">${pasivosHtml}</div>`;
             } else {
                 balanceContentDiv.innerHTML = `<table class="w-full border-collapse" id="preview-balance-table"><thead><tr class="bg-gray-100 dark:bg-gray-800"><th class="p-3 text-left font-semibold text-sm rounded-t-lg">Concepto</th><th class="p-3 text-left font-semibold text-sm rounded-t-lg">Monto</th></tr></thead><tbody><tr><td colspan="2" class="p-3 text-sm">Sin datos disponibles. Calcule el balance primero.</td></tr></tbody></table>`;
             }
 
             if (financialData.results.totals) {
-                const rt = financialData.results.totals;
                 document.getElementById('preview-results-table').innerHTML = generateResultsTableHtml(financialData.results);
             }
 
@@ -2602,7 +2681,6 @@
             const pdfContainer = document.createElement('div');
             pdfContainer.className = 'pdf-report';
 
-            // Agrega el logo como marca de agua si hay un logo subido
             if (logoObjectURL) {
                 const watermarkImage = document.createElement('img');
                 watermarkImage.src = logoObjectURL;
@@ -2611,11 +2689,9 @@
                 pdfContainer.appendChild(watermarkImage);
             }
 
-            // Agrega el contenido del reporte
             const contentDiv = document.createElement('div');
             contentDiv.className = 'pdf-content-with-watermark';
 
-            // Título principal del reporte
             const companyName = getTextValue('company-name') || 'Nombre de la Empresa';
             const reportPeriod = getTextValue('report-period') || 'YYYY-MM';
             const titleHtml = `<div class="text-center mb-8 pb-8 border-b-2 border-border-light dark:border-border-dark"><h2 class="text-3xl font-bold text-primary-600 dark:text-primary-500 mb-2">${companyName}</h2><p class="text-lg text-gray-500 dark:text-gray-400">Periodo: ${reportPeriod}</p></div>`;
@@ -2627,7 +2703,10 @@
 
             if (section === 'full' || section === 'balance') {
                 if (financialData.balance.totals) {
-                    const { activosHtml, pasivosHtml } = generateBalanceTablesHtml(financialData.balance, true);
+                    const {
+                        activosHtml,
+                        pasivosHtml
+                    } = generateBalanceTablesHtml(financialData.balance, true);
                     const balanceSection = `<div class="mb-8"><h3 class="text-2xl font-semibold pb-2 mb-4 border-b-2">Balance General</h3><div class="flex flex-col md:flex-row gap-4"><div class="flex-1">${activosHtml}</div><div class="flex-1">${pasivosHtml}</div></div></div>`;
                     contentDiv.innerHTML += balanceSection;
                 }
@@ -2647,6 +2726,57 @@
                     contentDiv.innerHTML += ratiosSection;
                 }
             }
+            if (section === 'full' || section === 'comprobacion') {
+                const comprobacionSection = `
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-semibold pb-2 mb-4 border-b-2">Comprobación de Estados</h3>
+                        <div id="comprobacion-results-pdf" class="space-y-4"></div>
+                    </div>
+                `;
+                contentDiv.innerHTML += comprobacionSection;
+                const comprobacionResultsDiv = contentDiv.querySelector('#comprobacion-results-pdf');
+                if (financialData.balance.totals && financialData.results.totals) {
+                    const { totalAssets, totalLiabilitiesEquity, totalEquity } = financialData.balance.totals;
+                    const { netIncome } = financialData.results.totals;
+                    const accountingEquationCheck = Math.abs(totalAssets - totalLiabilitiesEquity) < 0.01;
+                    const netIncomeCheck = Math.abs(netIncome - getValue('current-period-result')) < 0.01;
+
+                    const accountingMessage = document.createElement('div');
+                    accountingMessage.className = `p-4 rounded-lg flex items-center gap-3 ${accountingEquationCheck ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`;
+                    accountingMessage.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${accountingEquationCheck ? 'text-green-500' : 'text-red-500'}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="${accountingEquationCheck ? 'M5 13l4 4L19 7' : 'M6 18L18 6M6 6l12 12'}" />
+                        </svg>
+                        <div>
+                            <h4 class="font-bold">Ecuación Contable (Activo = Pasivo + Patrimonio)</h4>
+                            <p class="text-sm">Resultado: ${accountingEquationCheck ? '¡Los estados cuadran!' : '¡Los estados no cuadran!'}</p>
+                            <p class="text-sm">Activo: ${formatCurrency(totalAssets)}</p>
+                            <p class="text-sm">Pasivo + Patrimonio: ${formatCurrency(totalLiabilitiesEquity)}</p>
+                        </div>
+                    `;
+                    comprobacionResultsDiv.appendChild(accountingMessage);
+
+                    const netIncomeMessage = document.createElement('div');
+                    netIncomeMessage.className = `p-4 rounded-lg flex items-center gap-3 ${netIncomeCheck ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`;
+                    netIncomeMessage.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${netIncomeCheck ? 'text-green-500' : 'text-red-500'}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="${netIncomeCheck ? 'M5 13l4 4L19 7' : 'M6 18L18 6M6 6l12 12'}" />
+                        </svg>
+                        <div>
+                            <h4 class="font-bold">Conciliación del Resultado del Ejercicio</h4>
+                            <p class="text-sm">Resultado: ${netIncomeCheck ? '¡La utilidad neta coincide!' : '¡La utilidad neta no coincide!'}</p>
+                            <p class="text-sm">Utilidad Neta (Estado de Resultados): ${formatCurrency(netIncome)}</p>
+                            <p class="text-sm">Resultado del Ejercicio (Balance): ${formatCurrency(getValue('current-period-result'))}</p>
+                        </div>
+                    `;
+                    comprobacionResultsDiv.appendChild(netIncomeMessage);
+
+                } else {
+                    comprobacionResultsDiv.innerHTML = `<p class="text-gray-500 text-sm">Sin datos para comprobar. Calcula el balance y los resultados primero.</p>`;
+                }
+            }
+
+
             pdfContainer.appendChild(contentDiv);
             return pdfContainer;
         }
@@ -2655,7 +2785,7 @@
             const companyName = getTextValue('company-name') || 'Reporte Financiero';
             const reportPeriod = getTextValue('report-period') || 'N/A';
             const logoUrl = logoObjectURL;
-            const watermark = getTextValue('watermark-text');
+            const watermarkText = getTextValue('watermark-text');
             const watermarkOpacity = parseFloat(document.getElementById('watermark-opacity').value);
             const exportBtn = document.getElementById('export-pdf-btn');
             const originalBtnHTML = exportBtn.innerHTML;
@@ -2668,437 +2798,570 @@
             exportBtn.disabled = true;
             exportBtn.innerHTML = `${spinnerSVG} Generando...`;
 
-            // Contenedor principal para todo el PDF
-            const pdfContainer = document.createElement('div');
-            pdfContainer.className = 'pdf-report pdf-watermark'; // Aplicar el estilo de marca de agua aquí
-            pdfContainer.style.setProperty('--watermark-image', `url('${logoUrl}')`);
-            pdfContainer.style.setProperty('--watermark-opacity', watermarkOpacity);
-            pdfContainer.style.position = 'relative'; // Necesario para el posicionamiento absoluto
-
-            // Crear el div que contendrá el contenido del reporte
             const contentDiv = document.createElement('div');
-            contentDiv.innerHTML = getPdfContent().innerHTML;
-            pdfContainer.appendChild(contentDiv);
+            contentDiv.className = 'pdf-report pdf-watermark';
+            contentDiv.style.setProperty('--watermark-image', `url('${logoUrl}')`);
+            contentDiv.style.setProperty('--watermark-opacity', watermarkOpacity);
+            contentDiv.style.position = 'relative';
 
-            const options = {
+
+            const section = document.getElementById('export-section').value;
+            const companyNameElement = `<div class="text-center mb-8"><h2 class="text-3xl font-bold text-primary-600 dark:text-primary-500 mb-2">${companyName}</h2><p class="text-lg text-gray-500 dark:text-gray-400">Periodo: ${reportPeriod}</p></div>`;
+
+            const watermarkHtml = watermarkText ? `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 5rem; color: rgba(0,0,0,${watermarkOpacity * 2}); opacity: 0.1; z-index: 1000; pointer-events: none;">${watermarkText}</div>` : '';
+
+            let reportContentHtml = `<div style="position: relative; z-index: 2;">${companyNameElement}`;
+
+            if (financialData.analysis.summary) {
+                reportContentHtml += `<div class="ai-analysis-container bg-primary-50 dark:bg-primary-900 border border-primary-200 dark:border-primary-800 p-6 rounded-xl mt-8 mb-8"><h4 class="text-lg font-semibold text-primary-600 dark:text-primary-500">✨ Resumen Ejecutivo por IA</h4><p class="mt-2 text-sm leading-relaxed">${financialData.analysis.summary.replace(/\n/g, '<br>')}</p></div>`;
+            }
+
+            if (section === 'full' || section === 'balance') {
+                if (financialData.balance.totals) {
+                    const {
+                        activosHtml,
+                        pasivosHtml
+                    } = generateBalanceTablesHtml(financialData.balance, true);
+                    reportContentHtml += `<div class="mb-8"><h3 class="text-2xl font-semibold pb-2 mb-4 border-b-2">Balance General</h3><div class="flex flex-col md:flex-row gap-4"><div class="flex-1">${activosHtml}</div><div class="flex-1">${pasivosHtml}</div></div></div>`;
+                }
+            }
+
+            if (section === 'full' || section === 'results') {
+                if (financialData.results.totals) {
+                    const resultsSection = `<div class="mb-8"><h3 class="text-2xl font-semibold pb-2 mb-4 border-b-2">Estado de Resultados</h3>${generateResultsTableHtml(financialData.results, true)}</div>`;
+                    reportContentHtml += resultsSection;
+                }
+            }
+
+            if (section === 'full' || section === 'ratios') {
+                if (financialData.ratios && Object.keys(financialData.ratios).length > 0) {
+                    const ratios = financialData.ratios;
+                    const ratiosSection = `<div class="mb-8"><h3 class="text-2xl font-semibold pb-2 mb-4 border-b-2">Ratios Financieros Clave</h3><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><div class="bg-gray-100 p-4 rounded-lg border-l-4 border-primary-600 shadow-sm"><h4 class="text-xs font-semibold text-gray-500">Razón Corriente</h4><p class="text-xl font-bold">${ratios.currentRatio.toFixed(2)}</p></div><div class="bg-gray-100 p-4 rounded-lg border-l-4 border-primary-600 shadow-sm"><h4 class="text-xs font-semibold text-gray-500">ROE</h4><p class="text-xl font-bold">${(ratios.roe * 100).toFixed(2)}%</p></div><div class="bg-gray-100 p-4 rounded-lg border-l-4 border-primary-600 shadow-sm"><h4 class="text-xs font-semibold text-gray-500">Margen Neto</h4><p class="text-xl font-bold">${(ratios.netMargin * 100).toFixed(2)}%</p></div></div></div>`;
+                    reportContentHtml += ratiosSection;
+                }
+            }
+            if (section === 'full' || section === 'comprobacion') {
+                if (financialData.balance.totals && financialData.results.totals) {
+                    const { totalAssets, totalLiabilitiesEquity, totalEquity } = financialData.balance.totals;
+                    const { netIncome } = financialData.results.totals;
+                    const accountingEquationCheck = Math.abs(totalAssets - totalLiabilitiesEquity) < 0.01;
+                    const netIncomeCheck = Math.abs(netIncome - getValue('current-period-result')) < 0.01;
+
+                    const comprobacionHtml = `
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-semibold pb-2 mb-4 border-b-2">Comprobación de Estados</h3>
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-lg flex items-center gap-3 ${accountingEquationCheck ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${accountingEquationCheck ? 'text-green-500' : 'text-red-500'}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="${accountingEquationCheck ? 'M5 13l4 4L19 7' : 'M6 18L18 6M6 6l12 12'}" />
+                                </svg>
+                                <div>
+                                    <h4 class="font-bold">Ecuación Contable (Activo = Pasivo + Patrimonio)</h4>
+                                    <p class="text-sm">Resultado: ${accountingEquationCheck ? '¡Los estados cuadran!' : '¡Los estados no cuadran!'}</p>
+                                    <p class="text-sm">Activo: ${formatCurrency(totalAssets)}</p>
+                                    <p class="text-sm">Pasivo + Patrimonio: ${formatCurrency(totalLiabilitiesEquity)}</p>
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-lg flex items-center gap-3 ${netIncomeCheck ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${netIncomeCheck ? 'text-green-500' : 'text-red-500'}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="${netIncomeCheck ? 'M5 13l4 4L19 7' : 'M6 18L18 6M6 6l12 12'}" />
+                                </svg>
+                                <div>
+                                    <h4 class="font-bold">Conciliación del Resultado del Ejercicio</h4>
+                                    <p class="text-sm">Resultado: ${netIncomeCheck ? '¡La utilidad neta coincide!' : '¡La utilidad neta no coincide!'}</p>
+                                    <p class="text-sm">Utilidad Neta (Estado de Resultados): ${formatCurrency(netIncome)}</p>
+                                    <p class="text-sm">Resultado del Ejercicio (Balance): ${formatCurrency(getValue('current-period-result'))}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    reportContentHtml += comprobacionHtml;
+                } else {
+                    reportContentHtml += `<div class="mb-8"><h3 class="text-2xl font-semibold pb-2 mb-4 border-b-2">Comprobación de Estados</h3><p class="text-gray-500 text-sm">Sin datos para comprobar. Calcula el balance y los resultados primero.</p></div>`;
+                }
+            }
+
+
+            reportContentHtml += `</div>`;
+            contentDiv.innerHTML = reportContentHtml;
+
+            const coverBackground = document.getElementById('cover-background').value;
+            let coverHtml = '';
+            if (coverBackground === 'solid') {
+                coverHtml = `
+                    <div class="pdf-cover" style="width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; page-break-after: always; color: white;">
+                        <div>
+                            ${logoUrl ? `<img src="${logoUrl}" alt="Company Logo" style="width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; border: 4px solid white;">` : ''}
+                            <h1 class="pdf-cover-text text-4xl font-extrabold">${companyName}</h1>
+                            <p class="pdf-cover-text text-xl font-light mt-4">Reporte Financiero</p>
+                            <p class="pdf-cover-text text-xl font-light">${reportPeriod}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                coverHtml = `
+                    <div class="pdf-cover" style="width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; page-break-after: always; color: white; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" fill="%23f0f9ff" /><path d="M50 0L100 50L50 100L0 50Z" fill="%23e0f2fe" opacity="0.3" /></svg>'); background-size: 100px 100px;">
+                        <div>
+                            ${logoUrl ? `<img src="${logoUrl}" alt="Company Logo" style="width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; border: 4px solid white;">` : ''}
+                            <h1 class="pdf-cover-text text-4xl font-extrabold">${companyName}</h1>
+                            <p class="pdf-cover-text text-xl font-light mt-4">Reporte Financiero</p>
+                            <p class="pdf-cover-text text-xl font-light">${reportPeriod}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            contentDiv.prepend(htmlToElement(coverHtml));
+
+            html2pdf().from(contentDiv).set({
                 margin: 10,
-                filename: `Reporte_${companyName.replace(/ /g, "_")}_${reportPeriod.replace(/ /g, "_")}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            // Usar html2pdf para generar y guardar el reporte
-            html2pdf()
-                .from(pdfContainer)
-                .set(options)
-                .save()
-                .then(() => {
-                    showNotification('PDF generado y descargado.', 'success');
-                })
-                .catch(err => {
-                    showNotification('Error al generar el PDF.', 'error');
-                    console.error(err);
-                })
-                .finally(() => {
-                    exportBtn.disabled = false;
-                    exportBtn.innerHTML = originalBtnHTML;
-                });
+                filename: `${companyName}_Reporte_Financiero_${reportPeriod}.pdf`,
+                html2canvas: {
+                    scale: 2,
+                    letterRendering: true,
+                    useCORS: true
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                }
+            }).save().then(() => {
+                exportBtn.disabled = false;
+                exportBtn.innerHTML = originalBtnHTML;
+                showNotification('Reporte exportado como PDF.', 'success');
+            });
         }
-
 
         function exportCSV() {
             const section = document.getElementById('export-section').value;
-            let csvContent = "data:text/csv;charset=utf-8,";
-            let filename = 'Reporte_Financiero.csv';
+            let csv = '';
+            const companyName = getTextValue('company-name') || 'Reporte Financiero';
+            const reportPeriod = getTextValue('report-period') || 'N/A';
+            const headers = "Concepto,Monto\n";
 
-            if (section === 'balance' || section === 'full') {
-                if (!financialData.balance.totals) { showNotification('Calcule el balance primero.', 'error'); return; }
-                csvContent += "Tipo,Concepto,Sub-Concepto,Monto\n";
-                Object.entries(financialData.balance).forEach(([key, value]) => {
-                    if (key === 'totals') {
-                        Object.entries(value).forEach(([subKey, subValue]) => {
-                            csvContent += `Balance,${subKey},,${subValue}\n`;
-                        });
-                    } else {
-                        Object.entries(value).forEach(([subKey, subValue]) => {
-                            if (typeof subValue === 'object') {
-                                Object.entries(subValue).forEach(([innerKey, innerValue]) => {
-                                    csvContent += `Balance,${key},${innerKey},${innerValue}\n`;
-                                });
-                            } else {
-                                csvContent += `Balance,${key},${subKey},${subValue}\n`;
-                            }
-                        });
-                    }
-                });
-                filename = 'Balance_General.csv';
+            if (section === 'full' || section === 'balance') {
+                if (financialData.balance.totals) {
+                    const bt = financialData.balance.totals;
+                    csv += "Balance General\n";
+                    csv += headers;
+                    csv += `TOTAL ACTIVO CORRIENTE,${bt.currentAssetsTotal}\n`;
+                    csv += `TOTAL ACTIVO NO CORRIENTE,${bt.nonCurrentAssetsTotal}\n`;
+                    csv += `TOTAL ACTIVO,${bt.totalAssets}\n`;
+                    csv += `TOTAL PASIVO CORRIENTE,${bt.currentLiabilitiesTotal}\n`;
+                    csv += `TOTAL PASIVO NO CORRIENTE,${bt.longTermLiabilitiesTotal}\n`;
+                    csv += `TOTAL PASIVO,${bt.totalLiabilities}\n`;
+                    csv += `TOTAL PATRIMONIO,${bt.totalEquity}\n`;
+                    csv += `TOTAL PASIVO Y PATRIMONIO,${bt.totalLiabilitiesEquity}\n`;
+                }
             }
 
-            if (section === 'results' || section === 'full') {
-                if (!financialData.results.totals) { showNotification('Calcule los resultados primero.', 'error'); return; }
-                csvContent += "Tipo,Concepto,Sub-Concepto,Monto\n";
-                Object.entries(financialData.results).forEach(([key, value]) => {
-                    if (key === 'totals' || key === 'netIncome') {
-                        csvContent += `Resultados,${key},,${value}\n`;
-                    } else {
-                        Object.entries(value).forEach(([subKey, subValue]) => {
-                            if (typeof subValue === 'object') {
-                                Object.entries(subValue).forEach(([innerKey, innerValue]) => {
-                                    csvContent += `Resultados,${key},${innerKey},${innerValue}\n`;
-                                });
-                            } else {
-                                csvContent += `Resultados,${key},${subKey},${subValue}\n`;
-                            }
-                        });
-                    }
-                });
-                filename = section === 'results' ? 'Estado_Resultados.csv' : 'Reporte_Completo.csv';
+            if (section === 'full' || section === 'results') {
+                if (financialData.results.totals) {
+                    const rt = financialData.results.totals;
+                    csv += "\nEstado de Resultados\n";
+                    csv += headers;
+                    csv += `Ventas Netas,${rt.netSales}\n`;
+                    csv += `Costo de Ventas,${rt.costOfSales}\n`;
+                    csv += `Utilidad Bruta,${rt.grossProfit}\n`;
+                    csv += `Gastos de Operacion,${rt.totalOperatingExpenses}\n`;
+                    csv += `Utilidad Operativa,${rt.operatingProfit}\n`;
+                    csv += `Gastos Financieros,${rt.totalFinancialExpenses}\n`;
+                    csv += `Utilidad antes de Impuestos,${rt.profitBeforeTax}\n`;
+                    csv += `Impuestos,${rt.totalTaxes}\n`;
+                    csv += `UTILIDAD NETA,${rt.netIncome}\n`;
+                }
+            }
+            if (section === 'full' || section === 'comprobacion') {
+                if (financialData.balance.totals && financialData.results.totals) {
+                    const bt = financialData.balance.totals;
+                    const rt = financialData.results.totals;
+                    csv += "\nComprobación de Estados\n";
+                    csv += headers;
+                    csv += `Ecuación Contable (Activo vs Pasivo+Patrimonio),${Math.abs(bt.totalAssets - bt.totalLiabilitiesEquity) < 0.01 ? 'Cuadra' : 'No Cuadra'}\n`;
+                    csv += `Conciliación del Resultado (Utilidad Neta vs Resultado del Ejercicio),${Math.abs(rt.netIncome - getValue('current-period-result')) < 0.01 ? 'Cuadra' : 'No Cuadra'}\n`;
+                }
             }
 
-            if (section === 'ratios' || section === 'full') {
-                if (!financialData.ratios) { showNotification('Calcule los ratios primero.', 'error'); return; }
-                csvContent += "Tipo,Ratio,Valor\n";
-                Object.entries(financialData.ratios).forEach(([key, value]) => {
-                    csvContent += `Ratios,${key},${value.toFixed(4)}\n`;
-                });
-                filename = section === 'ratios' ? 'Ratios_Financieros.csv' : 'Reporte_Completo.csv';
-            }
-
-            const encodedUri = encodeURI(csvContent);
+            const blob = new Blob([csv], {
+                type: 'text/csv;charset=utf-8;'
+            });
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", filename);
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `${companyName}_Reporte_Financiero_${reportPeriod}.csv`);
+            link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showNotification(`${filename} generado y descargado.`, 'success');
+            showNotification('Reporte exportado como CSV.', 'success');
         }
 
-        function updatePreview() {
-            document.getElementById('preview-company-name').textContent = getTextValue('company-name') || 'Nombre de la Empresa';
-            document.getElementById('preview-period').textContent = `Periodo: ${getTextValue('report-period') || 'YYYY-MM'}`;
-
-            const logoPreview = document.getElementById('preview-logo');
-            if (logoObjectURL) {
-                logoPreview.innerHTML = `<img src="${logoObjectURL}" alt="Logo" class="w-full h-full object-cover rounded-full">`;
-            } else {
-                logoPreview.innerHTML = '<span>LOGO</span>';
-            }
-
-            const aiSummaryContainer = document.getElementById('preview-ai-summary');
-            if (financialData.analysis.summary) {
-                aiSummaryContainer.innerHTML = `<div class="ai-analysis-container bg-primary-50 dark:bg-primary-900 border border-primary-200 dark:border-primary-800 p-6 rounded-xl mt-8 mb-8"><h4 class="text-lg font-semibold text-primary-600 dark:text-primary-500">✨ Resumen Ejecutivo por IA</h4><p class="mt-2 text-sm leading-relaxed">${financialData.analysis.summary.replace(/\n/g, '<br>')}</p></div>`;
-            } else {
-                aiSummaryContainer.innerHTML = "";
-            }
-
-            updatePreviewTables();
-            showNotification('Vista previa actualizada.', 'success');
-        }
-
-        function setupTabNavigation() {
-            const tabs = document.querySelectorAll('.tab-button');
-            tabs.forEach(button => {
-                button.addEventListener('click', function () {
-                    const tabId = this.dataset.tab;
-                    tabs.forEach(btn => {
-                        btn.classList.remove('active', 'bg-primary-600', 'dark:bg-primary-500', 'text-white', 'font-semibold');
-                        btn.classList.add('text-gray-300', 'hover:bg-gray-700');
-                    });
-                    this.classList.add('active', 'bg-primary-600', 'dark:bg-primary-500', 'text-white', 'font-semibold');
-                    this.classList.remove('text-gray-300', 'hover:bg-gray-700');
-
-                    document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
-                    document.getElementById(tabId).classList.remove('hidden');
-
-                    if (window.innerWidth <= 992) {
-                        document.getElementById('sidebar').classList.remove('open');
-                    }
-                    showTabInstruction(tabId);
-                });
-            });
-        }
-
-        function setupMobileMenu() {
-            const toggleButton = document.getElementById('mobile-menu-toggle');
-            const sidebar = document.getElementById('sidebar');
-            toggleButton.addEventListener('click', () => {
-                sidebar.classList.toggle('open');
-            });
-        }
-
-        function setupThemeToggle() {
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const htmlElement = document.documentElement;
-            const moonIcon = document.getElementById('moon-icon');
-            const sunIcon = document.getElementById('sun-icon');
-
-            function applyTheme(isDark) {
-                if (isDark) {
-                    htmlElement.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                    moonIcon.classList.add('hidden');
-                    sunIcon.classList.remove('hidden');
-                } else {
-                    htmlElement.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
-                    moonIcon.classList.remove('hidden');
-                    sunIcon.classList.add('hidden');
-                }
-            }
-
-            const currentTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            applyTheme(currentTheme === 'dark' || (!currentTheme && prefersDark));
-
-            themeToggleBtn.addEventListener('click', () => {
-                const isDark = htmlElement.classList.contains('dark');
-                applyTheme(!isDark);
-            });
-        }
-
-        function setupNumberFormatting() {
-            document.querySelectorAll('input[type="text"][placeholder="$0.00"]').forEach(input => {
-                input.addEventListener('blur', (e) => {
-                    const value = parseCurrency(e.target.value);
-                    e.target.value = formatAsCurrency(value, true);
-                });
-                input.addEventListener('focus', (e) => {
-                    const value = parseCurrency(e.target.value);
-                    if (value === 0) e.target.value = '';
-                    else e.target.value = value;
-                });
-            });
-        }
-
-        function enterApp() {
-            const welcomeScreen = document.getElementById('welcome-screen');
-            const mainApp = document.getElementById('main-app-container');
-            welcomeScreen.classList.add('hidden');
-            mainApp.classList.remove('hidden');
-            showWelcomeNotification();
-        }
-
-        // --- Funciones de carga de datos de ejemplo ---
+        // --- Data Handling ---
         function loadSampleBalanceData() {
-            const data = { 'cash': 25000, 'banks': 35000, 'short-term-investments': 10000, 'domestic-clients': 20000, 'foreign-clients': 15000, 'notes-receivable': 8000, 'bad-debt-provision': 2000, 'raw-materials': 18000, 'work-in-progress': 12000, 'finished-goods': 22000, 'goods-in-transit': 3000, 'tax-refunds': 5000, 'interest-receivable': 2500, 'supplier-advances': 4000, 'other-current-assets': 3500, 'land': 80000, 'buildings': 120000, 'machinery': 90000, 'furniture': 15000, 'transportation-equipment': 25000, 'accumulated-depreciation': 45000, 'trademarks-patents': 12000, 'licenses': 8000, 'software': 10000, 'accumulated-amortization': 3000, 'investment-shares': 20000, 'bonds': 15000, 'other-investments': 10000, 'domestic-suppliers': 18000, 'foreign-suppliers': 12000, 'notes-payable': 5000, 'short-term-bank-loans': 25000, 'bank-overdrafts': 8000, 'vat-payable': 6000, 'income-tax-payable': 4000, 'other-taxes': 2000, 'customer-advances': 7000, 'provisions': 3000, 'dividends-payable': 5000, 'other-current-liabilities': 4000, 'long-term-bank-loans': 60000, 'finance-lease-obligations': 15000, 'other-long-term-liabilities': 10000, 'capital-stock': 151000, 'share-premium': 20000, 'legal-reserves': 15000, 'voluntary-reserves': 10000, 'accumulated-results': 25000, 'current-period-result': 48500 };
-            Object.keys(data).forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = formatAsCurrency(data[id], true);
+            document.getElementById('cash').value = '150000';
+            document.getElementById('banks').value = '350000';
+            document.getElementById('short-term-investments').value = '50000';
+            document.getElementById('domestic-clients').value = '200000';
+            document.getElementById('foreign-clients').value = '100000';
+            document.getElementById('notes-receivable').value = '20000';
+            document.getElementById('bad-debt-provision').value = '5000';
+            document.getElementById('raw-materials').value = '120000';
+            document.getElementById('work-in-progress').value = '80000';
+            document.getElementById('finished-goods').value = '150000';
+            document.getElementById('goods-in-transit').value = '30000';
+            document.getElementById('tax-refunds').value = '15000';
+            document.getElementById('interest-receivable').value = '5000';
+            document.getElementById('supplier-advances').value = '10000';
+            document.getElementById('other-current-assets').value = '8000';
+            document.getElementById('land').value = '500000';
+            document.getElementById('buildings').value = '800000';
+            document.getElementById('machinery').value = '350000';
+            document.getElementById('furniture').value = '100000';
+            document.getElementById('transportation-equipment').value = '200000';
+            document.getElementById('accumulated-depreciation').value = '250000';
+            document.getElementById('trademarks-patents').value = '120000';
+            document.getElementById('licenses').value = '80000';
+            document.getElementById('software').value = '60000';
+            document.getElementById('accumulated-amortization').value = '40000';
+            document.getElementById('investment-shares').value = '250000';
+            document.getElementById('bonds').value = '150000';
+            document.getElementById('other-investments').value = '50000';
+            document.getElementById('domestic-suppliers').value = '150000';
+            document.getElementById('foreign-suppliers').value = '80000';
+            document.getElementById('notes-payable').value = '40000';
+            document.getElementById('short-term-bank-loans').value = '200000';
+            document.getElementById('bank-overdrafts').value = '30000';
+            document.getElementById('vat-payable').value = '25000';
+            document.getElementById('income-tax-payable').value = '15000';
+            document.getElementById('other-taxes').value = '5000';
+            document.getElementById('customer-advances').value = '10000';
+            document.getElementById('provisions').value = '20000';
+            document.getElementById('dividends-payable').value = '10000';
+            document.getElementById('other-current-liabilities').value = '8000';
+            document.getElementById('long-term-bank-loans').value = '400000';
+            document.getElementById('finance-lease-obligations').value = '100000';
+            document.getElementById('other-long-term-liabilities').value = '20000';
+            document.getElementById('capital-stock').value = '1000000';
+            document.getElementById('share-premium').value = '100000';
+            document.getElementById('legal-reserves').value = '50000';
+            document.getElementById('voluntary-reserves').value = '25000';
+            document.getElementById('accumulated-results').value = '150000';
+            document.getElementById('current-period-result').value = '391000'; // Ajustado para que cuadre
+            showNotification('Datos de ejemplo cargados en el Balance General.', 'info');
+            // Format inputs immediately after loading data
+            document.querySelectorAll('#balance input[type="text"]').forEach(input => {
+                if (input.value) {
+                    input.value = formatCurrency(parseFloat(input.value));
+                }
             });
-            showNotification('Datos de ejemplo de Balance cargados.', 'success');
+            calculateBalance();
         }
 
         function loadSampleResultsData() {
-            const data = { 'gross-sales': 250000, 'sales-returns': 8000, 'sales-discounts': 5000, 'bonuses': 3000, 'rental-income': 12000, 'financial-income': 8000, 'asset-sale-gain': 5000, 'other-income': 3000, 'beginning-inventory': 45000, 'net-purchases': 120000, 'ending-inventory': 50000, 'finished-goods-cost': 15000, 'sales-salaries': 25000, 'sales-commissions': 12000, 'advertising': 8000, 'freight-out': 6000, 'other-sales-expenses': 4000, 'admin-salaries': 30000, 'professional-fees': 8000, 'general-services': 6000, 'office-maintenance': 4000, 'depreciation-expense': 12000, 'amortization-expense': 3000, 'other-admin-expenses': 5000, 'interest-expense': 8000, 'bank-commissions': 3000, 'exchange-loss': 2000, 'other-financial-expenses': 1500, 'income-tax': 15000, 'other-taxes-expense': 2000 };
-            Object.keys(data).forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = formatAsCurrency(data[id], true);
+            document.getElementById('gross-sales').value = '5000000';
+            document.getElementById('sales-returns').value = '50000';
+            document.getElementById('sales-discounts').value = '20000';
+            document.getElementById('bonuses').value = '10000';
+            document.getElementById('rental-income').value = '5000';
+            document.getElementById('financial-income').value = '1000';
+            document.getElementById('asset-sale-gain').value = '20000';
+            document.getElementById('other-income').value = '10000';
+            document.getElementById('beginning-inventory').value = '100000';
+            document.getElementById('net-purchases').value = '1500000';
+            document.getElementById('ending-inventory').value = '150000';
+            document.getElementById('finished-goods-cost').value = '0';
+            document.getElementById('sales-salaries').value = '800000';
+            document.getElementById('sales-commissions').value = '150000';
+            document.getElementById('advertising').value = '100000';
+            document.getElementById('freight-out').value = '50000';
+            document.getElementById('other-sales-expenses').value = '20000';
+            document.getElementById('admin-salaries').value = '600000';
+            document.getElementById('professional-fees').value = '80000';
+            document.getElementById('general-services').value = '50000';
+            document.getElementById('office-maintenance').value = '30000';
+            document.getElementById('depreciation-expense').value = '250000';
+            document.getElementById('amortization-expense').value = '40000';
+            document.getElementById('other-admin-expenses').value = '10000';
+            document.getElementById('interest-expense').value = '15000';
+            document.getElementById('bank-commissions').value = '5000';
+            document.getElementById('exchange-loss').value = '2000';
+            document.getElementById('other-financial-expenses').value = '1000';
+            document.getElementById('income-tax').value = '120000';
+            document.getElementById('other-taxes-expense').value = '5000';
+            showNotification('Datos de ejemplo cargados en el Estado de Resultados.', 'info');
+            // Format inputs immediately after loading data
+            document.querySelectorAll('#resultados input[type="text"]').forEach(input => {
+                if (input.value) {
+                    input.value = formatCurrency(parseFloat(input.value));
+                }
             });
-            showNotification('Datos de ejemplo de Estado de Resultados cargados.', 'success');
+            calculateResults();
         }
 
         function loadSampleComparisonData() {
-            document.getElementById('period1-name').value = '2025-06';
-            document.getElementById('period1-net-income').value = formatAsCurrency(25000, true);
-            document.getElementById('period1-sales').value = formatAsCurrency(180000, true);
-            document.getElementById('period2-name').value = '2025-07';
-            document.getElementById('period2-net-income').value = formatAsCurrency(32000, true);
-            document.getElementById('period2-sales').value = formatAsCurrency(210000, true);
-            showNotification('Datos de ejemplo de Comparativo cargados.', 'success');
+            document.getElementById('period1-name').value = 'Jun 2025';
+            document.getElementById('period1-net-income').value = '150000';
+            document.getElementById('period1-sales').value = '1000000';
+            document.getElementById('period2-name').value = 'Jul 2025';
+            document.getElementById('period2-net-income').value = '200000';
+            document.getElementById('period2-sales').value = '1200000';
+            showNotification('Datos de ejemplo cargados para el Comparativo.', 'info');
         }
 
-        function calculateAll() {
-            calculateBalance();
-            calculateResults();
-            calculateRatios();
-            updatePreview();
-        }
-
-        // --- Integración con la API de Gemini (Análisis con IA) ---
-        function getPromptData() {
-            if (!financialData.balance.totals || !financialData.results.totals || !financialData.ratios) {
-                return null;
-            }
-            return `
-                Datos Financieros para ${getTextValue('company-name') || 'la empresa'} para el periodo ${getTextValue('report-period') || 'actual'}:
-                - Activos Totales: ${financialData.balance.totals.totalAssets}
-                - Pasivos Totales: ${financialData.balance.totals.totalLiabilities}
-                - Patrimonio Neto: ${financialData.balance.totals.totalEquity}
-                - Ingresos Totales: ${financialData.results.totals.totalRevenue}
-                - Utilidad Bruta: ${financialData.results.totals.grossProfit}
-                - Utilidad Operativa: ${financialData.results.totals.operatingProfit}
-                - Utilidad Neta: ${financialData.results.totals.netIncome}
-                - Razón Corriente: ${financialData.ratios.currentRatio.toFixed(2)}
-                - Prueba Ácida: ${financialData.ratios.quickRatio.toFixed(2)}
-                - Ratio de Endeudamiento: ${financialData.ratios.debtRatio.toFixed(2)}
-                - ROE (Retorno sobre el Patrimonio): ${financialData.ratios.roe.toFixed(2)}
-                - Margen Neto: ${financialData.ratios.netMargin.toFixed(2)}
-            `;
-        }
-
-        async function callGeminiAPI(userPrompt, button, resultTextarea) {
-            const originalBtnHTML = button.innerHTML;
-            button.disabled = true;
-            button.innerHTML = `${spinnerSVG} Generando...`;
-            resultTextarea.value = "Analizando datos...";
-            showNotification("Generando análisis con IA...", "info");
-
-            const systemPrompt = "Eres un analista financiero experto. Tu tarea es analizar los siguientes datos financieros y generar una respuesta concisa, profesional y fácil de entender en español. El tono debe ser objetivo y basado en datos.";
-
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            const payload = {
-                contents: [{ parts: [{ text: userPrompt }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                tools: [{ "google_search": {} }]
-            };
-
-            let retries = 0;
-            const maxRetries = 3;
-            let success = false;
-            let responseText = "Ocurrió un error al generar el análisis. Por favor, inténtelo de nuevo.";
-            while (retries < maxRetries && !success) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        if (response.status === 429) {
-                            retries++;
-                            const delay = Math.pow(2, retries) * 1000;
-                            await new Promise(res => setTimeout(res, delay));
-                            continue;
-                        } else {
-                            throw new Error(`Error de la API: ${response.status} ${response.statusText}`);
-                        }
-                    }
-
-                    const result = await response.json();
-                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                    if (text) {
-                        responseText = text;
-                        success = true;
-                    } else {
-                        throw new Error("La respuesta de la API no contiene texto.");
-                    }
-
-                } catch (error) {
-                    console.error("Error al llamar a la API de Gemini:", error);
-                    retries++;
-                    const delay = Math.pow(2, retries) * 1000;
-                    await new Promise(res => setTimeout(res, delay));
-                }
-            }
-
-            button.disabled = false;
-            button.innerHTML = originalBtnHTML;
-            return responseText;
-        }
-
-        async function generateAIAnalysis(analysisType) {
-            const promptData = getPromptData();
-            if (!promptData) {
-                showNotification('Por favor, calcule primero el Balance y los Resultados.', 'error');
-                return;
-            }
-
-            const resultTextarea = document.getElementById('ai-result-display');
-            let userPrompt = "";
-            let button;
-
-            switch (analysisType) {
-                case 'summary':
-                    button = document.getElementById('ai-summary-btn');
-                    userPrompt = `Basado en los siguientes datos, genera un resumen ejecutivo. Céntrate en los puntos más importantes sobre la liquidez, rentabilidad y estructura de capital.\n\n${promptData}`;
-                    break;
-                case 'swot':
-                    button = document.getElementById('ai-swot-btn');
-                    userPrompt = `Basado en los siguientes datos, identifica 2-3 fortalezas clave y 2-3 debilidades clave. Explica brevemente por qué cada punto es una fortaleza o debilidad, utilizando los datos para respaldar tu análisis.\n\n${promptData}`;
-                    break;
-                case 'recommendations':
-                    button = document.getElementById('ai-recom-btn');
-                    userPrompt = `Basado en los siguientes datos, proporciona 2-3 recomendaciones estratégicas y accionables para mejorar la salud financiera de la empresa. Justifica cada recomendación.\n\n${promptData}`;
-                    break;
-            }
-
-            const text = await callGeminiAPI(userPrompt, button, resultTextarea);
-            if (text) {
-                resultTextarea.value = text;
-                financialData.analysis[analysisType] = text;
-                if (analysisType === 'summary') {
-                    updatePreview();
-                }
-            }
-        }
-
-        async function generateAIBenchmarkAnalysis() {
-            const promptData = getPromptData();
-            const industry = getTextValue('industry-input');
-            if (!promptData) {
-                showNotification('Por favor, calcule primero el Balance y los Resultados.', 'error');
-                return;
-            }
-            if (!industry) {
-                showNotification('Por favor, especifique una industria para el análisis comparativo.', 'error');
-                return;
-            }
-
-            const resultTextarea = document.getElementById('ai-result-display');
-            const button = document.getElementById('ai-benchmark-btn');
-
-            const userPrompt = `Realiza un análisis de benchmarking para una empresa en la industria de "${industry}". Compara los siguientes ratios de la empresa con los promedios típicos de esa industria. Para cada ratio, explica qué significa, cuál es el valor de la empresa, cuál es el benchmark de la industria (búscalo si no lo conoces) y si la empresa está por encima, por debajo o en línea con el promedio. \n\n${promptData}`;
-
-            const text = await callGeminiAPI(userPrompt, button, resultTextarea);
-            if (text) {
-                resultTextarea.value = text;
-                financialData.analysis.benchmark = text;
-            }
-        }
-
-        // --- Event listeners e inicialización de la app ---
+        // --- Event Listeners and UI Logic ---
         document.addEventListener('DOMContentLoaded', () => {
-            setupTabNavigation();
-            setupMobileMenu();
-            setupThemeToggle();
-            setupNumberFormatting();
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tab = button.getAttribute('data-tab');
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    document.getElementById(tab).classList.remove('hidden');
 
-            // Handle click on the custom upload area to open file dialog
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active', 'bg-primary-600', 'dark:bg-primary-500', 'text-white', 'font-semibold');
+                        btn.classList.add('text-gray-300');
+                    });
+                    button.classList.add('active', 'bg-primary-600', 'dark:bg-primary-500', 'text-white', 'font-semibold');
+                    button.classList.remove('text-gray-300');
+                    showTabInstruction(tab);
+                });
+            });
+
+            // Add event listeners to format currency on input blur
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.addEventListener('blur', (event) => {
+                    if (event.target.value) {
+                        const numericValue = parseFloat(event.target.value.replace(/[^0-9.-]+/g, "")) || 0;
+                        event.target.value = formatCurrency(numericValue);
+                    }
+                });
+            });
+
+            document.getElementById('mobile-menu-toggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('open');
+            });
+
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                const isDarkMode = document.documentElement.classList.contains('dark');
+                document.getElementById('sun-icon').classList.toggle('hidden', isDarkMode);
+                document.getElementById('moon-icon').classList.toggle('hidden', !isDarkMode);
+            });
+
             document.getElementById('logo-upload-container').addEventListener('click', () => {
                 document.getElementById('company-logo').click();
             });
 
-            // Handle the file input change event
-            document.getElementById('company-logo').addEventListener('change', function (event) {
+            document.getElementById('company-logo').addEventListener('change', (event) => {
                 const file = event.target.files[0];
                 if (file) {
-                    if (logoObjectURL) URL.revokeObjectURL(logoObjectURL);
-                    logoObjectURL = URL.createObjectURL(file);
-                    updatePreview();
-
-                    // Display a preview inside the upload container
-                    const uploadContainer = document.getElementById('logo-upload-container');
-                    const fileReader = new FileReader();
-                    fileReader.onload = (e) => {
-                        uploadContainer.innerHTML = `
-                            <div class="h-20 w-20 rounded-full overflow-hidden mb-2 mx-auto border-4 border-white dark:border-gray-700 shadow-md">
-                                <img src="${e.target.result}" alt="Logo subido" class="h-full w-full object-cover">
-                            </div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Logo subido. Haga clic para cambiar.</p>
-                        `;
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        if (logoObjectURL) {
+                            URL.revokeObjectURL(logoObjectURL);
+                        }
+                        logoObjectURL = URL.createObjectURL(file);
+                        document.getElementById('preview-logo').innerHTML = `<img src="${e.target.result}" alt="Company Logo" class="w-full h-full object-contain rounded-full">`;
+                        showNotification('Logo subido correctamente.', 'success');
                     };
-                    fileReader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
                 }
             });
 
-            loadSampleBalanceData();
-            loadSampleResultsData();
-            calculateAll();
+            document.getElementById('company-name').addEventListener('input', (event) => {
+                document.getElementById('preview-company-name').textContent = event.target.value || 'Nombre de la Empresa';
+            });
+            document.getElementById('report-period').addEventListener('input', (event) => {
+                document.getElementById('preview-period').textContent = `Periodo: ${event.target.value || 'YYYY-MM'}`;
+            });
+
+            document.getElementById('ai-summary-btn').addEventListener('click', () => {
+                // Llama a la API de Gemini para el resumen
+                const data = {
+                    balance: financialData.balance.totals,
+                    results: financialData.results.totals
+                };
+                callGeminiAPI('summary', data);
+            });
+            document.getElementById('ai-swot-btn').addEventListener('click', () => {
+                // Llama a la API de Gemini para el análisis SWOT
+                const data = {
+                    balance: financialData.balance.totals,
+                    results: financialData.results.totals
+                };
+                callGeminiAPI('swot', data);
+            });
+            document.getElementById('ai-recom-btn').addEventListener('click', () => {
+                // Llama a la API de Gemini para las recomendaciones
+                const data = {
+                    balance: financialData.balance.totals,
+                    results: financialData.results.totals
+                };
+                callGeminiAPI('recommendations', data);
+            });
         });
+
+        // Función auxiliar para convertir HTML string a elemento DOM
+        function htmlToElement(html) {
+            const template = document.createElement('template');
+            html = html.trim();
+            template.innerHTML = html;
+            return template.content.firstChild;
+        }
+
+        async function callGeminiAPI(type, data) {
+            const resultDisplay = document.getElementById('ai-result-display');
+            const btn = document.getElementById(`ai-${type}-btn`);
+            const originalBtnText = btn.innerHTML;
+            const messageDiv = document.getElementById('ai-message');
+            messageDiv.innerHTML = '';
+
+            if (!data.balance || !data.results) {
+                showNotification('Por favor, calcula primero el Balance General y el Estado de Resultados.', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `${spinnerSVG} Analizando...`;
+            resultDisplay.value = 'Generando análisis con IA...';
+
+            let userPrompt = '';
+            switch (type) {
+                case 'summary':
+                    userPrompt = `Actúa como un analista financiero experto. Proporciona un resumen ejecutivo de un párrafo sobre el desempeño de la empresa. Utiliza los siguientes datos financieros:\nBalance General: ${JSON.stringify(data.balance)}\nEstado de Resultados: ${JSON.stringify(data.results)}\n`;
+                    break;
+                case 'swot':
+                    userPrompt = `Actúa como un consultor de negocios. Con base en los siguientes datos financieros, identifica las principales fortalezas y debilidades de la empresa en formato de lista. Utiliza los siguientes datos:\nBalance General: ${JSON.stringify(data.balance)}\nEstado de Resultados: ${JSON.stringify(data.results)}\n`;
+                    break;
+                case 'recommendations':
+                    userPrompt = `Actúa como un asesor financiero. Proporciona 3-5 recomendaciones clave para mejorar la salud financiera de la empresa, basadas en los siguientes datos:\nBalance General: ${JSON.stringify(data.balance)}\nEstado de Resultados: ${JSON.stringify(data.results)}\n`;
+                    break;
+            }
+
+            const payload = {
+                contents: [{
+                    parts: [{
+                        text: userPrompt
+                    }]
+                }],
+                tools: [{
+                    "google_search": {}
+                }],
+            };
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    financialData.analysis[type] = text;
+                    resultDisplay.value = text;
+                    showNotification('Análisis generado exitosamente.', 'success');
+                } else {
+                    throw new Error('No se pudo generar el análisis.');
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                showNotification(`Error al generar el análisis: ${error.message}`, 'error');
+                resultDisplay.value = 'Ocurrió un error al generar el análisis. Por favor, inténtalo de nuevo.';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+            }
+        }
+
+        async function generateAIBenchmarkAnalysis() {
+            const industry = getTextValue('industry-input');
+            const resultDisplay = document.getElementById('ai-result-display');
+            const btn = document.getElementById('ai-benchmark-btn');
+            const originalBtnText = btn.innerHTML;
+            const messageDiv = document.getElementById('ai-message');
+            messageDiv.innerHTML = '';
+
+            if (!industry) {
+                showNotification('Por favor, introduce la industria para realizar el benchmarking.', 'error');
+                return;
+            }
+
+            if (!financialData.ratios || Object.keys(financialData.ratios).length === 0) {
+                showNotification('Calcula los ratios financieros primero.', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `${spinnerSVG} Analizando...`;
+            resultDisplay.value = 'Generando análisis de benchmarking con IA...';
+
+            const userPrompt = `Compara los siguientes ratios financieros de una empresa con los promedios de la industria de ${industry}. Proporciona un análisis conciso y claro de las fortalezas y debilidades relativas de la empresa. Utiliza los siguientes ratios:\n${JSON.stringify(financialData.ratios)}\n`;
+
+            const payload = {
+                contents: [{
+                    parts: [{
+                        text: userPrompt
+                    }]
+                }],
+                tools: [{
+                    "google_search": {}
+                }],
+            };
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    financialData.analysis.benchmark = text;
+                    resultDisplay.value = text;
+                    showNotification('Análisis de benchmarking generado exitosamente.', 'success');
+                } else {
+                    throw new Error('No se pudo generar el análisis.');
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API for benchmarking:", error);
+                showNotification(`Error al generar el análisis de benchmarking: ${error.message}`, 'error');
+                resultDisplay.value = 'Ocurrió un error al generar el análisis. Por favor, inténtalo de nuevo.';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+            }
+        }
+
+
+        window.enterApp = function () {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('main-app-container').classList.remove('hidden');
+            setTimeout(showWelcomeNotification, 500);
+        }
     </script>
 </body>
 
