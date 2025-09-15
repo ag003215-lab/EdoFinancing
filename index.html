@@ -50,7 +50,8 @@
                     },
                     animation: {
                         'slide-in': 'slideIn 0.4s forwards',
-                        'slide-out': 'slideOut 0.4s forwards'
+                        'slide-out': 'slideOut 0.4s forwards',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards'
                     },
                     keyframes: {
                         slideIn: {
@@ -58,6 +59,10 @@
                         },
                         slideOut: {
                             'to': { transform: 'translateX(120%)' }
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
                         }
                     }
                 }
@@ -231,7 +236,7 @@
             padding: 1.25rem;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
+            z-index: 2001;
             transform: translateX(120%);
             animation: slideIn 0.4s forwards;
             max-width: 350px;
@@ -605,6 +610,19 @@
             margin-bottom: 0.25rem;
         }
 
+        .dark-mode .prose {
+            color: #cbd5e1;
+        }
+
+        .dark-mode .prose h4 {
+            color: #f1f5f9;
+        }
+
+        .dark-mode .prose p,
+        .dark-mode .prose li {
+            color: #cbd5e1;
+        }
+
         .section-title {
             scroll-margin-top: 80px;
         }
@@ -679,6 +697,18 @@
             width: 50px;
             height: 50px;
             animation: spin 1.5s linear infinite;
+        }
+
+        /* Animation for sections */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -789,7 +819,7 @@
     <!-- Main Content -->
     <main id="main-content" class="main-content p-4 md:p-8 pb-24">
         <!-- Header -->
-        <header class="mb-8">
+        <header class="mb-8 animate-on-scroll">
             <div class="flex flex-wrap justify-between items-center gap-4">
                 <div>
                     <h1 class="text-2xl md:text-3xl font-bold">Panel Financiero</h1>
@@ -810,7 +840,7 @@
         </header>
 
         <!-- Dashboard Ejecutivo -->
-        <section id="dashboard" class="section-title mb-10">
+        <section id="dashboard" class="section-title mb-10 animate-on-scroll">
             <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                 <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
                     <i class="fas fa-tachometer-alt text-blue-500"></i>
@@ -917,7 +947,7 @@
         </section>
 
         <!-- Balance General -->
-        <section id="balance" class="section-title mb-10">
+        <section id="balance" class="section-title mb-10 animate-on-scroll">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
                 <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2"><i
                         class="fas fa-balance-scale text-blue-500"></i> Balance General</h2>
@@ -930,42 +960,57 @@
                     <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4">Activo</h3>
                     <div class="space-y-3 md:space-y-4">
                         <div class="form-section">
-                            <h4 class="font-medium">Activo Corriente</h4>
+                            <h4 class="font-medium">ACTIVO CORRIENTE</h4>
                             <div class="space-y-2 md:space-y-3 mt-2">
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Efectivo y Equivalentes</label><input type="text" id="cash"
-                                        placeholder="$0.00" class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Cuentas por Cobrar</label><input type="text"
-                                        id="accounts-receivable" placeholder="$0.00"
-                                        class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
+                                <div class="flex justify-between items-center gap-2"><label
+                                        class="text-sm">Caja</label><input type="text" id="caja" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label
+                                        class="text-sm">Bancos</label><input type="text" id="bancos" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Cuentas por
+                                        Cobrar</label><input type="text" id="accounts-receivable" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label
                                         class="text-sm">Inventario</label><input type="text" id="inventory"
-                                        placeholder="$0.00" class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Otros Activos Corrientes</label><input type="text"
-                                        id="other-current-assets" placeholder="$0.00"
-                                        class="input-field w-full sm:w-32 text-right"></div>
+                                        placeholder="$0.00" class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Otros
+                                        Activos Corrientes</label><input type="text" id="other-current-assets"
+                                        placeholder="$0.00" class="input-field w-32 text-right"></div>
                             </div>
                         </div>
                         <div class="form-section">
-                            <h4 class="font-medium">Activo No Corriente</h4>
+                            <h4 class="font-medium">ACTIVO NO CORRIENTE</h4>
                             <div class="space-y-2 md:space-y-3 mt-2">
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Propiedad, Planta y Equipo</label><input type="text" id="ppe"
-                                        placeholder="$0.00" class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Intangibles</label><input type="text" id="intangibles"
-                                        placeholder="$0.00" class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Inversiones</label><input type="text" id="investments"
-                                        placeholder="$0.00" class="input-field w-full sm:w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Propiedad o
+                                        Terrenos</label><input type="text" id="propiedad-terrenos" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label
+                                        class="text-sm">Mobiliario</label><input type="text" id="mobiliario"
+                                        placeholder="$0.00" class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label
+                                        class="text-sm text-red-500">(-) Depreciación Mobiliario</label><input
+                                        type="text" id="dep-mobiliario" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Equipo de
+                                        transporte</label><input type="text" id="eq-transporte" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label
+                                        class="text-sm text-red-500">(-) Depreciación de transporte</label><input
+                                        type="text" id="dep-transporte" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Equipo de
+                                        oficina</label><input type="text" id="eq-oficina" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label
+                                        class="text-sm text-red-500">(-) Depreciación Equipo Oficina</label><input
+                                        type="text" id="dep-oficina" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
                             </div>
                         </div>
-                        <div class="pt-4 border-t border-gray-200 dark:border-slate-700">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-lg">
-                                <span>Total Activo</span><span id="total-assets"
-                                    class="text-blue-600 dark:text-blue-400">$0.00</span></div>
+                        <div class="pt-4 border-t-2 border-black dark:border-white">
+                            <div class="flex justify-between font-bold text-lg"><span>Total Activo</span><span
+                                    id="total-assets" class="text-blue-600 dark:text-blue-400">$0.00</span></div>
                         </div>
                     </div>
                 </div>
@@ -973,52 +1018,50 @@
                     <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4">Pasivo y Patrimonio</h3>
                     <div class="space-y-3 md:space-y-4">
                         <div class="form-section">
-                            <h4 class="font-medium">Pasivo Corriente</h4>
+                            <h4 class="font-medium">PASIVO CORRIENTE</h4>
                             <div class="space-y-2 md:space-y-3 mt-2">
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Cuentas por Pagar</label><input type="text"
-                                        id="accounts-payable" placeholder="$0.00"
-                                        class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Impuestos por Pagar</label><input type="text" id="taxes-payable"
-                                        placeholder="$0.00" class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Préstamos Corto Plazo</label><input type="text"
-                                        id="short-term-debt" placeholder="$0.00"
-                                        class="input-field w-full sm:w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Cuentas por
+                                        Pagar</label><input type="text" id="accounts-payable" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">ISR por
+                                        pagar</label><input type="text" id="isr-payable" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Préstamos
+                                        Corto Plazo</label><input type="text" id="short-term-debt" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label
+                                        class="text-sm">Acreedores</label><input type="text" id="acreedores"
+                                        placeholder="$0.00" class="input-field w-32 text-right"></div>
                             </div>
                         </div>
                         <div class="form-section">
-                            <h4 class="font-medium">Pasivo No Corriente</h4>
+                            <h4 class="font-medium">PASIVO NO CORRIENTE</h4>
                             <div class="space-y-2 md:space-y-3 mt-2">
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Préstamos Largo Plazo</label><input type="text"
-                                        id="long-term-debt" placeholder="$0.00"
-                                        class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Obligaciones</label><input type="text"
-                                        id="other-long-term-liabilities" placeholder="$0.00"
-                                        class="input-field w-full sm:w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Préstamos
+                                        Largo Plazo</label><input type="text" id="long-term-debt" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Otros
+                                        Pasivos No Corrientes</label><input type="text" id="other-long-term-liabilities"
+                                        placeholder="$0.00" class="input-field w-32 text-right"></div>
                             </div>
                         </div>
                         <div class="form-section">
-                            <h4 class="font-medium">Patrimonio</h4>
+                            <h4 class="font-medium">PATRIMONIO</h4>
                             <div class="space-y-2 md:space-y-3 mt-2">
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Capital Social</label><input type="text" id="equity"
-                                        placeholder="$0.00" class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Capital
+                                        Social</label><input type="text" id="equity" placeholder="$0.00"
+                                        class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label
                                         class="text-sm">Reservas</label><input type="text" id="reserves"
-                                        placeholder="$0.00" class="input-field w-full sm:w-32 text-right"></div>
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label
-                                        class="text-sm">Utilidades Retenidas</label><input type="text"
-                                        id="retained-earnings" placeholder="$0.00"
-                                        class="input-field w-full sm:w-32 text-right"></div>
+                                        placeholder="$0.00" class="input-field w-32 text-right"></div>
+                                <div class="flex justify-between items-center gap-2"><label class="text-sm">Utilidad o
+                                        Pérdida del Ejercicio</label><input type="text" id="retained-earnings"
+                                        placeholder="$0.00" class="input-field w-32 text-right"></div>
                             </div>
                         </div>
-                        <div class="pt-4 border-t border-gray-200 dark:border-slate-700">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between font-bold text-lg">
-                                <span>Total Pasivo y Patrimonio</span><span id="total-liabilities-equity"
+                        <div class="pt-4 border-t-2 border-black dark:border-white">
+                            <div class="flex justify-between font-bold text-lg"><span>Total Pasivo y
+                                    Patrimonio</span><span id="total-liabilities-equity"
                                     class="text-blue-600 dark:text-blue-400">$0.00</span></div>
                         </div>
                     </div>
@@ -1033,62 +1076,110 @@
         </section>
 
         <!-- Estado de Resultados -->
-        <section id="resultados" class="section-title mb-10">
+        <section id="resultados" class="section-title mb-10 animate-on-scroll">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
                 <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2"><i
-                        class="fas fa-chart-bar text-green-500"></i> Estado de Resultados</h2>
+                        class="fas fa-chart-bar text-green-500"></i> Estado de Resultados Detallado</h2>
                 <button id="calculate-results"
                     class="btn btn-primary w-full sm:w-auto hover:shadow-md transition-shadow"><i
                         class="fas fa-calculator"></i> Calcular Resultados</button>
             </div>
             <div class="card p-4 md:p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
+                <div class="space-y-4">
+                    <!-- Ingresos -->
                     <div>
-                        <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4">Ingresos y Costos</h3>
-                        <div class="space-y-2 md:space-y-3">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label>Ventas
-                                    Netas</label><input type="text" id="net-sales" placeholder="$0.00"
-                                    class="input-field w-full sm:w-32 text-right"></div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label>Otros
-                                    Ingresos</label><input type="text" id="other-income" placeholder="$0.00"
-                                    class="input-field w-full sm:w-32 text-right"></div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label>Costo de
-                                    Ventas</label><input type="text" id="cost-of-sales" placeholder="$0.00"
-                                    class="input-field w-full sm:w-32 text-right"></div>
+                        <h4 class="font-semibold mb-2">Ingresos</h4>
+                        <div class="space-y-2 pl-4">
+                            <div class="flex justify-between items-center"><label>Ingresos por Ventas</label><input
+                                    type="text" id="ingresos-ventas" placeholder="$0.00"
+                                    class="input-field w-40 text-right"></div>
+                            <div class="flex justify-between items-center"><label class="text-red-500">(-) Devoluciones
+                                    y Rebajas s/Venta</label><input type="text" id="devoluciones-ventas"
+                                    placeholder="$0.00" class="input-field w-40 text-right"></div>
                         </div>
                     </div>
+                    <div class="py-2 border-t dark:border-slate-700 flex justify-between items-center font-bold">
+                        <h4 class="text-md">Ventas Netas</h4>
+                        <span id="net-sales-display" class="text-md">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center"><label>Costo de Ventas (COGS)</label><input
+                            type="text" id="cost-of-sales" placeholder="$0.00" class="input-field w-40 text-right">
+                    </div>
+
+                    <!-- Utilidad Bruta -->
+                    <div
+                        class="py-2 border-y-2 border-slate-300 dark:border-slate-600 flex justify-between items-center font-bold text-lg">
+                        <h4>Utilidad Bruta</h4>
+                        <span id="gross-profit">$0.00</span>
+                    </div>
+
+                    <!-- Gastos Operativos -->
                     <div>
-                        <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4">Gastos</h3>
-                        <div class="space-y-2 md:space-y-3">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label>Gastos
-                                    de Administración</label><input type="text" id="admin-expenses" placeholder="$0.00"
-                                    class="input-field w-full sm:w-32 text-right"></div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2"><label>Gastos
-                                    de Ventas</label><input type="text" id="sales-expenses" placeholder="$0.00"
-                                    class="input-field w-full sm:w-32 text-right"></div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                <label>Depreciación</label><input type="text" id="depreciation" placeholder="$0.00"
-                                    class="input-field w-full sm:w-32 text-right"></div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                <label>Intereses</label><input type="text" id="interest-expense" placeholder="$0.00"
-                                    class="input-field w-full sm:w-32 text-right"></div>
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                <label>Impuestos</label><input type="text" id="tax-expense" placeholder="$0.00"
-                                    class="input-field w-full sm:w-32 text-right"></div>
+                        <h4 class="font-semibold mb-2">Gastos Operativos</h4>
+                        <div class="space-y-2 pl-4">
+                            <h5 class="font-medium mt-2">Gastos de Venta</h5>
+                            <div class="space-y-2 pl-4">
+                                <div class="flex justify-between items-center"><label class="text-sm">Sueldos y
+                                        Comisiones (Ventas)</label><input type="text" id="sales-salaries"
+                                        placeholder="$0.00" class="input-field w-40 text-right"></div>
+                                <div class="flex justify-between items-center"><label class="text-sm">Publicidad y
+                                        Marketing</label><input type="text" id="marketing-expenses" placeholder="$0.00"
+                                        class="input-field w-40 text-right"></div>
+                            </div>
+                            <h5 class="font-medium mt-2">Gastos de Administración</h5>
+                            <div class="space-y-2 pl-4">
+                                <div class="flex justify-between items-center"><label class="text-sm">Sueldos
+                                        (Administración)</label><input type="text" id="admin-salaries"
+                                        placeholder="$0.00" class="input-field w-40 text-right"></div>
+                                <div class="flex justify-between items-center"><label
+                                        class="text-sm">Renta</label><input type="text" id="rent-expenses"
+                                        placeholder="$0.00" class="input-field w-40 text-right"></div>
+                                <div class="flex justify-between items-center"><label class="text-sm">Servicios
+                                        Públicos</label><input type="text" id="utilities-expenses" placeholder="$0.00"
+                                        class="input-field w-40 text-right"></div>
+                            </div>
+                            <div class="flex justify-between items-center mt-2"><label>Depreciación y
+                                    Amortización</label><input type="text" id="depreciation" placeholder="$0.00"
+                                    class="input-field w-40 text-right"></div>
                         </div>
                     </div>
-                </div>
-                <div class="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-200 dark:border-slate-700">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between">
-                        <h3 class="text-lg md:text-xl font-semibold">Utilidad Neta</h3>
-                        <span id="net-income" class="text-xl md:text-2xl font-bold text-green-500">$0.00</span>
+
+                    <!-- Utilidad Operativa -->
+                    <div
+                        class="py-2 border-y-2 border-slate-300 dark:border-slate-600 flex justify-between items-center font-bold text-lg">
+                        <h4>Utilidad Operativa (EBIT)</h4>
+                        <span id="operating-income">$0.00</span>
+                    </div>
+
+                    <!-- Otros Ingresos/Gastos e Intereses -->
+                    <div class="flex justify-between items-center"><label>Otros Ingresos / (Gastos)</label><input
+                            type="text" id="other-income" placeholder="$0.00" class="input-field w-40 text-right"></div>
+                    <div class="flex justify-between items-center"><label>(-) Gastos por Intereses</label><input
+                            type="text" id="interest-expense" placeholder="$0.00" class="input-field w-40 text-right">
+                    </div>
+
+                    <!-- Utilidad antes de Impuestos -->
+                    <div
+                        class="py-2 border-y dark:border-slate-700 flex justify-between items-center font-bold text-lg">
+                        <h4>Utilidad antes de Impuestos (EBT)</h4>
+                        <span id="ebt">$0.00</span>
+                    </div>
+
+                    <!-- Impuestos y Utilidad Neta -->
+                    <div class="flex justify-between items-center"><label>(-) Impuesto sobre la Renta</label><input
+                            type="text" id="tax-expense" placeholder="$0.00" class="input-field w-40 text-right"></div>
+
+                    <div
+                        class="mt-4 pt-4 border-t-2 border-black dark:border-white flex justify-between items-center font-extrabold">
+                        <h3 class="text-xl">Utilidad Neta</h3>
+                        <span id="net-income" class="text-xl text-green-600 dark:text-green-400">$0.00</span>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Flujo de Efectivo -->
-        <section id="flujo" class="section-title mb-10">
+        <section id="flujo" class="section-title mb-10 animate-on-scroll">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
                 <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2"><i
                         class="fas fa-exchange-alt text-indigo-500"></i> Flujo de Efectivo</h2>
@@ -1143,7 +1234,7 @@
         </section>
 
         <!-- Análisis de Ratios -->
-        <section id="ratios" class="section-title mb-10">
+        <section id="ratios" class="section-title mb-10 animate-on-scroll">
             <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2"><i
                         class="fas fa-percentage text-purple-500"></i> Análisis de Ratios</h2>
@@ -1153,19 +1244,31 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                 <div class="ratio-card">
-                    <h4 class="text-sm font-bold text-blue-700 dark:text-blue-300">ROE</h4>
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-blue-700 dark:text-blue-300">ROE</h4>
+                        <i class="fas fa-info-circle text-gray-400 cursor-pointer" data-term="ROE"></i>
+                    </div>
                     <p class="text-xl md:text-2xl font-bold mt-2" id="roe">0.00%</p>
                 </div>
                 <div class="ratio-card">
-                    <h4 class="text-sm font-bold text-blue-700 dark:text-blue-300">ROA</h4>
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-blue-700 dark:text-blue-300">ROA</h4>
+                        <i class="fas fa-info-circle text-gray-400 cursor-pointer" data-term="ROA"></i>
+                    </div>
                     <p class="text-xl md:text-2xl font-bold mt-2" id="roa">0.00%</p>
                 </div>
                 <div class="ratio-card">
-                    <h4 class="text-sm font-bold text-blue-700 dark:text-blue-300">Razón Corriente</h4>
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-blue-700 dark:text-blue-300">Razón Corriente</h4>
+                        <i class="fas fa-info-circle text-gray-400 cursor-pointer" data-term="Razón Corriente"></i>
+                    </div>
                     <p class="text-xl md:text-2xl font-bold mt-2" id="current-ratio">0.00</p>
                 </div>
                 <div class="ratio-card">
-                    <h4 class="text-sm font-bold text-blue-700 dark:text-blue-300">Prueba Ácida</h4>
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-blue-700 dark:text-blue-300">Prueba Ácida</h4>
+                        <i class="fas fa-info-circle text-gray-400 cursor-pointer" data-term="Prueba Ácida"></i>
+                    </div>
                     <p class="text-xl md:text-2xl font-bold mt-2" id="quick-ratio">0.00</p>
                 </div>
             </div>
@@ -1178,7 +1281,7 @@
         </section>
 
         <!-- Análisis con IA -->
-        <section id="ia" class="section-title mb-10">
+        <section id="ia" class="section-title mb-10 animate-on-scroll">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
                 <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2"><i
                         class="fas fa-robot text-amber-500"></i> Análisis con Inteligencia Artificial</h2>
@@ -1225,7 +1328,7 @@
         </section>
 
         <!-- Comparativo -->
-        <section id="comparativo" class="section-title mb-10">
+        <section id="comparativo" class="section-title mb-10 animate-on-scroll">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
                 <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2"><i
                         class="fas fa-chart-line text-indigo-500"></i> Comparativo de Periodos</h2>
@@ -1277,7 +1380,7 @@
         </section>
 
         <!-- Presupuesto con IA -->
-        <section id="presupuesto" class="section-title mb-10">
+        <section id="presupuesto" class="section-title mb-10 animate-on-scroll">
             <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2 mb-6"><i
                     class="fas fa-calculator text-amber-500"></i> Presupuesto y Proyecciones con IA</h2>
             <div class="card p-4 md:p-6">
@@ -1308,7 +1411,7 @@
         </section>
 
         <!-- Exportar -->
-        <section id="exportar" class="section-title mb-10">
+        <section id="exportar" class="section-title mb-10 animate-on-scroll">
             <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2 mb-6"><i
                     class="fas fa-file-export text-red-500"></i> Exportar Datos</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -1349,6 +1452,11 @@
                                 <input type="checkbox" id="export-check-comparativo" checked
                                     class="form-checkbox text-blue-600 rounded-md h-4 w-4">
                                 <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Comparativo</span>
+                            </label>
+                            <label class="inline-flex items-center font-medium text-blue-600 dark:text-blue-400">
+                                <input type="checkbox" id="export-check-ai-summary" checked
+                                    class="form-checkbox text-blue-600 rounded-md h-4 w-4">
+                                <span class="ml-2 text-sm">✨ Incluir Resumen por IA</span>
                             </label>
                         </div>
                     </div>
@@ -1412,6 +1520,21 @@
         </div>
     </div>
 
+    <!-- AI Explanation Modal -->
+    <div id="ai-explanation-modal"
+        class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[1001] hidden">
+        <div class="card p-6 rounded-lg shadow-xl w-full max-w-lg mx-4 relative">
+            <button id="ai-explanation-close"
+                class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:hover:text-gray-200">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <h3 id="ai-explanation-title" class="text-xl font-bold mb-4">✨ Explicación con IA</h3>
+            <div id="ai-explanation-content" class="prose dark:prose-invert max-w-none max-h-[60vh] overflow-y-auto">
+                <p>Cargando explicación...</p>
+            </div>
+        </div>
+    </div>
+
     <!-- SCRIPT SECTION -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1433,6 +1556,7 @@
             initializeEventListeners();
             initializeSidebar();
             initializeTheme();
+            initializeAnimations();
             updateChartTheme();
             generateTrendChart();
 
@@ -1486,6 +1610,15 @@
             safeAddEventListener('#export-pdf', 'click', exportToPDF);
             safeAddEventListener('#export-excel', 'click', exportToExcel);
             safeAddEventListener('#theme-toggle', 'click', toggleTheme);
+
+            // AI Explanation listeners
+            document.querySelectorAll('[data-term]').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    const term = e.target.getAttribute('data-term');
+                    getAIExplanation(term);
+                })
+            });
+            safeAddEventListener('#ai-explanation-close', 'click', () => document.getElementById('ai-explanation-modal').classList.add('hidden'));
 
             // Logo upload
             const logoUploadArea = document.getElementById('logo-upload-area');
@@ -1635,19 +1768,25 @@
             const data = window.financialData.balance;
 
             data.assets = {
-                cash: parseCurrency(document.getElementById('cash').value),
+                caja: parseCurrency(document.getElementById('caja').value),
+                bancos: parseCurrency(document.getElementById('bancos').value),
                 accountsReceivable: parseCurrency(document.getElementById('accounts-receivable').value),
                 inventory: parseCurrency(document.getElementById('inventory').value),
                 otherCurrentAssets: parseCurrency(document.getElementById('other-current-assets').value),
-                ppe: parseCurrency(document.getElementById('ppe').value),
-                intangibles: parseCurrency(document.getElementById('intangibles').value),
-                investments: parseCurrency(document.getElementById('investments').value)
+                propiedadTerrenos: parseCurrency(document.getElementById('propiedad-terrenos').value),
+                mobiliario: parseCurrency(document.getElementById('mobiliario').value),
+                depMobiliario: -Math.abs(parseCurrency(document.getElementById('dep-mobiliario').value)),
+                eqTransporte: parseCurrency(document.getElementById('eq-transporte').value),
+                depTransporte: -Math.abs(parseCurrency(document.getElementById('dep-transporte').value)),
+                eqOficina: parseCurrency(document.getElementById('eq-oficina').value),
+                depOficina: -Math.abs(parseCurrency(document.getElementById('dep-oficina').value)),
             };
 
             data.liabilities = {
                 accountsPayable: parseCurrency(document.getElementById('accounts-payable').value),
-                taxesPayable: parseCurrency(document.getElementById('taxes-payable').value),
+                isrPayable: parseCurrency(document.getElementById('isr-payable').value),
                 shortTermDebt: parseCurrency(document.getElementById('short-term-debt').value),
+                acreedores: parseCurrency(document.getElementById('acreedores').value),
                 longTermDebt: parseCurrency(document.getElementById('long-term-debt').value),
                 otherLongTermLiabilities: parseCurrency(document.getElementById('other-long-term-liabilities').value)
             };
@@ -1693,41 +1832,59 @@
         function calculateResults() {
             const data = window.financialData.results;
 
+            // 1. Get all input values
             data.revenue = {
-                netSales: parseCurrency(document.getElementById('net-sales').value),
+                ingresosPorVentas: parseCurrency(document.getElementById('ingresos-ventas').value),
+                devolucionesVentas: -Math.abs(parseCurrency(document.getElementById('devoluciones-ventas').value)),
                 otherIncome: parseCurrency(document.getElementById('other-income').value)
             };
 
             data.expenses = {
                 costOfSales: parseCurrency(document.getElementById('cost-of-sales').value),
-                adminExpenses: parseCurrency(document.getElementById('admin-expenses').value),
-                salesExpenses: parseCurrency(document.getElementById('sales-expenses').value),
+                salesSalaries: parseCurrency(document.getElementById('sales-salaries').value),
+                marketingExpenses: parseCurrency(document.getElementById('marketing-expenses').value),
+                adminSalaries: parseCurrency(document.getElementById('admin-salaries').value),
+                rentExpenses: parseCurrency(document.getElementById('rent-expenses').value),
+                utilitiesExpenses: parseCurrency(document.getElementById('utilities-expenses').value),
                 depreciation: parseCurrency(document.getElementById('depreciation').value),
                 interestExpense: parseCurrency(document.getElementById('interest-expense').value),
                 taxExpense: parseCurrency(document.getElementById('tax-expense').value)
             };
 
-            const totalRevenue = Object.values(data.revenue).reduce((a, b) => a + b, 0);
-            const totalExpenses = Object.values(data.expenses).reduce((a, b) => a + b, 0);
-            const netIncome = totalRevenue - totalExpenses;
+            // 2. Perform calculations for subtotals
+            data.netSales = data.revenue.ingresosPorVentas + data.revenue.devolucionesVentas;
+            data.grossProfit = data.netSales - data.expenses.costOfSales;
 
-            document.getElementById('net-income').textContent = '$' + netIncome.toLocaleString('es-ES', { minimumFractionDigits: 2 });
-            document.getElementById('dashboard-revenue').textContent = '$' + totalRevenue.toLocaleString('es-ES', { minimumFractionDigits: 2 });
-            document.getElementById('dashboard-net-income').textContent = '$' + netIncome.toLocaleString('es-ES', { minimumFractionDigits: 2 });
+            data.totalSalesExpenses = data.expenses.salesSalaries + data.expenses.marketingExpenses;
+            data.totalAdminExpenses = data.expenses.adminSalaries + data.expenses.rentExpenses + data.expenses.utilitiesExpenses;
+            data.totalOperatingExpenses = data.totalSalesExpenses + data.totalAdminExpenses + data.expenses.depreciation;
+
+            data.operatingIncome = data.grossProfit - data.totalOperatingExpenses;
+            data.ebt = data.operatingIncome + data.revenue.otherIncome - data.expenses.interestExpense;
+            data.netIncome = data.ebt - data.expenses.taxExpense;
+
+            // 3. Update the UI with calculated values
+            const format = (value) => '$' + value.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            document.getElementById('net-sales-display').textContent = format(data.netSales);
+            document.getElementById('gross-profit').textContent = format(data.grossProfit);
+            document.getElementById('operating-income').textContent = format(data.operatingIncome);
+            document.getElementById('ebt').textContent = format(data.ebt);
+            document.getElementById('net-income').textContent = format(data.netIncome);
+
+            // Update Dashboard and other parts of the app
+            const totalRevenue = data.revenue.ingresosPorVentas + data.revenue.otherIncome; // Total revenue for dashboard is gross revenue
+            document.getElementById('dashboard-revenue').textContent = format(totalRevenue);
+            document.getElementById('dashboard-net-income').textContent = format(data.netIncome);
 
             const summaryIncomeActual = document.getElementById('summary-income-actual');
-            const summaryCosActual = document.getElementById('summary-cos-actual');
-            const summaryNetIncomeActual = document.getElementById('summary-net-income-actual');
+            if (summaryIncomeActual) summaryIncomeActual.textContent = format(totalRevenue);
 
-            if (summaryIncomeActual) {
-                summaryIncomeActual.textContent = '$' + totalRevenue.toLocaleString('es-ES', { minimumFractionDigits: 2 });
-            }
-            if (summaryCosActual) {
-                summaryCosActual.textContent = '$' + data.expenses.costOfSales.toLocaleString('es-ES', { minimumFractionDigits: 2 });
-            }
-            if (summaryNetIncomeActual) {
-                summaryNetIncomeActual.textContent = '$' + netIncome.toLocaleString('es-ES', { minimumFractionDigits: 2 });
-            }
+            const summaryCosActual = document.getElementById('summary-cos-actual');
+            if (summaryCosActual) summaryCosActual.textContent = format(data.expenses.costOfSales);
+
+            const summaryNetIncomeActual = document.getElementById('summary-net-income-actual');
+            if (summaryNetIncomeActual) summaryNetIncomeActual.textContent = format(data.netIncome);
 
             showNotification('Estado de resultados calculado');
         }
@@ -1764,7 +1921,7 @@
             const balance = window.financialData.balance;
             const results = window.financialData.results;
 
-            if (!Object.values(balance.assets).some(v => v !== 0) || !results.revenue.netSales) {
+            if (!Object.values(balance.assets).some(v => v !== 0) || !results.netSales) {
                 showNotification('Por favor calcule primero el balance y resultados', 'error');
                 return;
             }
@@ -1773,17 +1930,18 @@
             const totalLiabilities = Object.values(balance.liabilities).reduce((a, b) => a + b, 0);
             const totalEquity = Object.values(balance.equity).reduce((a, b) => a + b, 0);
 
-            const totalCurrentAssets = balance.assets.cash +
+            const totalCurrentAssets = balance.assets.caja +
+                balance.assets.bancos +
                 balance.assets.accountsReceivable +
                 balance.assets.inventory +
                 balance.assets.otherCurrentAssets;
 
             const totalCurrentLiabilities = balance.liabilities.accountsPayable +
-                balance.liabilities.taxesPayable +
-                balance.liabilities.shortTermDebt;
+                balance.liabilities.isrPayable +
+                balance.liabilities.shortTermDebt +
+                balance.liabilities.acreedores;
 
-            const netIncome = Object.values(results.revenue).reduce((a, b) => a + b, 0) -
-                Object.values(results.expenses).reduce((a, b) => a + b, 0);
+            const netIncome = results.netIncome || 0; // Use calculated netIncome
 
             window.financialData.ratios = {
                 roe: totalEquity !== 0 ? netIncome / totalEquity : 0,
@@ -1829,25 +1987,6 @@
             element.innerHTML = `<div class="flex flex-col items-center gap-2 md:gap-4"><div class="ai-spinner"></div><p>Procesando con IA...</p></div>`;
 
             const apiKey = "";
-
-            if (!apiKey) {
-                showNotification("API key no configurada. Esta es una demostración.", "warning");
-                setTimeout(() => {
-                    element.innerHTML = `
-                        <div class="prose dark:prose-invert max-w-none">
-                            <h4>Análisis de Ejemplo</h4>
-                            <p>Este es un análisis de ejemplo ya que no se ha configurado una API key válida.</p>
-                            <ul>
-                                <li>La empresa muestra una posición financiera sólida con una razón corriente de ${window.financialData.ratios.currentRatio ? window.financialData.ratios.currentRatio.toFixed(2) : 'N/A'}</li>
-                                <li>El ROE de ${window.financialData.ratios.roe ? (window.financialData.ratios.roe * 100).toFixed(2) : 'N/A'}% indica una buena rentabilidad para los accionistas</li>
-                                <li>Se recomienda mejorar la eficiencia operativa para aumentar la utilidad neta</li>
-                            </ul>
-                        </div>
-                    `;
-                }, 1500);
-                return null;
-            }
-
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             try {
@@ -1872,6 +2011,20 @@
                 element.innerHTML = `<p class="text-red-500 text-center">Error al generar el análisis. ${error.message}</p>`;
 
                 return null;
+            }
+        }
+
+        async function getAIExplanation(term) {
+            const modal = document.getElementById('ai-explanation-modal');
+            const content = document.getElementById('ai-explanation-content');
+            modal.classList.remove('hidden');
+
+            const prompt = `Explica el ratio financiero "${term}" de forma clara y concisa para un dueño de un pequeño negocio. Incluye qué mide, por qué es importante, y cuál podría ser un valor de referencia general. Responde en español y usa formato Markdown simple.`;
+
+            const result = await callGeminiAPI(prompt, content);
+
+            if (result) {
+                content.innerHTML = simpleMarkdownToHtml(result);
             }
         }
 
@@ -1908,7 +2061,7 @@
                 return;
             }
 
-            if (!window.financialData.results.revenue.netSales) {
+            if (!window.financialData.results.netSales) {
                 showNotification("Por favor, calcula el estado de resultados primero para tener datos de referencia.", "warning");
                 return;
             }
@@ -1942,12 +2095,16 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
             narrateButton.disabled = true;
 
             try {
-                const audioData = await callGeminiTTSAPI(textToNarrate);
-                if (audioData) {
+                const audioResponse = await callGeminiTTSAPI(textToNarrate);
+                if (audioResponse && audioResponse.data) {
                     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const pcmData = base64ToArrayBuffer(audioData.audioContent);
+                    const pcmData = base64ToArrayBuffer(audioResponse.data);
                     const pcm16 = new Int16Array(pcmData);
-                    const wavBlob = pcmToWav(pcm16, audioContext.sampleRate);
+
+                    const sampleRateMatch = audioResponse.mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
                     const audioUrl = URL.createObjectURL(wavBlob);
 
                     const audio = new Audio(audioUrl);
@@ -1956,13 +2113,14 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
                     audio.onended = () => {
                         icon.className = "fas fa-volume-high";
                         narrateButton.disabled = false;
+                        URL.revokeObjectURL(audioUrl);
                     };
                 } else {
                     icon.className = "fas fa-volume-high";
                     narrateButton.disabled = false;
                 }
             } catch (e) {
-                console.error(e);
+                console.error("Error al procesar el audio:", e);
                 showNotification("Hubo un error al generar el audio.", "error");
                 icon.className = "fas fa-volume-high";
                 narrateButton.disabled = false;
@@ -1971,16 +2129,13 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
 
         async function callGeminiTTSAPI(text) {
             const apiKey = "";
-            if (!apiKey) {
-                showNotification("API key no configurada. Función de audio no disponible.", "warning");
-                return null;
-            }
-
-            const apiUrl = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
             const payload = {
-                input: { text: text },
-                voice: { languageCode: 'es-US', name: 'es-US-Standard-A' },
-                audioConfig: { audioEncoding: 'LINEAR16' }
+                contents: [{ parts: [{ text: `Lee el siguiente análisis financiero de forma clara y profesional: ${text}` }] }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Puck" } } }
+                },
             };
 
             try {
@@ -1989,10 +2144,18 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                if (!response.ok) throw new Error(`API Error: ${response.status}`);
-                return await response.json();
+                if (!response.ok) throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                if (part && part.inlineData?.data && part.inlineData?.mimeType.startsWith("audio/")) {
+                    return part.inlineData;
+                } else {
+                    console.error("Invalid audio response from API:", result);
+                    throw new Error("Respuesta de audio inválida desde la API.");
+                }
             } catch (error) {
-                console.error("Error calling Gemini TTS API:", error);
+                console.error("Error llamando a la API de Gemini TTS:", error);
+                showNotification("Error al generar el audio. Revisa la consola para más detalles.", "error");
                 return null;
             }
         }
@@ -2164,38 +2327,53 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
 
         // --- DATA & STATE MANAGEMENT ---
         function loadSampleData() {
-            document.getElementById('cash').value = '$150,000.00';
+            // Balance Sheet
+            document.getElementById('caja').value = '$50,000.00';
+            document.getElementById('bancos').value = '$100,000.00';
             document.getElementById('accounts-receivable').value = '$85,000.00';
             document.getElementById('inventory').value = '$120,000.00';
             document.getElementById('other-current-assets').value = '$15,000.00';
-            document.getElementById('ppe').value = '$300,000.00';
-            document.getElementById('intangibles').value = '$50,000.00';
-            document.getElementById('investments').value = '$75,000.00';
+            document.getElementById('propiedad-terrenos').value = '$300,000.00';
+            document.getElementById('mobiliario').value = '$40,000.00';
+            document.getElementById('dep-mobiliario').value = '$4,000.00';
+            document.getElementById('eq-transporte').value = '$60,000.00';
+            document.getElementById('dep-transporte').value = '$12,000.00';
+            document.getElementById('eq-oficina').value = '$25,000.00';
+            document.getElementById('dep-oficina').value = '$5,000.00';
             document.getElementById('accounts-payable').value = '$60,000.00';
-            document.getElementById('taxes-payable').value = '$20,000.00';
+            document.getElementById('isr-payable').value = '$15,000.00';
             document.getElementById('short-term-debt').value = '$40,000.00';
+            document.getElementById('acreedores').value = '$25,000.00';
             document.getElementById('long-term-debt').value = '$150,000.00';
             document.getElementById('other-long-term-liabilities').value = '$30,000.00';
-            document.getElementById('equity').value = '$320,000.00';
+            document.getElementById('equity').value = '$450,000.00';
             document.getElementById('reserves').value = '$50,000.00';
-            document.getElementById('retained-earnings').value = '$105,000.00';
-            document.getElementById('net-sales').value = '$500,000.00';
-            document.getElementById('other-income').value = '$10,000.00';
-            document.getElementById('cost-of-sales').value = '$250,000.00';
-            document.getElementById('admin-expenses').value = '$80,000.00';
-            document.getElementById('sales-expenses').value = '$60,000.00';
-            document.getElementById('depreciation').value = '$20,000.00';
-            document.getElementById('interest-expense').value = '$15,000.00';
-            document.getElementById('tax-expense').value = '$25,000.00';
+            document.getElementById('retained-earnings').value = '$64,000.00';
 
-            document.getElementById('net-income-cf').value = '$70,000.00'; // Corrected from 100k
-            document.getElementById('depreciation-cf').value = '$20,000.00';
+            // Income Statement
+            document.getElementById('ingresos-ventas').value = '$510,000.00';
+            document.getElementById('devoluciones-ventas').value = '$10,000.00';
+            document.getElementById('cost-of-sales').value = '$250,000.00';
+            document.getElementById('sales-salaries').value = '$40,000.00';
+            document.getElementById('marketing-expenses').value = '$20,000.00';
+            document.getElementById('admin-salaries').value = '$50,000.00';
+            document.getElementById('rent-expenses').value = '$20,000.00';
+            document.getElementById('utilities-expenses').value = '$10,000.00';
+            document.getElementById('depreciation').value = '$21,000.00';
+            document.getElementById('other-income').value = '$10,000.00';
+            document.getElementById('interest-expense').value = '$15,000.00';
+            document.getElementById('tax-expense').value = '$20,000.00';
+
+            // Cash Flow
+            document.getElementById('net-income-cf').value = '$64,000.00';
+            document.getElementById('depreciation-cf').value = '$21,000.00';
             document.getElementById('working-capital-change').value = '$-5,000.00';
             document.getElementById('ppe-purchases').value = '$-75,000.00';
             document.getElementById('investments-change').value = '$-20,000.00';
             document.getElementById('new-debt').value = '$50,000.00';
             document.getElementById('dividends').value = '$-30,000.00';
 
+            // Comparison
             document.getElementById('period1-name').value = 'Ene-Mar 2024';
             document.getElementById('period2-name').value = 'Abr-Jun 2024';
             document.getElementById('period1-income').value = '$85,000.00';
@@ -2217,14 +2395,14 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
             if (confirmed) {
                 document.querySelectorAll('input[type="text"], textarea').forEach(input => input.value = '');
 
-                ['total-assets', 'total-liabilities-equity', 'net-income', 'net-cash-flow', 'dashboard-revenue', 'dashboard-net-income'].forEach(id => {
-                    document.getElementById(id).textContent = '$0.00';
+                ['total-assets', 'total-liabilities-equity', 'net-income', 'net-cash-flow', 'dashboard-revenue', 'dashboard-net-income', 'gross-profit', 'operating-income', 'ebt', 'net-sales-display'].forEach(id => {
+                    if (document.getElementById(id)) document.getElementById(id).textContent = '$0.00';
                 });
                 ['roe', 'roa', 'dashboard-debt-ratio'].forEach(id => {
-                    document.getElementById(id).textContent = '0.00%';
+                    if (document.getElementById(id)) document.getElementById(id).textContent = '0.00%';
                 });
                 ['current-ratio', 'quick-ratio', 'dashboard-liquidity'].forEach(id => {
-                    document.getElementById(id).textContent = '0.00';
+                    if (document.getElementById(id)) document.getElementById(id).textContent = '0.00';
                 });
 
                 document.getElementById('summary-table-body').innerHTML = `
@@ -2321,6 +2499,23 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
                 if (window.innerWidth >= 1024) {
                     closeMobileSidebar();
                 }
+            });
+        }
+
+        function initializeAnimations() {
+            const sections = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
             });
         }
 
@@ -2430,9 +2625,11 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
                 { id: 'flujo', checked: document.getElementById('export-check-flujo').checked },
                 { id: 'ratios', checked: document.getElementById('export-check-ratios').checked },
                 { id: 'comparativo', checked: document.getElementById('export-check-comparativo').checked }
-            ].filter(section => section.checked);
+            ];
 
-            if (sectionsToExport.length === 0) {
+            const includeAISummary = document.getElementById('export-check-ai-summary').checked;
+
+            if (sectionsToExport.filter(s => s.checked).length === 0 && !includeAISummary) {
                 showNotification('Seleccione al menos un estado financiero para exportar.', 'warning');
                 document.getElementById('pdf-export-styles').remove();
                 hideLoader();
@@ -2461,7 +2658,27 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
 
             try {
                 let isFirstPage = true;
+
+                if (includeAISummary) {
+                    const prompt = `Actúa como un analista financiero experto. Escribe un resumen ejecutivo conciso sobre la salud financiera de esta empresa basado en los siguientes datos: ${JSON.stringify(window.financialData, null, 2)}. Cubre los puntos clave de liquidez, rentabilidad y endeudamiento. Concluye con 2-3 recomendaciones estratégicas. El resultado debe estar en español, en párrafos bien formados.`;
+                    const summaryText = await callGeminiAPI(prompt, document.createElement('div'));
+
+                    if (summaryText) {
+                        addPageBackground(doc);
+                        doc.setFontSize(18);
+                        doc.setTextColor(37, 99, 235);
+                        doc.text("✨ Resumen Ejecutivo (Generado por IA)", 15, 20);
+                        doc.setFontSize(11);
+                        doc.setTextColor(0, 0, 0);
+                        const splitText = doc.splitTextToSize(summaryText.replace(/\*\*/g, '').replace(/\*/g, ''), 180);
+                        doc.text(splitText, 15, 30);
+                        isFirstPage = false;
+                    }
+                }
+
                 for (const section of sectionsToExport) {
+                    if (!section.checked) continue;
+
                     const element = document.getElementById(section.id);
                     if (element) {
                         if (!isFirstPage) {
@@ -2522,6 +2739,7 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
 
                 if (Object.keys(data.ratios).length === 0) {
                     showNotification('Calcule los estados financieros primero para exportar datos completos.', 'warning');
+                    hideLoader();
                     return;
                 }
 
@@ -2547,10 +2765,31 @@ Crea una estrategia de presupuesto de alto nivel para alcanzar este objetivo. El
                 const resultsData = [
                     ['Estado de Resultados'],
                     ['Concepto', 'Monto'],
-                    ...Object.entries(data.results.revenue).map(([key, value]) => [key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()), value]),
-                    ...Object.entries(data.results.expenses).map(([key, value]) => [key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()), value]),
+                    ['Ingresos por Ventas', data.results.revenue.ingresosPorVentas],
+                    ['(-) Devoluciones y Rebajas s/Venta', data.results.revenue.devolucionesVentas],
+                    ['Ventas Netas', data.results.netSales],
+                    ['Costo de Ventas', data.results.expenses.costOfSales],
+                    ['Utilidad Bruta', data.results.grossProfit],
                     [''],
-                    ['Utilidad Neta', Object.values(data.results.revenue).reduce((a, b) => a + b, 0) - Object.values(data.results.expenses).reduce((a, b) => a + b, 0)]
+                    ['Gastos Operativos'],
+                    ['  Gastos de Venta'],
+                    ['    Sueldos y Comisiones (Ventas)', data.results.expenses.salesSalaries],
+                    ['    Publicidad y Marketing', data.results.expenses.marketingExpenses],
+                    ['  Gastos de Administración'],
+                    ['    Sueldos (Administración)', data.results.expenses.adminSalaries],
+                    ['    Renta', data.results.expenses.rentExpenses],
+                    ['    Servicios Públicos', data.results.expenses.utilitiesExpenses],
+                    ['Depreciación y Amortización', data.results.expenses.depreciation],
+                    ['Total Gastos Operativos', data.results.totalOperatingExpenses],
+                    [''],
+                    ['Utilidad Operativa (EBIT)', data.results.operatingIncome],
+                    [''],
+                    ['Otros Ingresos / (Gastos)', data.results.revenue.otherIncome],
+                    ['(-) Gastos por Intereses', data.results.expenses.interestExpense],
+                    ['Utilidad antes de Impuestos (EBT)', data.results.ebt],
+                    ['(-) Impuesto sobre la Renta', data.results.expenses.taxExpense],
+                    [''],
+                    ['Utilidad Neta', data.results.netIncome]
                 ];
 
                 const cashFlowData = [
