@@ -3,10 +3,6 @@
     "development"
   ],
   "hints": {
-    "button-type": "off",
-    "no-inline-styles": "off",
-    "axe/forms": "off",
-    "axe/name-role-value": "off",
-    "axe/parsing": "off"
+    "compat-api/css": "off"
   }
 }
