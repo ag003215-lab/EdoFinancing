@@ -1627,13 +1627,20 @@
                 <i class="fas fa-brain"></i>
                 <span class="label">Analytics</span>
             </a>
+            <a href="#gestion-datos" class="nav-link" role="menuitem" data-title="Gestión de Datos">
+                <i class="fas fa-trash-alt"></i>
+                <span class="label">Borrar Datos</span>
+            </a>
         </nav>
         <div class="sidebar-footer">
             <div class="user">
                 <div class="avatar">A</div>
                 <div class="user-info">
                     <div class="user-name">Administrador</div>
-                    <div class="user-role">Propietario</div>
+                    <div class="user-role">
+                        <span id="user-role">Cargando...</span>
+                    </div>
+                    <div class="copyright mt-2 text-xs text-gray-400">ID: <span id="user-id"></span></div>
                 </div>
             </div>
             <div class="copyright mt-2">© 2025 FinPro X</div>
@@ -1835,242 +1842,1772 @@
         </section>
 
         <!-- Balance General Section -->
-        <section id="balance" class="section-title mb-10 animate-slide-up">
-            <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
-                <i class="fas fa-balance-scale text-indigo-500"></i> Balance General
-            </h2>
-            <button id="calculate-balance" class="btn btn-primary w-full sm:w-auto hover:shadow-md transition-shadow">
-                <i class="fas fa-calculator"></i> Calcular Balance
-            </button>
+        <section id="balance" class="hidden animate-slide-up">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-balance-scale text-indigo-500"></i> Balance General
+                </h2>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button id="calculate-balance"
+                        class="btn btn-primary w-full sm:w-auto hover:shadow-md transition-shadow">
+                        <i class="fas fa-calculator"></i> Calcular Balance
+                    </button>
+                    <button id="save-balance-data"
+                        class="btn btn-success w-full sm:w-auto hover:shadow-md transition-shadow">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 mb-8">
+                <!-- Activos -->
+                <div class="card p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-blue-600 dark:text-blue-400">
+                        <i class="fas fa-wallet"></i> ACTIVO
+                    </h3>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-money-bill-wave"></i> ACTIVO CORRIENTE</h4>
+                        <div class="space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Efectivo</label>
+                                <input type="text" id="caja" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Bancos</label>
+                                <input type="text" id="bancos" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Cuentas por Cobrar</label>
+                                <input type="text" id="accounts-receivable" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Inventarios</label>
+                                <input type="text" id="inventories" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Otros Activos Corrientes</label>
+                                <input type="text" id="other-current-assets" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-building"></i> ACTIVO NO CORRIENTE</h4>
+                        <div class="space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Propiedad, Planta y Equipo</label>
+                                <input type="text" id="ppe" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Intangibles</label>
+                                <input type="text" id="intangibles" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Otros Activos No Corrientes</label>
+                                <input type="text" id="other-non-current-assets" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t dark:border-slate-700">
+                        <div class="flex justify-between items-center font-bold text-lg">
+                            <span>Total Activo</span>
+                            <span id="total-activo">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pasivos -->
+                <div class="card p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-red-600 dark:text-red-400">
+                        <i class="fas fa-hand-holding-usd"></i> PASIVO
+                    </h3>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-credit-card"></i> PASIVO CORRIENTE</h4>
+                        <div class="space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Cuentas por Pagar</label>
+                                <input type="text" id="accounts-payable" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Préstamos a Corto Plazo</label>
+                                <input type="text" id="short-term-loans" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Pasivos Laborales</label>
+                                <input type="text" id="labor-liabilities" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Otros Pasivos Corrientes</label>
+                                <input type="text" id="other-current-liabilities" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-university"></i> PASIVO NO CORRIENTE</h4>
+                        <div class="space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Deuda a Largo Plazo</label>
+                                <input type="text" id="long-term-debt" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Otros Pasivos No Corrientes</label>
+                                <input type="text" id="other-non-current-liabilities" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t dark:border-slate-700">
+                        <div class="flex justify-between items-center font-bold text-lg">
+                            <span>Total Pasivo</span>
+                            <span id="total-pasivo">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patrimonio -->
+                <div class="card p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-green-600 dark:text-green-400">
+                        <i class="fas fa-user-tie"></i> PATRIMONIO
+                    </h3>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-crown"></i> CAPITAL SOCIAL</h4>
+                        <div class="space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Capital Social</label>
+                                <input type="text" id="capital-social" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Reservas</label>
+                                <input type="text" id="reserves" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-chart-line"></i> RESULTADOS ACUMULADOS</h4>
+                        <div class="space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Utilidades Retenidas</label>
+                                <input type="text" id="retained-earnings" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right currency-input">
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <label>Resultado del Ejercicio</label>
+                                <input type="text" id="net-income-balance" placeholder="$0.00"
+                                    class="input-field w-full sm:w-32 text-right" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t dark:border-slate-700">
+                        <div class="flex justify-between items-center font-bold text-lg">
+                            <span>Total Patrimonio</span>
+                            <span id="total-patrimonio">$0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t dark:border-slate-700">
+                        <div
+                            class="flex justify-between items-center font-bold text-lg bg-blue-50 dark:bg-blue-900/30 p-3 rounded">
+                            <span>Total Pasivo y Patrimonio</span>
+                            <span id="total-pasivo-patrimonio">$0.00</span>
+                        </div>
+                        <div id="equation-status" class="mt-3 text-center">
+                            <p class="text-gray-500">Ingrese datos y calcule para verificar la ecuación contable</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 mb-8">
-            <!-- Activos -->
-            <div class="card p-4 md:p-6">
-                <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-blue-600 dark:text-blue-400">
-                    <i class="fas fa-wallet"></i> ACTIVO
-                </h3>
-
-                <div class="form-section">
-                    <h4><i class="fas fa-money-bill-wave"></i> ACTIVO CORRIENTE</h4>
-                    <div class="space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Efectivo</label>
-                            <input type="text" id="caja" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Bancos</label>
-                            <input type="text" id="bancos" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Cuentas por Cobrar</label>
-                            <input type="text" id="accounts-receivable" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Inventarios</label>
-                            <input type="text" id="inventories" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Otros Activos Corrientes</label>
-                            <input type="text" id="other-current-assets" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h4><i class="fas fa-building"></i> ACTIVO NO CORRIENTE</h4>
-                    <div class="space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Propiedad, Planta y Equipo</label>
-                            <input type="text" id="ppe" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Intangibles</label>
-                            <input type="text" id="intangibles" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Otros Activos No Corrientes</label>
-                            <input type="text" id="other-non-current-assets" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pt-4 border-t dark:border-slate-700">
-                    <div class="flex justify-between items-center font-bold text-lg">
-                        <span>Total Activo</span>
-                        <span id="total-activo">$0.00</span>
-                    </div>
+        <!-- Estado de Resultados Section -->
+        <section id="resultados" class="hidden animate-slide-up">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-green-500"></i> Estado de Resultados
+                </h2>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button id="calculate-results"
+                        class="btn btn-primary w-full sm:w-auto hover:shadow-md transition-shadow">
+                        <i class="fas fa-calculator"></i> Calcular Resultados
+                    </button>
+                    <button id="save-results-data"
+                        class="btn btn-success w-full sm:w-auto hover:shadow-md transition-shadow">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
                 </div>
             </div>
 
-            <!-- Pasivos -->
-            <div class="card p-4 md:p-6">
-                <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-red-600 dark:text-red-400">
-                    <i class="fas fa-hand-holding-usd"></i> PASIVO
-                </h3>
-
-                <div class="form-section">
-                    <h4><i class="fas fa-credit-card"></i> PASIVO CORRIENTE</h4>
-                    <div class="space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Cuentas por Pagar</label>
-                            <input type="text" id="accounts-payable" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Préstamos a Corto Plazo</label>
-                            <input type="text" id="short-term-loans" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Pasivos Laborales</label>
-                            <input type="text" id="labor-liabilities" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Otros Pasivos Corrientes</label>
-                            <input type="text" id="other-current-liabilities" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
+            <div class="card p-4 md:p-6 mb-8 animate-slide-up">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Ingresos -->
+                    <div>
+                        <h3 class="text-lg md:text-xl font-semibold mb-4 text-blue-600 dark:text-blue-400">
+                            <i class="fas fa-plus-circle"></i> INGRESOS
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label>Ingresos por Ventas</label>
+                                <input type="text" id="ingresos-ventas" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label class="text-red-500">(-) Devoluciones y Rebajas s/Venta</label>
+                                <input type="text" id="devoluciones-ventas" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div
+                                class="py-2 border-t dark:border-slate-700 flex justify-between items-center font-bold">
+                                <span>Ventas Netas</span>
+                                <span id="net-sales-display">$0.00</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-section">
-                    <h4><i class="fas fa-university"></i> PASIVO NO CORRIENTE</h4>
-                    <div class="space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Deuda a Largo Plazo</label>
-                            <input type="text" id="long-term-debt" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
+                    <!-- Costos y Gastos -->
+                    <div>
+                        <h3 class="text-lg md:text-xl font-semibold mb-4 text-red-600 dark:text-red-400">
+                            <i class="fas fa-minus-circle"></i> COSTOS Y GASTOS
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label>Costo de Ventas</label>
+                                <input type="text" id="cost-of-sales" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="py-2 border-t flex justify-between items-center font-bold">
+                                <span>Utilidad Bruta</span>
+                                <span id="gross-profit-display">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Gastos de Personal</label>
+                                <input type="text" id="gastos-personal" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Gastos de Administración</label>
+                                <input type="text" id="gastos-administracion" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Gastos de Venta</label>
+                                <input type="text" id="gastos-venta" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Otros Gastos Operacionales</label>
+                                <input type="text" id="otros-gastos-op" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="py-2 border-t flex justify-between items-center font-bold">
+                                <span>EBITDA</span>
+                                <span id="ebitda-display">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label class="text-gray-500">Depreciación y Amortización</label>
+                                <input type="text" id="depreciacion-amortizacion" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="py-2 border-t flex justify-between items-center font-bold">
+                                <span>Utilidad Operacional</span>
+                                <span id="operational-income-display">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label class="text-gray-500">Gastos Financieros</label>
+                                <input type="text" id="gastos-financieros" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="py-2 border-t flex justify-between items-center font-bold">
+                                <span>Utilidad Antes de Impuestos</span>
+                                <span id="pre-tax-income-display">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label class="text-gray-500">Impuestos</label>
+                                <input type="text" id="impuestos" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div
+                                class="mt-4 pt-2 border-t-2 border-primary flex justify-between items-center font-bold text-lg">
+                                <span>UTILIDAD NETA</span>
+                                <span id="net-income-display">$0.00</span>
+                            </div>
                         </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Otros Pasivos No Corrientes</label>
-                            <input type="text" id="other-non-current-liabilities" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pt-4 border-t dark:border-slate-700">
-                    <div class="flex justify-between items-center font-bold text-lg">
-                        <span>Total Pasivo</span>
-                        <span id="total-pasivo">$0.00</span>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Patrimonio -->
-            <div class="card p-4 md:p-6">
-                <h3 class="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-green-600 dark:text-green-400">
-                    <i class="fas fa-user-tie"></i> PATRIMONIO
-                </h3>
+        <!-- Flujo de Efectivo Section -->
+        <section id="flujo" class="hidden animate-slide-up">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-exchange-alt text-purple-500"></i> Flujo de Efectivo
+                </h2>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button id="calculate-cash-flow"
+                        class="btn btn-primary w-full sm:w-auto hover:shadow-md transition-shadow">
+                        <i class="fas fa-calculator"></i> Calcular Flujo
+                    </button>
+                    <button id="save-cash-flow-data"
+                        class="btn btn-success w-full sm:w-auto hover:shadow-md transition-shadow">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </div>
 
-                <div class="form-section">
-                    <h4><i class="fas fa-crown"></i> CAPITAL SOCIAL</h4>
+            <div class="card p-4 md:p-6 mb-8 animate-slide-up">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Actividades de Operación -->
+                    <div>
+                        <h3 class="text-lg md:text-xl font-semibold mb-4 text-blue-600 dark:text-blue-400">
+                            <i class="fas fa-dollar-sign"></i> ACTIVIDADES DE OPERACIÓN
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label>Utilidad Neta</label>
+                                <input type="text" id="flujo-utilidad-neta" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input" readonly>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Depreciación y Amortización</label>
+                                <input type="text" id="flujo-depreciacion" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Cuentas por Cobrar (cambio)</label>
+                                <input type="text" id="flujo-cuentas-cobrar" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Inventarios (cambio)</label>
+                                <input type="text" id="flujo-inventarios" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Cuentas por Pagar (cambio)</label>
+                                <input type="text" id="flujo-cuentas-pagar" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="py-2 border-t flex justify-between items-center font-bold">
+                                <span>Total Flujo de Operación</span>
+                                <span id="cash-flow-operation">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actividades de Inversión y Financiación -->
+                    <div>
+                        <h3 class="text-lg md:text-xl font-semibold mb-4 text-orange-600 dark:text-orange-400">
+                            <i class="fas fa-chart-line"></i> ACTIVIDADES DE INVERSIÓN
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label>Compra de Activos Fijos</label>
+                                <input type="text" id="flujo-compra-activos" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Venta de Activos Fijos</label>
+                                <input type="text" id="flujo-venta-activos" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="py-2 border-t flex justify-between items-center font-bold">
+                                <span>Total Flujo de Inversión</span>
+                                <span id="cash-flow-investment">$0.00</span>
+                            </div>
+                        </div>
+
+                        <h3 class="text-lg md:text-xl font-semibold mt-6 mb-4 text-purple-600 dark:text-purple-400">
+                            <i class="fas fa-handshake"></i> ACTIVIDADES DE FINANCIACIÓN
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label>Emisión de Deuda</label>
+                                <input type="text" id="flujo-emision-deuda" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Pago de Deuda</label>
+                                <input type="text" id="flujo-pago-deuda" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="py-2 border-t flex justify-between items-center font-bold">
+                                <span>Total Flujo de Financiación</span>
+                                <span id="cash-flow-financing">$0.00</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mt-4 pt-2 border-t-2 border-primary flex justify-between items-center font-bold text-lg">
+                            <span>CAMBIO NETO DE EFECTIVO</span>
+                            <span id="net-cash-change">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Análisis de Ratios Section -->
+        <section id="ratios" class="hidden animate-slide-up">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-percentage text-pink-500"></i> Análisis de Ratios
+                </h2>
+                <button id="calculate-ratios"
+                    class="btn btn-primary w-full sm:w-auto hover:shadow-md transition-shadow">
+                    <i class="fas fa-calculator"></i> Calcular Ratios
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-8">
+                <!-- Ratios de Liquidez -->
+                <div class="card p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-semibold mb-4 text-blue-600 dark:text-blue-400">
+                        <i class="fas fa-hand-holding-usd"></i> Liquidez
+                    </h3>
                     <div class="space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Capital Social</label>
-                            <input type="text" id="capital-social" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
+                        <div class="flex justify-between items-center">
+                            <span>Ratio Corriente</span>
+                            <span id="liquidez-corriente" class="font-bold text-gray-800 dark:text-gray-200">0.00</span>
                         </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Reservas</label>
-                            <input type="text" id="reserves" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
+                        <div class="flex justify-between items-center">
+                            <span>Ratio Rápido</span>
+                            <span id="liquidez-rapida" class="font-bold text-gray-800 dark:text-gray-200">0.00</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-section">
-                    <h4><i class="fas fa-chart-line"></i> RESULTADOS ACUMULADOS</h4>
+                <!-- Ratios de Solvencia -->
+                <div class="card p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-semibold mb-4 text-red-600 dark:text-red-400">
+                        <i class="fas fa-credit-card"></i> Solvencia
+                    </h3>
                     <div class="space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Utilidades Retenidas</label>
-                            <input type="text" id="retained-earnings" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right currency-input">
+                        <div class="flex justify-between items-center">
+                            <span>Ratio Deuda-Patrimonio</span>
+                            <span id="solvencia-deuda-patrimonio"
+                                class="font-bold text-gray-800 dark:text-gray-200">0.00</span>
                         </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <label>Resultado del Ejercicio</label>
-                            <input type="text" id="net-income-balance" placeholder="$0.00"
-                                class="input-field w-full sm:w-32 text-right" readonly>
+                        <div class="flex justify-between items-center">
+                            <span>Apalancamiento</span>
+                            <span id="solvencia-apalancamiento"
+                                class="font-bold text-gray-800 dark:text-gray-200">0.00</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-4 border-t dark:border-slate-700">
-                    <div class="flex justify-between items-center font-bold text-lg">
-                        <span>Total Patrimonio</span>
-                        <span id="total-patrimonio">$0.00</span>
+                <!-- Ratios de Rentabilidad -->
+                <div class="card p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-semibold mb-4 text-green-600 dark:text-green-400">
+                        <i class="fas fa-chart-line"></i> Rentabilidad
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span>Margen Bruto</span>
+                            <span id="rentabilidad-margen-bruto"
+                                class="font-bold text-gray-800 dark:text-gray-200">0.00%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>Margen Neto</span>
+                            <span id="rentabilidad-margen-neto"
+                                class="font-bold text-gray-800 dark:text-gray-200">0.00%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>ROA</span>
+                            <span id="rentabilidad-roa" class="font-bold text-gray-800 dark:text-gray-200">0.00%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>ROE</span>
+                            <span id="rentabilidad-roe" class="font-bold text-gray-800 dark:text-gray-200">0.00%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparativo Section -->
+        <section id="comparativo" class="hidden animate-slide-up">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-chart-line text-blue-500"></i> Comparativo
+                </h2>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <select id="comparativo-periodo" class="input-field w-full sm:w-auto">
+                        <option value="year">Comparar por Año</option>
+                        <option value="quarter">Comparar por Trimestre</option>
+                        <option value="month">Comparar por Mes</option>
+                    </select>
+                    <button id="run-comparativo"
+                        class="btn btn-primary w-full sm:w-auto hover:shadow-md transition-shadow">
+                        <i class="fas fa-chart-line"></i> Generar
+                    </button>
+                </div>
+            </div>
+
+            <div class="card p-4 md:p-6 mb-8 animate-slide-up">
+                <h3 class="text-lg md:text-xl font-semibold mb-4">Ingresos y Gastos Comparativos</h3>
+                <div class="chart-container h-80 md:h-96 mb-6">
+                    <canvas id="comparative-chart"></canvas>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="financial-table">
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th id="comparative-col-1-header">Período 1</th>
+                                <th id="comparative-col-2-header">Período 2</th>
+                                <th>Variación %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparative-table-body">
+                            <!-- Data will be inserted by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Presupuesto Section -->
+        <section id="presupuesto" class="hidden animate-slide-up">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-calculator text-red-500"></i> Presupuesto
+                </h2>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button id="save-budget" class="btn btn-success w-full sm:w-auto hover:shadow-md transition-shadow">
+                        <i class="fas fa-save"></i> Guardar Presupuesto
+                    </button>
+                    <button id="compare-budget"
+                        class="btn btn-accent w-full sm:w-auto hover:shadow-md transition-shadow">
+                        <i class="fas fa-sync-alt"></i> Comparar
+                    </button>
+                </div>
+            </div>
+
+            <div class="card p-4 md:p-6 mb-8 animate-slide-up">
+                <h3 class="text-lg md:text-xl font-semibold mb-4">Ingresa tu Presupuesto Anual</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Ingresos Presupuestados</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label>Ventas Netas</label>
+                                <input type="text" id="budget-net-sales" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Gastos Presupuestados</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label>Costo de Ventas</label>
+                                <input type="text" id="budget-cost-of-sales" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Gastos Operacionales</label>
+                                <input type="text" id="budget-operating-expenses" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Gastos Financieros</label>
+                                <input type="text" id="budget-financial-expenses" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <label>Impuestos</label>
+                                <input type="text" id="budget-taxes" placeholder="$0.00"
+                                    class="input-field w-40 text-right currency-input">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-6 pt-4 border-t dark:border-slate-700">
-                    <div
-                        class="flex justify-between items-center font-bold text-lg bg-blue-50 dark:bg-blue-900/30 p-3 rounded">
-                        <span>Total Pasivo y Patrimonio</span>
-                        <span id="total-pasivo-patrimonio">$0.00</span>
+                <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <h3 class="text-xl font-semibold mb-4">Resultado de la Comparación</h3>
+                    <div id="budget-comparison-results" class="space-y-4">
+                        <p class="text-gray-500 text-center">Calcula y compara tu desempeño real con el presupuesto.</p>
                     </div>
-                    <div id="equation-status" class="mt-3 text-center">
-                        <p class="text-gray-500">Ingrese datos y calcule para verificar la ecuación contable</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exportar Section -->
+        <section id="exportar" class="hidden animate-slide-up">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-file-export text-orange-500"></i> Exportar Reportes
+                </h2>
+                <p class="text-gray-500 dark:text-gray-400">Selecciona el formato de exportación deseado.</p>
+            </div>
+
+            <div class="card p-4 md:p-6 animate-slide-up">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="export-option" id="export-pdf">
+                        <i class="fas fa-file-pdf text-red-500"></i>
+                        <p class="font-semibold">Exportar a PDF</p>
+                        <p class="text-sm text-gray-500">Balance y Resultados en un solo documento.</p>
                     </div>
+                    <div class="export-option" id="export-excel">
+                        <i class="fas fa-file-excel text-green-500"></i>
+                        <p class="font-semibold">Exportar a Excel</p>
+                        <p class="text-sm text-gray-500">Hoja de cálculo con todos los datos.</p>
+                    </div>
+                    <div class="export-option" id="export-png">
+                        <i class="fas fa-file-image text-blue-500"></i>
+                        <p class="font-semibold">Exportar Gráficos</p>
+                        <p class="text-sm text-gray-500">Imagen PNG de los gráficos principales.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gestión de Datos Section -->
+        <section id="gestion-datos" class="hidden animate-slide-up">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-trash-alt text-red-500"></i> Gestión de Datos
+                </h2>
+                <p class="text-gray-500 dark:text-gray-400">Opciones avanzadas para la administración de tus datos.</p>
+            </div>
+
+            <div class="card p-4 md:p-6 mb-8 animate-slide-up">
+                <h3 class="text-lg md:text-xl font-semibold mb-4">Borrar todos los Datos</h3>
+                <div class="callout danger">
+                    <i class="fas fa-exclamation-triangle callout-icon"></i>
+                    <div>
+                        <h4 class="font-semibold text-red-700">¡Atención! Esta acción es irreversible.</h4>
+                        <p class="text-sm text-red-600">Al confirmar, se eliminarán permanentemente todos los datos
+                            financieros asociados a tu cuenta. Esto incluye balances, estados de resultados y
+                            presupuestos.
+                        </p>
+                        <button id="delete-data-button" class="btn btn-danger mt-4">
+                            <i class="fas fa-trash-alt"></i> Borrar Todos los Datos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="hidden animate-slide-up">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-brain text-violet-500"></i> Analytics Avanzado con IA
+                </h2>
+            </div>
+            <div class="card p-4 md:p-6 mb-8">
+                <h3 class="text-lg md:text-xl font-semibold mb-4">Obtén un Análisis Instantáneo de tus Datos</h3>
+                <div id="ai-chatbox"
+                    class="h-80 overflow-y-auto border rounded-lg p-4 mb-4 bg-gray-50 dark:bg-slate-700 space-y-4">
+                    <div class="flex items-start gap-3">
+                        <div class="avatar bg-accent flex-shrink-0">IA</div>
+                        <div class="bg-gray-200 dark:bg-slate-600 p-3 rounded-xl rounded-tl-none max-w-md">
+                            <p class="text-sm">Hola, soy tu analista financiero. Pide un resumen de tus estados
+                                financieros, un pronóstico o un análisis de riesgos. Por ejemplo: "¿Cuál es mi situación
+                                financiera actual según los datos?"</p>
+                        </div>
+                    </div>
+                    <!-- User messages will be appended here -->
+                </div>
+                <form id="ai-chat-form" class="flex gap-2">
+                    <input type="text" id="ai-chat-input" placeholder="Haz una pregunta sobre tus datos..."
+                        class="input-field flex-1" required>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Modal for PDF Preview -->
+        <div id="pdf-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Vista Previa de Reporte</h3>
+                    <button id="close-modal" class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="pdf-viewer" class="pdf-preview"></iframe>
                 </div>
             </div>
         </div>
+    </main>
 
-        <!-- Estado de Resultados Section -->
-        <section id="resultados" class="section-title mb-10 animate-slide-up">
-            <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
-                <i class="fas fa-chart-bar text-green-500"></i> Estado de Resultados
-            </h2>
-            <button id="calculate-results" class="btn btn-primary w-full sm:w-auto hover:shadow-md transition-shadow">
-                <i class="fas fa-calculator"></i> Calcular Resultados
-            </button>
-        </section>
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container"></div>
 
-        <div class="card p-4 md:p-6 mb-8 animate-slide-up">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Ingresos -->
-                <div>
-                    <h3 class="text-lg md:text-xl font-semibold mb-4 text-blue-600 dark:text-blue-400">
-                        <i class="fas fa-plus-circle"></i> INGRESOS
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <label>Ingresos por Ventas</label>
-                            <input type="text" id="ingresos-ventas" placeholder="$0.00"
-                                class="input-field w-40 text-right currency-input">
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <label class="text-red-500">(-) Devoluciones y Rebajas s/Venta</label>
-                            <input type="text" id="devoluciones-ventas" placeholder="$0.00"
-                                class="input-field w-40 text-right currency-input">
-                        </div>
-                        <div class="py-2 border-t dark:border-slate-700 flex justify-between items-center font-bold">
-                            <span>Ventas Netas</span>
-                            <span id="net-sales-display">$0.00</span>
-                        </div>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="loading-content dark:bg-slate-800 dark:text-white">
+            <div class="loading-spinner"></div>
+            <p id="loading-message" class="text-lg font-semibold">Cargando...</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, setLogLevel, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Global Variables
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        let app, db, auth, userId;
+        let financialDataRef;
+        let unsubscribe;
+
+        // Configuration and UI Elements
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const startAppBtn = document.getElementById('start-app');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const pinSidebar = document.getElementById('pin-sidebar');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('main section');
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentDateEl = document.getElementById('current-date');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingMessageEl = document.getElementById('loading-message');
+        const notificationContainer = document.getElementById('notification-container');
+        const pdfModal = document.getElementById('pdf-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const pdfViewer = document.getElementById('pdf-viewer');
+        const aiChatbox = document.getElementById('ai-chatbox');
+        const aiChatForm = document.getElementById('ai-chat-form');
+        const aiChatInput = document.getElementById('ai-chat-input');
+        const userIdEl = document.getElementById('user-id');
+        const deleteDataButton = document.getElementById('delete-data-button');
+
+        let trendChart, financialChart, comparativeChart;
+
+        // Data Structure for Real-time Updates
+        let financialData = {
+            balance: {
+                caja: 0, bancos: 0, accountsReceivable: 0, inventories: 0, otherCurrentAssets: 0,
+                ppe: 0, intangibles: 0, otherNonCurrentAssets: 0,
+                accountsPayable: 0, shortTermLoans: 0, laborLiabilities: 0, otherCurrentLiabilities: 0,
+                longTermDebt: 0, otherNonCurrentLiabilities: 0,
+                capitalSocial: 0, reserves: 0, retainedEarnings: 0
+            },
+            resultados: {
+                ingresosVentas: 0, devolucionesVentas: 0, costOfSales: 0, gastosPersonal: 0, gastosAdministracion: 0,
+                gastosVenta: 0, otrosGastosOp: 0, depreciacionAmortizacion: 0, gastosFinancieros: 0, impuestos: 0
+            },
+            flujo: {
+                depreciacion: 0, cuentasCobrarCambio: 0, inventariosCambio: 0, cuentasPagarCambio: 0,
+                compraActivosFijos: 0, ventaActivosFijos: 0, emisionDeuda: 0, pagoDeuda: 0
+            },
+            budget: {
+                netSales: 0, costOfSales: 0, operatingExpenses: 0, financialExpenses: 0, taxes: 0
+            },
+            history: {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+                revenue: [0, 0, 0, 0, 0, 0],
+                expenses: [0, 0, 0, 0, 0, 0]
+            }
+        };
+
+        // Reset Data
+        const initialFinancialData = {
+            ...financialData
+        };
+
+        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent";
+        const API_KEY = ""; // Placeholder for Canvas environment
+
+        // Helper functions
+        function showLoading(message = 'Cargando...') {
+            loadingMessageEl.textContent = message;
+            loadingOverlay.classList.add('visible');
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.remove('visible');
+        }
+
+        function showNotification(type, title, message) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-info-circle"></i>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+            `;
+            notificationContainer.appendChild(notification);
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        function showConfirmNotification(title, message, onConfirm) {
+            // Remove previous confirm notifications to avoid stacking
+            document.querySelectorAll('.notification.confirm').forEach(n => n.remove());
+
+            const notification = document.createElement('div');
+            notification.className = `notification warning confirm`;
+            notification.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                    <div class="flex gap-2 mt-2">
+                        <button id="confirm-action" class="btn btn-danger btn-sm">Confirmar</button>
+                        <button id="cancel-action" class="btn btn-outline btn-sm">Cancelar</button>
                     </div>
                 </div>
+            `;
+            notificationContainer.appendChild(notification);
 
-                <!-- Costos y Gastos -->
-                <div>
-                    <h3 class="text-lg md:text-xl font-semibold mb-4 text-red-600 dark:text-red-400">
-                        <i class="fas fa-minus-circle"></i> COSTOS Y GASTOS
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <label>Costo de Ventas</label>
-                            <input type="text" id="cost-of-sales" placeholder="$0.00"
-                                class="input-field w-40 text-right currency-input">
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <label>Gastos de Personal</label>
-                            <input type="text`
+            document.getElementById('confirm-action').addEventListener('click', () => {
+                onConfirm();
+                notification.remove();
+            });
+
+            document.getElementById('cancel-action').addEventListener('click', () => {
+                notification.remove();
+            });
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(value);
+        }
+
+        function parseCurrency(value) {
+            if (!value) return 0;
+            return parseFloat(value.replace(/[^0-9,-]/g, '').replace(',', '.'));
+        }
+
+        function formatNumber(value, decimals = 2) {
+            return new Intl.NumberFormat('es-CO', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals,
+            }).format(value);
+        }
+
+        // Financial calculations
+        function calculateBalanceSheet() {
+            const data = financialData.balance;
+
+            // Activo Corriente
+            const totalCurrentAssets = ['caja', 'bancos', 'accountsReceivable', 'inventories', 'otherCurrentAssets']
+                .reduce((sum, id) => sum + data[id], 0);
+
+            // Activo No Corriente
+            const totalNonCurrentAssets = ['ppe', 'intangibles', 'otherNonCurrentAssets']
+                .reduce((sum, id) => sum + data[id], 0);
+
+            const totalAssets = totalCurrentAssets + totalNonCurrentAssets;
+
+            // Pasivo Corriente
+            const totalCurrentLiabilities = ['accountsPayable', 'shortTermLoans', 'laborLiabilities', 'otherCurrentLiabilities']
+                .reduce((sum, id) => sum + data[id], 0);
+
+            // Pasivo No Corriente
+            const totalNonCurrentLiabilities = ['longTermDebt', 'otherNonCurrentLiabilities']
+                .reduce((sum, id) => sum + data[id], 0);
+
+            const totalLiabilities = totalCurrentLiabilities + totalNonCurrentLiabilities;
+
+            // Patrimonio
+            const netIncome = calculateIncomeStatement(false).netIncome;
+            financialData.balance.netIncomeBalance = netIncome;
+            const totalEquity = ['capitalSocial', 'reserves', 'retainedEarnings']
+                .reduce((sum, id) => sum + data[id], 0) + netIncome;
+
+            const totalLiabilitiesAndEquity = totalLiabilities + totalEquity;
+
+            // Update UI
+            document.getElementById('total-activo').textContent = formatCurrency(totalAssets);
+            document.getElementById('total-pasivo').textContent = formatCurrency(totalLiabilities);
+            document.getElementById('net-income-balance').value = formatCurrency(netIncome);
+            document.getElementById('total-patrimonio').textContent = formatCurrency(totalEquity);
+            document.getElementById('total-pasivo-patrimonio').textContent = formatCurrency(totalLiabilitiesAndEquity);
+
+            const equationStatus = document.getElementById('equation-status');
+            const diff = Math.abs(totalAssets - totalLiabilitiesAndEquity);
+            if (diff < 0.01) {
+                equationStatus.innerHTML = `<span class="badge badge-success">¡La ecuación contable se cumple!</span>`;
+            } else {
+                equationStatus.innerHTML = `<span class="badge badge-danger">La ecuación no cuadra. Diferencia: ${formatCurrency(diff)}</span>`;
+            }
+        }
+
+        function calculateIncomeStatement(updateUI = true) {
+            const data = financialData.resultados;
+
+            const netSales = data.ingresosVentas - data.devolucionesVentas;
+            const grossProfit = netSales - data.costOfSales;
+            const operationalExpenses = data.gastosPersonal + data.gastosAdministracion + data.gastosVenta + data.otrosGastosOp;
+            const ebitda = grossProfit - operationalExpenses;
+            const operationalIncome = ebitda - data.depreciacionAmortizacion;
+            const preTaxIncome = operationalIncome - data.gastosFinancieros;
+            const netIncome = preTaxIncome - data.impuestos;
+
+            if (updateUI) {
+                document.getElementById('net-sales-display').textContent = formatCurrency(netSales);
+                document.getElementById('gross-profit-display').textContent = formatCurrency(grossProfit);
+                document.getElementById('ebitda-display').textContent = formatCurrency(ebitda);
+                document.getElementById('operational-income-display').textContent = formatCurrency(operationalIncome);
+                document.getElementById('pre-tax-income-display').textContent = formatCurrency(preTaxIncome);
+                document.getElementById('net-income-display').textContent = formatCurrency(netIncome);
+            }
+
+            return { netSales, grossProfit, ebitda, operationalIncome, preTaxIncome, netIncome };
+        }
+
+        function calculateCashFlow() {
+            const data = financialData.flujo;
+            const netIncome = financialData.resultados.netIncome;
+
+            // Actividades de Operación
+            const cashFlowOps = netIncome + data.depreciacion - data.cuentasCobrarCambio - data.inventariosCambio + data.cuentasPagarCambio;
+
+            // Actividades de Inversión
+            const cashFlowInv = data.ventaActivosFijos - data.compraActivosFijos;
+
+            // Actividades de Financiación
+            const cashFlowFin = data.emisionDeuda - data.pagoDeuda;
+
+            const netCashChange = cashFlowOps + cashFlowInv + cashFlowFin;
+
+            document.getElementById('cash-flow-operation').textContent = formatCurrency(cashFlowOps);
+            document.getElementById('cash-flow-investment').textContent = formatCurrency(cashFlowInv);
+            document.getElementById('cash-flow-financing').textContent = formatCurrency(cashFlowFin);
+            document.getElementById('net-cash-change').textContent = formatCurrency(netCashChange);
+        }
+
+        function calculateRatios() {
+            // Check if essential data is available
+            if (Object.values(financialData.balance).every(v => v === 0) || Object.values(financialData.resultados).every(v => v === 0)) {
+                showNotification('warning', 'Datos Insuficientes', 'Por favor, ingrese datos en el Balance y el Estado de Resultados primero.');
+                return;
+            }
+            const balance = financialData.balance;
+            const resultados = financialData.resultados;
+
+            const totalCurrentAssets = balance.caja + balance.bancos + balance.accountsReceivable + balance.inventories + balance.otherCurrentAssets;
+            const totalCurrentLiabilities = balance.accountsPayable + balance.shortTermLoans + balance.laborLiabilities + balance.otherCurrentLiabilities;
+            const totalAssets = totalCurrentAssets + balance.ppe + balance.intangibles + balance.otherNonCurrentAssets;
+            const totalLiabilities = totalCurrentLiabilities + balance.longTermDebt + balance.otherNonCurrentLiabilities;
+            const totalEquity = balance.capitalSocial + balance.reserves + balance.retainedEarnings + resultados.netIncome;
+
+            const netSales = resultados.ingresosVentas - resultados.devolucionesVentas;
+            const grossProfit = netSales - resultados.costOfSales;
+
+            // Ratios de Liquidez
+            const currentRatio = totalCurrentLiabilities > 0 ? totalCurrentAssets / totalCurrentLiabilities : 0;
+            const quickRatio = totalCurrentLiabilities > 0 ? (totalCurrentAssets - balance.inventories) / totalCurrentLiabilities : 0;
+            document.getElementById('liquidez-corriente').textContent = formatNumber(currentRatio, 2);
+            document.getElementById('liquidez-rapida').textContent = formatNumber(quickRatio, 2);
+
+            // Ratios de Solvencia
+            const debtToEquityRatio = totalEquity > 0 ? totalLiabilities / totalEquity : 0;
+            const leverageRatio = totalEquity > 0 ? totalAssets / totalEquity : 0;
+            document.getElementById('solvencia-deuda-patrimonio').textContent = formatNumber(debtToEquityRatio, 2);
+            document.getElementById('solvencia-apalancamiento').textContent = formatNumber(leverageRatio, 2);
+
+            // Ratios de Rentabilidad
+            const grossMargin = netSales > 0 ? (grossProfit / netSales) * 100 : 0;
+            const netMargin = netSales > 0 ? (resultados.netIncome / netSales) * 100 : 0;
+            const roa = totalAssets > 0 ? (resultados.netIncome / totalAssets) * 100 : 0;
+            const roe = totalEquity > 0 ? (resultados.netIncome / totalEquity) * 100 : 0;
+            document.getElementById('rentabilidad-margen-bruto').textContent = formatNumber(grossMargin, 2) + '%';
+            document.getElementById('rentabilidad-margen-neto').textContent = formatNumber(netMargin, 2) + '%';
+            document.getElementById('rentabilidad-roa').textContent = formatNumber(roa, 2) + '%';
+            document.getElementById('rentabilidad-roe').textContent = formatNumber(roe, 2) + '%';
+
+            showNotification('success', 'Ratios Calculados', 'Los ratios financieros han sido actualizados.');
+        }
+
+        function renderCharts() {
+            const { history, resultados } = financialData;
+
+            // Tendencias Financieras
+            const trendCtx = document.getElementById('trend-chart').getContext('2d');
+            if (trendChart) trendChart.destroy();
+            trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: history.labels,
+                    datasets: [{
+                        label: 'Ingresos',
+                        data: history.revenue,
+                        borderColor: 'rgba(37, 99, 235, 1)',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Gastos',
+                        data: history.expenses,
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 14,
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return `${context.dataset.label}: ${formatCurrency(context.raw)}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Composición de Ingresos
+            const financialCtx = document.getElementById('financial-chart').getContext('2d');
+            if (financialChart) financialChart.destroy();
+
+            const netSales = financialData.resultados.ingresosVentas - financialData.resultados.devolucionesVentas;
+            const remainingExpenses = (financialData.resultados.costOfSales + financialData.resultados.gastosPersonal + financialData.resultados.gastosAdministracion + financialData.resultados.gastosVenta + financialData.resultados.otrosGastosOp + financialData.resultados.depreciacionAmortizacion + financialData.resultados.gastosFinancieros + financialData.resultados.impuestos);
+            const netIncome = netSales - remainingExpenses;
+
+            financialChart = new Chart(financialCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Ventas Netas', 'Costos y Gastos', 'Utilidad Neta'],
+                    datasets: [{
+                        data: [netSales, remainingExpenses > 0 ? remainingExpenses : 0, netIncome > 0 ? netIncome : 0],
+                        backgroundColor: [
+                            'rgba(37, 99, 235, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(16, 185, 129, 0.8)'
+                        ],
+                        hoverBackgroundColor: [
+                            'rgba(37, 99, 235, 1)',
+                            'rgba(239, 68, 68, 1)',
+                            'rgba(16, 185, 129, 1)'
+                        ],
+                        borderWidth: 2,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 14,
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.raw) {
+                                        label += formatCurrency(context.raw);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateDashboardMetrics() {
+            const netIncome = calculateIncomeStatement(false).netIncome;
+            const revenue = financialData.resultados.ingresosVentas;
+            const totalCurrentLiabilities = financialData.balance.accountsPayable + financialData.balance.shortTermLoans + financialData.balance.laborLiabilities + financialData.balance.otherCurrentLiabilities;
+            const totalCurrentAssets = financialData.balance.caja + financialData.balance.bancos + financialData.balance.accountsReceivable + financialData.balance.inventories + financialData.balance.otherCurrentAssets;
+            const currentRatio = totalCurrentLiabilities > 0 ? totalCurrentAssets / totalCurrentLiabilities : 0;
+            const totalDebt = financialData.balance.shortTermLoans + financialData.balance.longTermDebt;
+
+            document.getElementById('dashboard-revenue').textContent = formatCurrency(revenue);
+            document.getElementById('dashboard-net-income').textContent = formatCurrency(netIncome);
+            document.getElementById('dashboard-current-ratio').textContent = formatNumber(currentRatio, 2);
+            document.getElementById('dashboard-total-debt').textContent = formatCurrency(totalDebt);
+
+            // Update summary table
+            const budgetNetSales = financialData.budget.netSales;
+            const actualNetSales = financialData.resultados.ingresosVentas - financialData.resultados.devolucionesVentas;
+            const salesVar = budgetNetSales > 0 ? ((actualNetSales - budgetNetSales) / budgetNetSales) * 100 : 0;
+            document.getElementById('summary-income-actual').textContent = formatCurrency(actualNetSales);
+            document.getElementById('summary-income-budget').textContent = formatCurrency(budgetNetSales);
+            document.getElementById('summary-income-var').textContent = formatNumber(salesVar, 1) + '%';
+            document.getElementById('summary-income-status').innerHTML = salesVar >= 0 ? `<span class="badge badge-success">En objetivo</span>` : `<span class="badge badge-danger">Bajo objetivo</span>`;
+
+            // Simplified cost of sales for summary table
+            const actualCOS = financialData.resultados.costOfSales;
+            const budgetCOS = financialData.budget.costOfSales;
+            const cosVar = budgetCOS > 0 ? ((actualCOS - budgetCOS) / budgetCOS) * 100 : 0;
+            document.getElementById('summary-cos-actual').textContent = formatCurrency(actualCOS);
+            document.getElementById('summary-cos-budget').textContent = formatCurrency(budgetCOS);
+            document.getElementById('summary-cos-var').textContent = formatNumber(cosVar, 1) + '%';
+            document.getElementById('summary-cos-status').innerHTML = cosVar <= 0 ? `<span class="badge badge-success">En objetivo</span>` : `<span class="badge badge-warning">Revisar</span>`;
+
+            // Simplified net income for summary table
+            const actualNetIncome = netIncome;
+            const budgetNetIncome = financialData.budget.netSales - financialData.budget.costOfSales - financialData.budget.operatingExpenses - financialData.budget.financialExpenses - financialData.budget.taxes;
+            const netIncomeVar = budgetNetIncome > 0 ? ((actualNetIncome - budgetNetIncome) / budgetNetIncome) * 100 : 0;
+            document.getElementById('summary-net-income-actual').textContent = formatCurrency(actualNetIncome);
+            document.getElementById('summary-net-income-budget').textContent = formatCurrency(budgetNetIncome);
+            document.getElementById('summary-net-income-var').textContent = formatNumber(netIncomeVar, 1) + '%';
+            document.getElementById('summary-net-income-status').innerHTML = netIncomeVar >= 0 ? `<span class="badge badge-success">En objetivo</span>` : `<span class="badge badge-danger">Bajo objetivo</span>`;
+
+            renderCharts();
+        }
+
+        async function saveFinancialData() {
+            if (!userId) {
+                showNotification('danger', 'Error de Autenticación', 'No se pudo guardar la data. Por favor, intente recargar la aplicación.');
+                return;
+            }
+            showLoading('Guardando datos...');
+            try {
+                await setDoc(financialDataRef, financialData);
+                hideLoading();
+                showNotification('success', 'Datos Guardados', 'Tus datos financieros se han guardado con éxito.');
+            } catch (error) {
+                console.error("Error saving document: ", error);
+                hideLoading();
+                showNotification('danger', 'Error al Guardar', 'No se pudieron guardar los datos. Por favor, intente de nuevo.');
+            }
+        }
+
+        async function deleteFinancialData() {
+            if (!userId) {
+                showNotification('danger', 'Error de Autenticación', 'No se pudo borrar la data. Por favor, intente recargar la aplicación.');
+                return;
+            }
+
+            showLoading('Borrando datos...');
+            try {
+                await deleteDoc(financialDataRef);
+                financialData = {
+                    ...initialFinancialData
+                };
+                loadDataToUI(financialData);
+                updateAllCalculationsAndUI();
+                hideLoading();
+                showNotification('success', 'Datos Borrados', 'Todos tus datos financieros han sido eliminados.');
+            } catch (error) {
+                console.error("Error deleting document: ", error);
+                hideLoading();
+                showNotification('danger', 'Error al Borrar', 'No se pudieron borrar los datos. Por favor, intente de nuevo.');
+            }
+        }
+
+        function loadDataToUI(data) {
+            // Load Balance Sheet data
+            for (const key in data.balance) {
+                const el = document.getElementById(key);
+                if (el) {
+                    el.value = formatCurrency(data.balance[key]);
+                }
+            }
+            // Load Income Statement data
+            for (const key in data.resultados) {
+                const el = document.getElementById(key);
+                if (el) {
+                    el.value = formatCurrency(data.resultados[key]);
+                }
+            }
+            // Load Cash Flow data
+            for (const key in data.flujo) {
+                const el = document.getElementById(key);
+                if (el) {
+                    el.value = formatCurrency(data.flujo[key]);
+                }
+            }
+            // Load Budget data
+            for (const key in data.budget) {
+                const el = document.getElementById(`budget-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`);
+                if (el) {
+                    el.value = formatCurrency(data.budget[key]);
+                }
+            }
+        }
+
+        function updateAllCalculationsAndUI() {
+            calculateIncomeStatement();
+            calculateBalanceSheet();
+            calculateCashFlow();
+            calculateRatios();
+            updateDashboardMetrics();
+        }
+
+        // AI Chat Functionality
+        async function handleAiInsightRequest(question) {
+            showLoading('Analizando datos con IA...');
+            const aiChatbox = document.getElementById('ai-chatbox');
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'flex items-start justify-end gap-3';
+            userMessageDiv.innerHTML = `<div class="bg-blue-500 text-white p-3 rounded-xl rounded-br-none max-w-md">${question}</div>`;
+            aiChatbox.appendChild(userMessageDiv);
+            aiChatbox.scrollTop = aiChatbox.scrollHeight;
+
+            const aiMessageDiv = document.createElement('div');
+            aiMessageDiv.className = 'flex items-start gap-3';
+            aiMessageDiv.innerHTML = `<div class="avatar bg-accent flex-shrink-0">IA</div><div class="bg-gray-200 dark:bg-slate-600 p-3 rounded-xl rounded-tl-none max-w-md">Analizando...</div>`;
+            aiChatbox.appendChild(aiMessageDiv);
+            aiChatbox.scrollTop = aiChatbox.scrollHeight;
+
+            try {
+                // Prepare a comprehensive text prompt with all financial data
+                const financialSummary = `
+                    Análisis Financiero para FinPro X.
+                    Balance General:
+                    - Total Activos: ${document.getElementById('total-activo').textContent}
+                    - Total Pasivos: ${document.getElementById('total-pasivo').textContent}
+                    - Total Patrimonio: ${document.getElementById('total-patrimonio').textContent}
+                    Estado de Resultados:
+                    - Ventas Netas: ${document.getElementById('net-sales-display').textContent}
+                    - Utilidad Bruta: ${document.getElementById('gross-profit-display').textContent}
+                    - EBITDA: ${document.getElementById('ebitda-display').textContent}
+                    - Utilidad Neta: ${document.getElementById('net-income-display').textContent}
+                    Ratios Clave:
+                    - Ratio Corriente: ${document.getElementById('liquidez-corriente').textContent}
+                    - Margen Neto: ${document.getElementById('rentabilidad-margen-neto').textContent}
+                    Pregunta del usuario: ${question}
+                `;
+
+                const payload = {
+                    contents: [{ parts: [{ text: financialSummary }] }],
+                    tools: [{ "google_search": {} }],
+                    systemInstruction: {
+                        parts: [{ text: "Actúa como un analista financiero experto. Analiza la información financiera proporcionada y responde la pregunta del usuario de manera clara, concisa y profesional. Ofrece un análisis de la situación, identifica puntos fuertes o débiles y sugiere próximos pasos. Responde en español." }]
+                    },
+                };
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API response error: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                const aiResponseText = result.candidates?.[0]?.content?.parts?.[0]?.text || "No se pudo generar un análisis. Por favor, intenta de nuevo.";
+                aiMessageDiv.querySelector('div').textContent = aiResponseText;
+
+            } catch (error) {
+                console.error("Error calling AI API:", error);
+                aiMessageDiv.querySelector('div').textContent = "Lo siento, hubo un error al conectar con el servicio de IA.";
+                showNotification('danger', 'Error de IA', 'No se pudo obtener el análisis. Revisa la consola para más detalles.');
+            } finally {
+                hideLoading();
+                aiChatbox.scrollTop = aiChatbox.scrollHeight;
+            }
+        }
+
+        // Export Functions
+        async function exportToPdf() {
+            showLoading('Generando PDF...');
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const pageTitle = "Reporte Financiero Pro X";
+
+                // Function to add header and footer
+                const addPageLayout = (pageNumber, totalPages) => {
+                    doc.setFontSize(10);
+                    doc.setTextColor(150);
+                    doc.text(`Página ${pageNumber} de ${totalPages}`, doc.internal.pageSize.getWidth() - 20, pageHeight - 10, { align: 'right' });
+                    doc.text(pageTitle, 20, pageHeight - 10);
+                };
+
+                const elementsToPrint = [
+                    { id: 'dashboard', title: 'Dashboard Ejecutivo' },
+                    { id: 'balance', title: 'Balance General' },
+                    { id: 'resultados', title: 'Estado de Resultados' },
+                    { id: 'flujo', title: 'Flujo de Efectivo' },
+                    { id: 'ratios', title: 'Análisis de Ratios' }
+                ];
+
+                for (let i = 0; i < elementsToPrint.length; i++) {
+                    const el = document.getElementById(elementsToPrint[i].id);
+                    if (el) {
+                        const canvas = await html2canvas(el);
+                        const imgData = canvas.toDataURL('image/png');
+                        const imgWidth = 190;
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                        const margin = 10;
+                        const x = (doc.internal.pageSize.getWidth() - imgWidth) / 2;
+                        let y = margin;
+
+                        if (doc.internal.pages.length > 1) {
+                            doc.addPage();
+                        }
+                        doc.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
+                        addPageLayout(doc.internal.pages.length, elementsToPrint.length);
+                    }
+                }
+
+                // Show PDF in modal
+                const pdfBlob = doc.output('blob');
+                pdfViewer.src = URL.createObjectURL(pdfBlob);
+                pdfModal.classList.add('open');
+                hideLoading();
+                showNotification('success', 'PDF Generado', 'Reporte PDF listo para previsualizar.');
+            } catch (error) {
+                console.error("Error generating PDF:", error);
+                hideLoading();
+                showNotification('danger', 'Error de Exportación', 'Hubo un problema al generar el PDF.');
+            }
+        }
+
+        function exportToExcel() {
+            const worksheet = XLSX.utils.json_to_sheet([
+                { 'Concepto': 'Ingresos por Ventas', 'Valor': financialData.resultados.ingresosVentas },
+                { 'Concepto': 'Utilidad Neta', 'Valor': calculateIncomeStatement(false).netIncome },
+                { 'Concepto': 'Total Activos', 'Valor': financialData.balance.caja + financialData.balance.bancos + financialData.balance.accountsReceivable + financialData.balance.inventories + financialData.balance.otherCurrentAssets + financialData.balance.ppe + financialData.balance.intangibles + financialData.balance.otherNonCurrentAssets },
+                { 'Concepto': 'Total Pasivos', 'Valor': financialData.balance.accountsPayable + financialData.balance.shortTermLoans + financialData.balance.laborLiabilities + financialData.balance.otherCurrentLiabilities + financialData.balance.longTermDebt + financialData.balance.otherNonCurrentLiabilities },
+            ]);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Resumen Financiero');
+            XLSX.writeFile(workbook, 'Reporte_Financiero.xlsx');
+            showNotification('success', 'Excel Generado', 'Reporte exportado a Excel con éxito.');
+        }
+
+        async function exportToPng() {
+            showLoading('Generando imagen...');
+            try {
+                const dashboardEl = document.getElementById('dashboard');
+                const canvas = await html2canvas(dashboardEl);
+                const a = document.createElement('a');
+                a.href = canvas.toDataURL('image/png');
+                a.download = 'dashboard-financiero.png';
+                a.click();
+                hideLoading();
+                showNotification('success', 'Imagen Generada', 'Dashboard exportado como PNG.');
+            } catch (error) {
+                console.error("Error generating PNG:", error);
+                hideLoading();
+                showNotification('danger', 'Error de Exportación', 'Hubo un problema al generar la imagen.');
+            }
+        }
+
+        // Event Listeners and Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            currentDateEl.textContent = today.toLocaleDateString('es-ES', options);
+        });
+
+        // Initialize Firebase
+        if (firebaseConfig.apiKey) {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            setLogLevel('debug'); // Enable debug logging
+
+            // Authentication and Data Listener moved here
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    userIdEl.textContent = userId;
+                    document.querySelector('.user-role').textContent = 'Propietario';
+                    financialDataRef = doc(db, `artifacts/${appId}/users/${userId}/financial-data`, 'main-document');
+                    if (unsubscribe) {
+                        unsubscribe(); // Unsubscribe from previous listener if it exists
+                    }
+                    unsubscribe = onSnapshot(financialDataRef, (docSnap) => {
+                        if (docSnap.exists()) {
+                            financialData = docSnap.data();
+                            loadDataToUI(financialData);
+                            updateAllCalculationsAndUI();
+                        } else {
+                            // Data does not exist, initialize with empty values and save.
+                            financialData = {
+                                ...initialFinancialData
+                            };
+                            loadDataToUI(financialData);
+                            updateAllCalculationsAndUI();
+                            saveFinancialData(); // Save the initial empty data
+                        }
+                    }, (error) => {
+                        console.error("Error fetching real-time data: ", error);
+                        showNotification('danger', 'Error de Conexión', 'No se pudo cargar los datos en tiempo real. Revisa tu conexión.');
+                    });
+                } else {
+                    if (initialAuthToken) {
+                        try {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } catch (error) {
+                            console.error("Error signing in with custom token: ", error);
+                            await signInAnonymously(auth);
+                        }
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                }
+            });
+        } else {
+            showNotification('danger', 'Configuración de Firebase', 'Firebase no está configurado. La persistencia de datos no funcionará.');
+            // Fallback for demo
+            financialData = {
+                ...initialFinancialData
+            };
+            loadDataToUI(financialData);
+            updateAllCalculationsAndUI();
+        }
+
+        startAppBtn.addEventListener('click', () => {
+            welcomeScreen.style.opacity = '0';
+            welcomeScreen.style.pointerEvents = 'none';
+            document.body.classList.remove('welcome-active');
+        });
+
+        // Sidebar and UI Logic
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('expanded');
+        });
+
+        pinSidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('slim');
+            pinSidebar.classList.toggle('pinned');
+        });
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            sidebar.classList.toggle('dark-mode');
+            document.querySelectorAll('.card').forEach(card => card.classList.toggle('dark-mode'));
+            document.querySelectorAll('.input-field').forEach(input => input.classList.toggle('dark-mode'));
+            document.querySelectorAll('.financial-table').forEach(table => table.classList.toggle('dark-mode'));
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = e.currentTarget.getAttribute('href').substring(1);
+                sections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+                document.getElementById(targetId).classList.remove('hidden');
+
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+
+                sidebar.classList.remove('expanded');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Financial Form Logic
+        const financialInputs = document.querySelectorAll('.currency-input');
+        financialInputs.forEach(input => {
+            input.addEventListener('input', (e) => {
+                const value = parseCurrency(e.target.value);
+                e.target.value = formatCurrency(value);
+            });
+        });
+
+        document.getElementById('load-sample').addEventListener('click', () => {
+            // Updated sample data, no longer loads automatically
+            const sample = {
+                balance: {
+                    caja: 1500, bancos: 25000, accountsReceivable: 45000, inventories: 60000, otherCurrentAssets: 3000,
+                    ppe: 200000, intangibles: 5000, otherNonCurrentAssets: 1000,
+                    accountsPayable: 20000, shortTermLoans: 15000, laborLiabilities: 8000, otherCurrentLiabilities: 2000,
+                    longTermDebt: 80000, otherNonCurrentLiabilities: 4000,
+                    capitalSocial: 100000, reserves: 15000, retainedEarnings: 20000
+                },
+                resultados: {
+                    ingresosVentas: 150000, devolucionesVentas: 5000, costOfSales: 70000, gastosPersonal: 15000, gastosAdministracion: 8000,
+                    gastosVenta: 12000, otrosGastosOp: 3000, depreciacionAmortizacion: 5000, gastosFinancieros: 1000, impuestos: 8000
+                },
+                flujo: {
+                    depreciacion: 5000, cuentasCobrarCambio: 10000, inventariosCambio: 5000, cuentasPagarCambio: -3000,
+                    compraActivosFijos: 10000, ventaActivosFijos: 2000, emisionDeuda: 5000, pagoDeuda: 3000
+                },
+                budget: {
+                    netSales: 140000, costOfSales: 65000, operatingExpenses: 40000, financialExpenses: 1500, taxes: 7000
+                },
+                history: {
+                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+                    revenue: [120000, 135000, 145000, 150000, 160000, 175000],
+                    expenses: [80000, 85000, 90000, 95000, 100000, 105000]
+                }
+            };
+            financialData = sample;
+            loadDataToUI(financialData);
+            updateAllCalculationsAndUI();
+            saveFinancialData();
+            showNotification('info', 'Datos Demo Cargados', 'Se han cargado datos de ejemplo para que puedas probar la aplicación.');
+        });
+        document.getElementById('refresh-dashboard').addEventListener('click', updateDashboardMetrics);
+        document.getElementById('ai-insights').addEventListener('click', () => {
+            handleAiInsightRequest("Realiza un análisis ejecutivo de mis datos financieros actuales.");
+        });
+
+        document.getElementById('calculate-balance').addEventListener('click', () => {
+            document.querySelectorAll('#balance .currency-input').forEach(input => {
+                const id = input.id;
+                financialData.balance[id] = parseCurrency(input.value);
+            });
+            calculateBalanceSheet();
+            showNotification('success', 'Balance Calculado', 'Balance General actualizado.');
+        });
+        document.getElementById('save-balance-data').addEventListener('click', () => {
+            document.querySelectorAll('#balance .currency-input').forEach(input => {
+                const id = input.id;
+                financialData.balance[id] = parseCurrency(input.value);
+            });
+            saveFinancialData();
+        });
+
+        document.getElementById('calculate-results').addEventListener('click', () => {
+            document.querySelectorAll('#resultados .currency-input').forEach(input => {
+                const id = input.id.replace(/-/g, '').replace('ingresosventas', 'ingresosVentas').replace('devolucionesventas', 'devolucionesVentas').replace('costofsales', 'costOfSales').replace('gastospersonal', 'gastosPersonal').replace('gastosadministracion', 'gastosAdministracion').replace('gastosventa', 'gastosVenta').replace('otrosgastosop', 'otrosGastosOp').replace('depreciacionamortizacion', 'depreciacionAmortizacion').replace('gastosfinancieros', 'gastosFinancieros').replace('impuestos', 'impuestos');
+                financialData.resultados[id] = parseCurrency(input.value);
+            });
+            financialData.resultados.netIncome = calculateIncomeStatement(false).netIncome;
+            calculateIncomeStatement();
+            showNotification('success', 'Resultados Calculados', 'Estado de Resultados actualizado.');
+        });
+        document.getElementById('save-results-data').addEventListener('click', () => {
+            document.querySelectorAll('#resultados .currency-input').forEach(input => {
+                const id = input.id.replace(/-/g, '').replace('ingresosventas', 'ingresosVentas').replace('devolucionesventas', 'devolucionesVentas').replace('costofsales', 'costOfSales').replace('gastospersonal', 'gastosPersonal').replace('gastosadministracion', 'gastosAdministracion').replace('gastosventa', 'gastosVenta').replace('otrosgastosop', 'otrosGastosOp').replace('depreciacionamortizacion', 'depreciacionAmortizacion').replace('gastosfinancieros', 'gastosFinancieros').replace('impuestos', 'impuestos');
+                financialData.resultados[id] = parseCurrency(input.value);
+            });
+            financialData.resultados.netIncome = calculateIncomeStatement(false).netIncome;
+            saveFinancialData();
+        });
+
+        document.getElementById('calculate-cash-flow').addEventListener('click', () => {
+            financialData.resultados.netIncome = calculateIncomeStatement(false).netIncome;
+            document.getElementById('flujo-utilidad-neta').value = formatCurrency(financialData.resultados.netIncome);
+
+            document.querySelectorAll('#flujo .currency-input').forEach(input => {
+                const id = input.id.replace('flujo-', '');
+                financialData.flujo[id] = parseCurrency(input.value);
+            });
+            calculateCashFlow();
+            showNotification('success', 'Flujo Calculado', 'Flujo de Efectivo actualizado.');
+        });
+        document.getElementById('save-cash-flow-data').addEventListener('click', () => {
+            document.querySelectorAll('#flujo .currency-input').forEach(input => {
+                const id = input.id.replace('flujo-', '');
+                financialData.flujo[id] = parseCurrency(input.value);
+            });
+            saveFinancialData();
+        });
+
+        document.getElementById('calculate-ratios').addEventListener('click', calculateRatios);
+
+        // Export and Modal
+        document.getElementById('export-pdf').addEventListener('click', exportToPdf);
+        document.getElementById('export-excel').addEventListener('click', exportToExcel);
+        document.getElementById('export-png').addEventListener('click', exportToPng);
+
+        closeModalBtn.addEventListener('click', () => {
+            pdfModal.classList.remove('open');
+            pdfViewer.src = '';
+        });
+
+        // AI Chat Form Submit
+        aiChatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const question = aiChatInput.value.trim();
+            if (question) {
+                handleAiInsightRequest(question);
+                aiChatInput.value = '';
+            }
+        });
+
+        // Budget Section
+        document.getElementById('save-budget').addEventListener('click', () => {
+            financialData.budget.netSales = parseCurrency(document.getElementById('budget-net-sales').value);
+            financialData.budget.costOfSales = parseCurrency(document.getElementById('budget-cost-of-sales').value);
+            financialData.budget.operatingExpenses = parseCurrency(document.getElementById('budget-operating-expenses').value);
+            financialData.budget.financialExpenses = parseCurrency(document.getElementById('budget-financial-expenses').value);
+            financialData.budget.taxes = parseCurrency(document.getElementById('budget-taxes').value);
+            saveFinancialData();
+        });
+
+        document.getElementById('compare-budget').addEventListener('click', () => {
+            const actualNetSales = financialData.resultados.ingresosVentas - financialData.resultados.devolucionesVentas;
+            const actualNetIncome = calculateIncomeStatement(false).netIncome;
+            const actualOperatingExpenses = financialData.resultados.gastosPersonal + financialData.resultados.gastosAdministracion + financialData.resultados.gastosVenta + financialData.resultados.otrosGastosOp;
+            const actualFinancialExpenses = financialData.resultados.gastosFinancieros;
+            const actualTaxes = financialData.resultados.impuestos;
+
+            const budgetNetSales = financialData.budget.netSales;
+            const budgetNetIncome = budgetNetSales - financialData.budget.costOfSales - financialData.budget.operatingExpenses - financialData.budget.financialExpenses - financialData.budget.taxes;
+
+            const resultsDiv = document.getElementById('budget-comparison-results');
+            resultsDiv.innerHTML = `
+                <div class="callout primary">
+                    <i class="fas fa-bullseye callout-icon"></i>
+                    <div>
+                        <h4 class="font-semibold">Comparación de Utilidad Neta</h4>
+                        <p class="text-sm">
+                            Tu utilidad neta real fue de <span class="font-bold">${formatCurrency(actualNetIncome)}</span>.
+                            Tu presupuesto era de <span class="font-bold">${formatCurrency(budgetNetIncome)}</span>.
+                            Esto representa una variación de <span class="font-bold">${formatNumber((actualNetIncome - budgetNetIncome) / budgetNetIncome * 100, 2)}%</span>.
+                        </p>
+                    </div>
+                </div>
+                <div class="callout secondary">
+                    <i class="fas fa-chart-line callout-icon"></i>
+                    <div>
+                        <h4 class="font-semibold">Análisis de Ingresos y Gastos</h4>
+                        <p class="text-sm">
+                            Ventas Netas: Real ${formatCurrency(actualNetSales)}, Presupuesto ${formatCurrency(budgetNetSales)}.
+                        </p>
+                        <p class="text-sm">
+                            Gastos Operacionales: Real ${formatCurrency(actualOperatingExpenses)}, Presupuesto ${formatCurrency(financialData.budget.operatingExpenses)}.
+                        </p>
+                    </div>
+                </div>
+            `;
+            showNotification('success', 'Presupuesto Comparado', 'Resultados de la comparación listos.');
+        });
+
+        // Comparative Section (Placeholder Logic)
+        document.getElementById('run-comparativo').addEventListener('click', () => {
+            showLoading('Generando comparativo...');
+            const periodo = document.getElementById('comparativo-periodo').value;
+            const tableBody = document.getElementById('comparative-table-body');
+            const data = {
+                'Ingresos por Ventas': [150000, 165000],
+                'Costo de Ventas': [70000, 75000],
+                'Utilidad Neta': [45000, 50000]
+            };
+
+            tableBody.innerHTML = '';
+            for (const key in data) {
+                const [val1, val2] = data[key];
+                const variance = ((val2 - val1) / val1) * 100;
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${key}</td>
+                        <td>${formatCurrency(val1)}</td>
+                        <td>${formatCurrency(val2)}</td>
+                        <td>${formatNumber(variance, 2)}%</td>
+                    </tr>
+                `;
+            }
+
+            const ctx = document.getElementById('comparative-chart').getContext('2d');
+            if (comparativeChart) comparativeChart.destroy();
+            comparativeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Ingresos por Ventas', 'Costo de Ventas', 'Utilidad Neta'],
+                    datasets: [{
+                        label: 'Período Anterior',
+                        data: Object.values(data).map(d => d[0]),
+                        backgroundColor: 'rgba(37, 99, 235, 0.6)'
+                    }, {
+                        label: 'Período Actual',
+                        data: Object.values(data).map(d => d[1]),
+                        backgroundColor: 'rgba(16, 185, 129, 0.6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return '$' + formatNumber(value, 0);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return `${context.dataset.label}: ${formatCurrency(context.raw)}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            hideLoading();
+            showNotification('success', 'Comparativo Generado', 'Los datos comparativos están listos.');
+        });
+
+        // Data Management - Delete button event listener
+        deleteDataButton.addEventListener('click', () => {
+            showConfirmNotification(
+                'Confirmar Eliminación',
+                '¿Estás seguro de que quieres borrar todos tus datos? Esta acción no se puede deshacer.',
+                deleteFinancialData
+            );
+        });
+
+    </script>
+</body>
+
+</html>
