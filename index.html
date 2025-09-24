@@ -2616,7 +2616,8 @@
             },
             resultados: {
                 ingresosVentas: 0, devolucionesVentas: 0, costOfSales: 0, gastosPersonal: 0, gastosAdministracion: 0,
-                gastosVenta: 0, otrosGastosOp: 0, depreciacionAmortizacion: 0, gastosFinancieros: 0, impuestos: 0
+                gastosVenta: 0, otrosGastosOp: 0, depreciacionAmortizacion: 0, gastosFinancieros: 0, impuestos: 0,
+                netIncome: 0 // Adding netIncome to the data structure
             },
             flujo: {
                 depreciacion: 0, cuentasCobrarCambio: 0, inventariosCambio: 0, cuentasPagarCambio: 0,
@@ -2982,7 +2983,7 @@
         }
 
         function updateDashboardMetrics() {
-            const netIncome = calculateIncomeStatement(false).netIncome;
+            const netIncome = financialData.resultados.netIncome || 0;
             const revenue = financialData.resultados.ingresosVentas;
             const totalCurrentLiabilities = financialData.balance.accountsPayable + financialData.balance.shortTermLoans + financialData.balance.laborLiabilities + financialData.balance.otherCurrentLiabilities;
             const totalCurrentAssets = financialData.balance.caja + financialData.balance.bancos + financialData.balance.accountsReceivable + financialData.balance.inventories + financialData.balance.otherCurrentAssets;
@@ -3031,7 +3032,7 @@
             }
             showLoading('Guardando datos...');
             try {
-                // Before saving, ensure calculated net income is up-to-date
+                // Update the calculated fields before saving
                 calculateIncomeStatement(false);
                 await setDoc(financialDataRef, financialData);
                 hideLoading();
@@ -3392,7 +3393,8 @@
                 },
                 resultados: {
                     ingresosVentas: 150000000, devolucionesVentas: 5000000, costOfSales: 70000000, gastosPersonal: 15000000, gastosAdministracion: 8000000,
-                    gastosVenta: 12000000, otrosGastosOp: 3000000, depreciacionAmortizacion: 5000000, gastosFinancieros: 1000000, impuestos: 8000000
+                    gastosVenta: 12000000, otrosGastosOp: 3000000, depreciacionAmortizacion: 5000000, gastosFinancieros: 1000000, impuestos: 8000000,
+                    netIncome: 35000000 // Sample net income
                 },
                 flujo: {
                     depreciacion: 5000000, cuentasCobrarCambio: 10000000, inventariosCambio: 5000000, cuentasPagarCambio: -3000000,
@@ -3506,7 +3508,7 @@
 
         document.getElementById('compare-budget').addEventListener('click', () => {
             const actualNetSales = financialData.resultados.ingresosVentas - financialData.resultados.devolucionesVentas;
-            const actualNetIncome = calculateIncomeStatement(false).netIncome;
+            const actualNetIncome = financialData.resultados.netIncome;
             const actualOperatingExpenses = financialData.resultados.gastosPersonal + financialData.resultados.gastosAdministracion + financialData.resultados.gastosVenta + financialData.resultados.otrosGastosOp;
             const actualFinancialExpenses = financialData.resultados.gastosFinancieros;
             const actualTaxes = financialData.resultados.impuestos;
@@ -3562,7 +3564,7 @@
                     <tr>
                         <td>${key}</td>
                         <td>${formatCurrency(val1)}</td>
-                        <td>${formatCurrency(val2)}</td>
+                        <td><td>${formatCurrency(val2)}</td>
                         <td>${formatNumber(variance, 2)}%</td>
                     </tr>
                 `;
