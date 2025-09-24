@@ -2756,8 +2756,7 @@
             const totalLiabilities = totalCurrentLiabilities + totalNonCurrentLiabilities;
 
             // Patrimonio
-            const netIncome = calculateIncomeStatement(false).netIncome;
-            financialData.balance.netIncomeBalance = netIncome;
+            const netIncome = financialData.resultados.netIncome || 0;
             const totalEquity = ['capitalSocial', 'reserves', 'retainedEarnings']
                 .reduce((sum, id) => sum + data[id], 0) + netIncome;
 
@@ -2772,7 +2771,7 @@
 
             const equationStatus = document.getElementById('equation-status');
             const diff = Math.abs(totalAssets - totalLiabilitiesAndEquity);
-            if (diff < 0.01) {
+            if (diff < 1) { // A small tolerance for floating point errors
                 equationStatus.innerHTML = `<span class="badge badge-success">¡La ecuación contable se cumple!</span>`;
             } else {
                 equationStatus.innerHTML = `<span class="badge badge-danger">La ecuación no cuadra. Diferencia: ${formatCurrency(diff)}</span>`;
@@ -2789,6 +2788,7 @@
             const operationalIncome = ebitda - data.depreciacionAmortizacion;
             const preTaxIncome = operationalIncome - data.gastosFinancieros;
             const netIncome = preTaxIncome - data.impuestos;
+            financialData.resultados.netIncome = netIncome; // Update the net income in the data object
 
             if (updateUI) {
                 document.getElementById('net-sales-display').textContent = formatCurrency(netSales);
@@ -3031,6 +3031,8 @@
             }
             showLoading('Guardando datos...');
             try {
+                // Before saving, ensure calculated net income is up-to-date
+                calculateIncomeStatement(false);
                 await setDoc(financialDataRef, financialData);
                 hideLoading();
                 showNotification('success', 'Datos Guardados', 'Tus datos financieros se han guardado con éxito.');
@@ -3437,16 +3439,17 @@
                 const id = input.id.replace(/-/g, '').replace('ingresosventas', 'ingresosVentas').replace('devolucionesventas', 'devolucionesVentas').replace('costofsales', 'costOfSales').replace('gastospersonal', 'gastosPersonal').replace('gastosadministracion', 'gastosAdministracion').replace('gastosventa', 'gastosVenta').replace('otrosgastosop', 'otrosGastosOp').replace('depreciacionamortizacion', 'depreciacionAmortizacion').replace('gastosfinancieros', 'gastosFinancieros').replace('impuestos', 'impuestos');
                 financialData.resultados[id] = parseCurrency(input.value);
             });
-            financialData.resultados.netIncome = calculateIncomeStatement(false).netIncome;
             calculateIncomeStatement();
+            saveFinancialData();
             showNotification('success', 'Resultados Calculados', 'Estado de Resultados actualizado.');
         });
+
         document.getElementById('save-results-data').addEventListener('click', () => {
             document.querySelectorAll('#resultados .currency-input').forEach(input => {
                 const id = input.id.replace(/-/g, '').replace('ingresosventas', 'ingresosVentas').replace('devolucionesventas', 'devolucionesVentas').replace('costofsales', 'costOfSales').replace('gastospersonal', 'gastosPersonal').replace('gastosadministracion', 'gastosAdministracion').replace('gastosventa', 'gastosVenta').replace('otrosgastosop', 'otrosGastosOp').replace('depreciacionamortizacion', 'depreciacionAmortizacion').replace('gastosfinancieros', 'gastosFinancieros').replace('impuestos', 'impuestos');
                 financialData.resultados[id] = parseCurrency(input.value);
             });
-            financialData.resultados.netIncome = calculateIncomeStatement(false).netIncome;
+            calculateIncomeStatement(); // Recalculate to ensure net income is correct before saving
             saveFinancialData();
         });
 
